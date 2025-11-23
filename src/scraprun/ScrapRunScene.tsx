@@ -32,6 +32,9 @@ export default function ScrapRunScene({
   minimalUi = false,
   endless = false,
 }: Props) {
+  const QUICK_TAP_MS = 150;
+  const SHIELD_PULSE_DURATION = 450;
+  const SHIELD_PULSE_RADIUS = 3;
   const mountRef = useRef<HTMLDivElement>(null);
   const [isHolding, setIsHolding] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -42,6 +45,11 @@ export default function ScrapRunScene({
     gameOver: false,
     shields: upgrades.shieldGenerator ?? 0,
   });
+  const pressStartRef = useRef<number | null>(null);
+  const lastDragXRef = useRef<number | null>(null);
+  const lastDragTimeRef = useRef<number>(0);
+  const strafeBoostRef = useRef(1);
+  const shieldPulseUntilRef = useRef(0);
 
   useEffect(() => {
     if (!mountRef.current || gameState.gameOver) return;
@@ -133,6 +141,7 @@ export default function ScrapRunScene({
     let currentStrafeTarget = 0;
     let currentIsHolding = false;
     let currentTouchPos: number | null = null;
+    let currentStrafeSpeed = effectiveConfig.strafeSpeed;
 
     const hitboxHelper =
       showHitboxes &&
@@ -144,6 +153,20 @@ export default function ScrapRunScene({
       playerGroup.add(hitboxHelper);
     }
 
+    const disposeDebris = (debris: THREE.Mesh) => {
+      if (debris.userData.hitboxHelper) {
+        scene.remove(debris.userData.hitboxHelper);
+        debris.userData.hitboxHelper.geometry.dispose();
+        debris.userData.hitboxHelper.material.dispose();
+      }
+      if (debris.userData.curveLine) {
+        scene.remove(debris.userData.curveLine);
+        debris.userData.curveLine.geometry.dispose();
+        debris.userData.curveLine.material.dispose();
+      }
+      scene.remove(debris);
+    };
+
     const animate = () => {
       if (!currentGameState.gameOver || endless) {
         requestAnimationFrame(animate);
@@ -152,9 +175,13 @@ export default function ScrapRunScene({
       planet.rotation.y += 0.002;
       const elapsed = shaderClock.getElapsedTime();
       orbMaterial.uniforms.time.value = elapsed;
+      const shieldPulseActive = performance.now() < shieldPulseUntilRef.current;
       const visualCharge = Math.min(
         1,
-        0.2 + currentGameState.collected * 0.05 + (currentIsHolding ? 0.4 : 0)
+        0.2 +
+          currentGameState.collected * 0.05 +
+          (currentIsHolding ? 0.4 : 0) +
+          (shieldPulseActive ? 0.2 : 0)
       );
       orbMaterial.uniforms.chargeLevel.value = visualCharge;
 
@@ -163,8 +190,12 @@ export default function ScrapRunScene({
       playerGroup.position.y = newY;
 
       const currentX = playerGroup.position.x;
-      const newX = THREE.MathUtils.lerp(currentX, currentStrafeTarget, effectiveConfig.strafeSpeed);
+      const newX = THREE.MathUtils.lerp(currentX, currentStrafeTarget, currentStrafeSpeed);
       playerGroup.position.x = newX;
+      const nextBoost = THREE.MathUtils.lerp(strafeBoostRef.current, 1, 0.08);
+      strafeBoostRef.current = nextBoost;
+      currentStrafeSpeed =
+        effectiveConfig.strafeSpeed * (1 + (strafeBoostRef.current - 1) * 0.85);
 
       playerGroup.rotation.y += 0.01;
 
@@ -263,19 +294,18 @@ export default function ScrapRunScene({
           debris.userData.hitboxHelper.position.copy(debris.position);
         }
 
+        if (shieldPulseActive && debris.userData.type === 'bad') {
+          const pulseDistance = debris.position.distanceTo(playerPos);
+          if (pulseDistance < SHIELD_PULSE_RADIUS) {
+            disposeDebris(debris);
+            debrisList.splice(i, 1);
+            continue;
+          }
+        }
+
         const distance = debris.position.distanceTo(playerPos);
         if (distance < hitboxRadius + 0.3) {
-          scene.remove(debris);
-          if (debris.userData.hitboxHelper) {
-            scene.remove(debris.userData.hitboxHelper);
-            debris.userData.hitboxHelper.geometry.dispose();
-            debris.userData.hitboxHelper.material.dispose();
-          }
-          if (debris.userData.curveLine) {
-            scene.remove(debris.userData.curveLine);
-            debris.userData.curveLine.geometry.dispose();
-            debris.userData.curveLine.material.dispose();
-          }
+          disposeDebris(debris);
           debrisList.splice(i, 1);
 
           if (debris.userData.type === 'good') {
@@ -319,17 +349,7 @@ export default function ScrapRunScene({
         }
 
         if (debris.position.z > effectiveConfig.despawnDistance) {
-          scene.remove(debris);
-          if (debris.userData.hitboxHelper) {
-            scene.remove(debris.userData.hitboxHelper);
-            debris.userData.hitboxHelper.geometry.dispose();
-            debris.userData.hitboxHelper.material.dispose();
-          }
-          if (debris.userData.curveLine) {
-            scene.remove(debris.userData.curveLine);
-            debris.userData.curveLine.geometry.dispose();
-            debris.userData.curveLine.material.dispose();
-          }
+          disposeDebris(debris);
           debrisList.splice(i, 1);
         }
       }
@@ -364,6 +384,14 @@ export default function ScrapRunScene({
       }
     }, 16);
 
+    (window as unknown as Record<string, () => boolean>).activateShieldPulse = () => {
+      if (currentGameState.shields <= 0) return false;
+      currentGameState.shields -= 1;
+      shieldPulseUntilRef.current = performance.now() + SHIELD_PULSE_DURATION;
+      setGameState({ ...currentGameState });
+      return true;
+    };
+
     (window as unknown as Record<string, (value: any) => void>).updateHoldingState = (
       holding: boolean
     ) => {
@@ -379,19 +407,12 @@ export default function ScrapRunScene({
     return () => {
       window.removeEventListener('resize', handleResize);
       clearInterval(stateInterval);
+      delete (window as unknown as Record<string, unknown>).activateShieldPulse;
+      delete (window as unknown as Record<string, unknown>).updateHoldingState;
+      delete (window as unknown as Record<string, unknown>).updateTouchPosition;
 
       debrisList.forEach((debris) => {
-        if (debris.userData.hitboxHelper) {
-          scene.remove(debris.userData.hitboxHelper);
-          debris.userData.hitboxHelper.geometry.dispose();
-          debris.userData.hitboxHelper.material.dispose();
-        }
-        if (debris.userData.curveLine) {
-          scene.remove(debris.userData.curveLine);
-          debris.userData.curveLine.geometry.dispose();
-          debris.userData.curveLine.material.dispose();
-        }
-        scene.remove(debris);
+        disposeDebris(debris);
       });
 
       if (hitboxHelper) {
@@ -433,13 +454,46 @@ export default function ScrapRunScene({
     return clientX - rect.left;
   };
 
+  const trackDragSpeed = (relativeX: number) => {
+    const now = performance.now();
+    if (lastDragXRef.current !== null && lastDragTimeRef.current > 0) {
+      const deltaX = relativeX - lastDragXRef.current;
+      const deltaTime = now - lastDragTimeRef.current;
+      if (deltaTime > 0) {
+        const velocity = Math.abs(deltaX / deltaTime);
+        const boost = Math.min(2, 1 + velocity * 0.35);
+        strafeBoostRef.current = Math.max(strafeBoostRef.current, boost);
+      }
+    }
+    lastDragXRef.current = relativeX;
+    lastDragTimeRef.current = now;
+  };
+
+  const maybeActivateShield = () => {
+    const activator = (window as unknown as Record<string, () => boolean>).activateShieldPulse;
+    if (activator) activator();
+  };
+
+  const handleReleaseCommon = (isQuickTap: boolean) => {
+    setIsHolding(false);
+    setTouchStart(null);
+    setCurrentTouchX(null);
+    lastDragXRef.current = null;
+    lastDragTimeRef.current = 0;
+    if (isQuickTap) {
+      maybeActivateShield();
+    }
+  };
+
   const handleTouchStart = (e: TouchEvent) => {
     setIsHolding(true);
+    pressStartRef.current = performance.now();
     const touch = e.touches[0];
     const relative = getRelativeX(touch.clientX);
     if (relative === null) return;
     setTouchStart(relative);
     setCurrentTouchX(relative);
+    trackDragSpeed(relative);
   };
 
   const handleTouchMove = (e: TouchEvent) => {
@@ -448,37 +502,43 @@ export default function ScrapRunScene({
       const relative = getRelativeX(touch.clientX);
       if (relative !== null) {
         setCurrentTouchX(relative);
+        trackDragSpeed(relative);
       }
     }
   };
 
   const handleTouchEnd = () => {
-    setIsHolding(false);
-    setTouchStart(null);
-    setCurrentTouchX(null);
+    const startedAt = pressStartRef.current;
+    const isQuickTap = startedAt !== null && performance.now() - startedAt <= QUICK_TAP_MS;
+    pressStartRef.current = null;
+    handleReleaseCommon(isQuickTap);
   };
 
   const handleMouseDown = (e: MouseEvent) => {
     setIsHolding(true);
+    pressStartRef.current = performance.now();
     const relative = getRelativeX(e.clientX);
     if (relative === null) return;
     setTouchStart(relative);
     setCurrentTouchX(relative);
+    trackDragSpeed(relative);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (touchStart !== null && isHolding) {
+    if (touchStart !== null) {
       const relative = getRelativeX(e.clientX);
       if (relative !== null) {
         setCurrentTouchX(relative);
+        trackDragSpeed(relative);
       }
     }
   };
 
   const handleMouseUp = () => {
-    setIsHolding(false);
-    setTouchStart(null);
-    setCurrentTouchX(null);
+    const startedAt = pressStartRef.current;
+    const isQuickTap = startedAt !== null && performance.now() - startedAt <= QUICK_TAP_MS;
+    pressStartRef.current = null;
+    handleReleaseCommon(isQuickTap);
   };
 
   return (
@@ -507,6 +567,7 @@ export default function ScrapRunScene({
                 <div className="text-lime-300 font-semibold mb-1">Charge then dive</div>
                 <div>Hold to push into the outer lane, release to fall back in.</div>
                 <div className="mt-1">Drag left/right to dodge and scoop trash.</div>
+                <div className="mt-1 text-cyan-200">Quick tap to pulse a shield charge.</div>
                 <div className="mt-1 text-red-300">Red junk cracks the shell.</div>
               </div>
             </div>
