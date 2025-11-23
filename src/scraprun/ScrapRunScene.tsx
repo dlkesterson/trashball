@@ -242,16 +242,16 @@ export default function ScrapRunScene({
       if (GOOD_SCRAP_URLS.length === 0) return;
       const url = GOOD_SCRAP_URLS[Math.floor(Math.random() * GOOD_SCRAP_URLS.length)];
       const existing = goodScrapCache.get(url);
-      const sourcePromise =
+      const sourcePromise: Promise<THREE.Object3D> =
         existing !== undefined
           ? Promise.resolve(existing)
-          : fbxLoader.loadAsync(url).then((obj) => {
+          : fbxLoader.loadAsync(url).then((obj: THREE.Object3D) => {
               goodScrapCache.set(url, obj);
               return obj;
             });
 
       sourcePromise
-        .then((source) => {
+        .then((source: THREE.Object3D) => {
           if (!debris.parent) return;
           const visual = source.clone(true);
           normalizeGoodScrap(visual);

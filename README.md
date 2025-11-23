@@ -1,5 +1,7 @@
 # 🗑️ Trashball: Core Accumulator
 
+![Trashball banner](src/assets/banner.png)
+
 Hybrid idle/runner game where you grow a cosmic trashball to power yourself up and launch high-stakes salvage runs. Built with React, Three.js, and Zustand.
 This is a work-in-progress prototype; expect rough edges, placeholder art, and frequent changes.
 
