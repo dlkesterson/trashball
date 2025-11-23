@@ -20,6 +20,7 @@ export default function OrbScene({ isHolding }: Props) {
   const physics = useGameStore((s) => s.physics);
   const upgrades = useGameStore((s) => s.upgrades);
   const prestigeLevel = useGameStore((s) => s.prestigeLevel);
+  const scrap = useGameStore((s) => s.scrap);
 
   const stateRef = useRef({
     velocity: 0,
@@ -47,6 +48,9 @@ export default function OrbScene({ isHolding }: Props) {
     prestigeRef.current = prestigeLevel;
   }, [prestigeLevel]);
 
+  const scrapUpdaterRef = useRef<((scrapValue: number) => void) | null>(null);
+  const scrapGroupRef = useRef<THREE.Group | null>(null);
+
   useEffect(() => {
     if (!mountRef.current) return;
 
@@ -67,6 +71,57 @@ export default function OrbScene({ isHolding }: Props) {
 
     const orb = new THREE.Mesh(orbGeometry, orbMaterial);
     scene.add(orb);
+
+    const scrapGroup = new THREE.Group();
+    orb.add(scrapGroup);
+    scrapGroupRef.current = scrapGroup;
+
+    const scrapMaterials = [
+      new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.4, roughness: 0.35 }),
+      new THREE.MeshStandardMaterial({ color: 0xfbbf24, metalness: 0.35, roughness: 0.3 }),
+      new THREE.MeshStandardMaterial({ color: 0xeab308, metalness: 0.45, roughness: 0.28 }),
+    ];
+    const scrapGeometries = [
+      new THREE.BoxGeometry(0.22, 0.14, 0.1),
+      new THREE.ConeGeometry(0.12, 0.24, 5),
+      new THREE.OctahedronGeometry(0.18, 0),
+      new THREE.CylinderGeometry(0.08, 0.08, 0.24, 6),
+    ];
+
+    scrapUpdaterRef.current = (scrapValue: number) => {
+      const group = scrapGroupRef.current;
+      if (!group) return;
+
+      const maxPieces = 50;
+      const count = Math.min(maxPieces, Math.max(0, Math.floor(scrapValue)));
+      group.clear();
+
+      for (let i = 0; i < count; i++) {
+        const geometry = scrapGeometries[i % scrapGeometries.length];
+        const material = scrapMaterials[i % scrapMaterials.length];
+        const scrapPiece = new THREE.Mesh(geometry, material);
+        scrapPiece.castShadow = true;
+
+        const direction = new THREE.Vector3(
+          Math.random() - 0.5,
+          Math.random() - 0.5,
+          Math.random() - 0.5
+        ).normalize();
+        const radius = 1.05 + Math.random() * 0.35;
+        scrapPiece.position.copy(direction.multiplyScalar(radius));
+        scrapPiece.rotation.set(
+          Math.random() * Math.PI,
+          Math.random() * Math.PI,
+          Math.random() * Math.PI
+        );
+        const scale = 0.7 + Math.random() * 0.6;
+        scrapPiece.scale.setScalar(scale);
+
+        group.add(scrapPiece);
+      }
+    };
+
+    scrapUpdaterRef.current(scrap);
 
     const particleCount = CALM_IDLE_PRESET.particles;
     const particleGeometry = new THREE.BufferGeometry();
@@ -209,6 +264,9 @@ export default function OrbScene({ isHolding }: Props) {
       if (mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
+      scrapGroup.clear();
+      scrapGeometries.forEach((geo) => geo.dispose());
+      scrapMaterials.forEach((mat) => mat.dispose());
       orbGeometry.dispose();
       orbMaterial.dispose();
       particleGeometry.dispose();
@@ -216,6 +274,10 @@ export default function OrbScene({ isHolding }: Props) {
       renderer.dispose();
     };
   }, [addEnergy, setCharge]);
+
+  useEffect(() => {
+    scrapUpdaterRef.current?.(scrap);
+  }, [scrap]);
 
   return <div ref={mountRef} className="fixed inset-0" />;
 }

@@ -41,6 +41,7 @@ The content is organized as follows:
 
 <directory_structure>
 .gitattributes
+.github/workflows/deploy.yml
 .gitignore
 index.html
 package.json
@@ -48,11 +49,23 @@ README.md
 src/App.tsx
 src/core/GameState.ts
 src/core/ScrapUnlocks.ts
+src/devtools/DebrisLab.tsx
+src/devtools/DevToolsHub.tsx
+src/devtools/GameStateInspector.tsx
+src/devtools/OrbDebug.tsx
+src/devtools/PlaceholderTool.tsx
+src/devtools/PrestigeSim.tsx
+src/devtools/ShaderLab.tsx
+src/devtools/UpgradeSim.tsx
 src/index.css
 src/main.tsx
+src/orb/orbMaterial.ts
+src/orb/orbPresets.ts
 src/orb/OrbScene.tsx
+src/scraprun/config.ts
 src/scraprun/ScrapRunOverlay.tsx
 src/scraprun/ScrapRunScene.tsx
+src/types.d.ts
 src/ui/MainMenu.tsx
 src/ui/UpgradePanel.tsx
 src/vite-env.d.ts
@@ -66,6 +79,64 @@ vite.config.ts
 
 <files>
 This section contains the contents of the repository's files.
+
+<file path=".github/workflows/deploy.yml">
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload production-ready files
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+</file>
+
+<file path=".gitattributes">
+# Auto detect text files and perform LF normalization
+* text=auto
+</file>
 
 <file path="index.html">
 <!doctype html>
@@ -105,10 +176,12 @@ This section contains the contents of the repository's files.
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.17",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.181.0",
     "@vitejs/plugin-react": "^5.1.1",
+    "tailwindcss": "^4.0.0",
     "typescript": "^5.9.3",
     "vite": "^7.2.4"
   }
@@ -116,19 +189,31 @@ This section contains the contents of the repository's files.
 </file>
 
 <file path="src/App.tsx">
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import OrbScene from './orb/OrbScene';
 import ScrapRunOverlay from './scraprun/ScrapRunOverlay';
 import MainMenu from './ui/MainMenu';
 import UpgradePanel from './ui/UpgradePanel';
+import DevToolsHub from './devtools/DevToolsHub';
 import { useGameStore } from './core/GameState';
 
+function getDevToolFromLocation() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('devTool');
+}
+
 export default function App() {
+  const devTool = useMemo(() => (__DEV_TOOLS__ ? getDevToolFromLocation() : null), []);
   const scrapRunActive = useGameStore((s) => s.scrapRunActive);
   const [isHolding, setIsHolding] = useState(false);
 
   const enableHold = () => setIsHolding(true);
   const disableHold = () => setIsHolding(false);
+
+  if (devTool) {
+    const initialTool = devTool === 'true' ? null : devTool;
+    return <DevToolsHub initialTool={initialTool} />;
+  }
 
   return (
     <div
@@ -166,7 +251,7 @@ export type PhysicsParams = {
   chargeDamping: number;
 };
 
-export type GameStore = {
+type GameValues = {
   energy: number;
   totalEnergy: number;
   charge: number;
@@ -179,7 +264,9 @@ export type GameStore = {
   cosmicEssence: number;
   physics: PhysicsParams;
   upgrades: Record<ScrapUpgradeId, number>;
+};
 
+export type GameStore = GameValues & {
   addEnergy: (n: number) => void;
   setCharge: (n: number) => void;
   addScrap: (n: number) => void;
@@ -187,6 +274,9 @@ export type GameStore = {
   endScrapRun: (score: number, collected: number) => void;
   purchaseUpgrade: (id: ScrapUpgradeId) => void;
   prestige: () => void;
+  devSetState?: (partial: Partial<GameValues>) => void;
+  devReset?: () => void;
+  devAdjustUpgrade?: (id: ScrapUpgradeId, delta: number) => void;
 };
 
 const initialPhysics: PhysicsParams = {
@@ -198,21 +288,25 @@ const initialPhysics: PhysicsParams = {
 
 const calculateEssence = (totalEnergy: number) => Math.floor(Math.sqrt(totalEnergy / 10000));
 
+const buildInitialState = (): GameValues => ({
+  energy: 0,
+  totalEnergy: 0,
+  charge: 0,
+  scrap: 0,
+  totalScrap: 0,
+  lastRunTime: 0,
+  bestRunScore: 0,
+  scrapRunActive: false,
+  prestigeLevel: 0,
+  cosmicEssence: 0,
+  physics: { ...initialPhysics },
+  upgrades: {} as Record<ScrapUpgradeId, number>,
+});
+
 export const useGameStore = create<GameStore>()(
   persist(
     (set) => ({
-      energy: 0,
-      totalEnergy: 0,
-      charge: 0,
-      scrap: 0,
-      totalScrap: 0,
-      lastRunTime: 0,
-      bestRunScore: 0,
-      scrapRunActive: false,
-      prestigeLevel: 0,
-      cosmicEssence: 0,
-      physics: initialPhysics,
-      upgrades: {} as Record<ScrapUpgradeId, number>,
+      ...buildInitialState(),
 
       addEnergy: (n) =>
         set((state) => ({
@@ -269,6 +363,38 @@ export const useGameStore = create<GameStore>()(
           prestigeLevel: state.prestigeLevel + 1,
           cosmicEssence: state.cosmicEssence + calculateEssence(state.totalEnergy),
         })),
+      devSetState: __DEV_TOOLS__
+        ? (partial) =>
+            set((state) => {
+              const next: Partial<GameStore> = {};
+
+              if (partial.physics) {
+                next.physics = { ...state.physics, ...partial.physics };
+              }
+              if (partial.upgrades) {
+                next.upgrades = { ...state.upgrades, ...partial.upgrades };
+              }
+
+              const { physics, upgrades, ...rest } = partial;
+              return { ...rest, ...next };
+            })
+        : undefined,
+      devReset: __DEV_TOOLS__
+        ? () =>
+            set(() => ({
+              ...buildInitialState(),
+            }))
+        : undefined,
+      devAdjustUpgrade: __DEV_TOOLS__
+        ? (id, delta) =>
+            set((state) => {
+              const current = state.upgrades[id] ?? 0;
+              const upgrade = SCRAP_UPGRADES[id];
+              const nextLevel = Math.max(0, Math.min(upgrade.max, current + delta));
+              if (nextLevel === current) return state;
+              return { upgrades: { ...state.upgrades, [id]: nextLevel } };
+            })
+        : undefined,
     }),
     { name: 'orb-ascent-save' }
   )
@@ -406,15 +532,1241 @@ export const getUpgradeCost = (id: ScrapUpgradeId, currentLevel: number): number
 };
 </file>
 
-<file path="src/index.css">
-:root {
-  font-family: 'DM Mono', 'Fira Code', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  color: #f8f7ff;
-  background: radial-gradient(circle at 20% 20%, #0b1027, #05070f 45%);
+<file path="src/devtools/DebrisLab.tsx">
+import { useMemo, useState } from 'react';
+import ScrapRunScene from '../scraprun/ScrapRunScene';
+import { BASE_GAME_CONFIG, type ScrapRunConfig } from '../scraprun/config';
+import type { ScrapUpgradeId } from '../core/ScrapUnlocks';
+
+const numberField = (n: number, decimals = 2) => Number(n.toFixed(decimals));
+
+export default function DebrisLab() {
+  const [config, setConfig] = useState<ScrapRunConfig>(BASE_GAME_CONFIG);
+  const [showCurvature, setShowCurvature] = useState(true);
+  const [showHitboxes, setShowHitboxes] = useState(true);
+
+  const memoConfig = useMemo(() => ({ ...config }), [config]);
+
+  const updateConfig = <K extends keyof ScrapRunConfig>(key: K, value: ScrapRunConfig[K]) => {
+    setConfig((prev) => ({ ...prev, [key]: value }));
+  };
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] min-h-screen bg-slate-950 text-slate-100">
+      <div className="relative">
+        <ScrapRunScene
+          onGameOver={() => {}}
+          upgrades={{} as Record<ScrapUpgradeId, number>}
+          config={memoConfig}
+          showCurvatureDebug={showCurvature}
+          showHitboxes={showHitboxes}
+          minimalUi
+          endless
+        />
+        <div className="absolute top-4 left-4 bg-black/50 px-3 py-2 rounded text-xs text-slate-300">
+          Dev Tool: DebrisLab - use ?devTool=debris
+        </div>
+      </div>
+
+      <div className="p-6 space-y-4 bg-slate-900/80 border-l border-slate-800 overflow-y-auto">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-xs text-slate-500 uppercase">Sandbox</div>
+            <div className="text-lg font-semibold">ScrapRun Debris Tuner</div>
+          </div>
+          <button
+            onClick={() => setConfig(BASE_GAME_CONFIG)}
+            className="px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded text-sm"
+          >
+            Reset to Base
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <NumberSlider
+            label="Spawn Interval (ms)"
+            value={config.spawnInterval}
+            min={200}
+            max={2000}
+            step={50}
+            onChange={(v) => updateConfig('spawnInterval', Math.max(50, Math.round(v)))}
+          />
+          <NumberSlider
+            label="Spawn Distance (Z)"
+            value={config.spawnDistance}
+            min={-80}
+            max={-10}
+            step={1}
+            onChange={(v) => updateConfig('spawnDistance', numberField(v, 0))}
+          />
+          <NumberSlider
+            label="Despawn Distance (Z)"
+            value={config.despawnDistance}
+            min={2}
+            max={20}
+            step={0.5}
+            onChange={(v) => updateConfig('despawnDistance', numberField(v))}
+          />
+          <NumberSlider
+            label="Debris Speed"
+            value={config.debrisSpeed}
+            min={0.05}
+            max={0.6}
+            step={0.01}
+            onChange={(v) => updateConfig('debrisSpeed', numberField(v, 3))}
+          />
+          <NumberSlider
+            label="Curvature Strength"
+            value={config.curvatureStrength}
+            min={0}
+            max={0.6}
+            step={0.01}
+            onChange={(v) => updateConfig('curvatureStrength', numberField(v, 3))}
+          />
+          <NumberSlider
+            label="Strafe Speed"
+            value={config.strafeSpeed}
+            min={0.02}
+            max={0.4}
+            step={0.01}
+            onChange={(v) => updateConfig('strafeSpeed', numberField(v, 3))}
+          />
+          <NumberSlider
+            label="Max Strafe"
+            value={config.maxStrafe}
+            min={1}
+            max={8}
+            step={0.1}
+            onChange={(v) => updateConfig('maxStrafe', numberField(v, 2))}
+          />
+          <NumberSlider
+            label="Good Ratio"
+            value={config.goodRatio}
+            min={0}
+            max={1}
+            step={0.02}
+            onChange={(v) => updateConfig('goodRatio', numberField(v, 3))}
+          />
+          <NumberSlider
+            label="Inner Orbit"
+            value={config.innerOrbit}
+            min={-5}
+            max={0}
+            step={0.1}
+            onChange={(v) => updateConfig('innerOrbit', numberField(v, 2))}
+          />
+          <NumberSlider
+            label="Outer Orbit"
+            value={config.outerOrbit}
+            min={0}
+            max={4}
+            step={0.1}
+            onChange={(v) => updateConfig('outerOrbit', numberField(v, 2))}
+          />
+          <NumberSlider
+            label="Orbit Lerp Speed"
+            value={config.orbitSpeed}
+            min={0.02}
+            max={0.2}
+            step={0.01}
+            onChange={(v) => updateConfig('orbitSpeed', numberField(v, 3))}
+          />
+        </div>
+
+        <div className="flex items-center gap-4">
+          <label className="flex items-center gap-2 text-sm text-slate-200">
+            <input
+              type="checkbox"
+              checked={showCurvature}
+              onChange={(e) => setShowCurvature(e.target.checked)}
+            />
+            Show Curvature Debug
+          </label>
+          <label className="flex items-center gap-2 text-sm text-slate-200">
+            <input
+              type="checkbox"
+              checked={showHitboxes}
+              onChange={(e) => setShowHitboxes(e.target.checked)}
+            />
+            Show Hitboxes
+          </label>
+        </div>
+
+        <div className="text-xs text-slate-500 leading-relaxed">
+          Endless loop is enabled in this lab so crashes won&apos;t exit the scene. Adjust spawn and
+          curve to feel out difficulty without playing full runs.
+        </div>
+      </div>
+    </div>
+  );
 }
 
-* {
-  box-sizing: border-box;
+function NumberSlider({
+  label,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (val: number) => void;
+}) {
+  return (
+    <label className="block text-xs text-slate-300 space-y-1">
+      <div className="flex items-center justify-between">
+        <span>{label}</span>
+        <span className="text-slate-100 font-semibold">{value}</span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full"
+      />
+    </label>
+  );
+}
+</file>
+
+<file path="src/devtools/DevToolsHub.tsx">
+import { useEffect, useMemo, useState, type ComponentType } from 'react';
+import ShaderLab from './ShaderLab';
+import DebrisLab from './DebrisLab';
+import UpgradeSim from './UpgradeSim';
+import PrestigeSim from './PrestigeSim';
+import OrbDebug from './OrbDebug';
+import GameStateInspector from './GameStateInspector';
+
+type DevToolId = 'shader' | 'debris' | 'upgrade' | 'prestige' | 'orbdebug' | 'state';
+
+const DEV_TOOLS: Array<{
+  id: DevToolId;
+  label: string;
+  description: string;
+  component: ComponentType;
+}> = [
+  {
+    id: 'shader',
+    label: 'Shader Lab',
+    description: 'Orb shader playground for gradients, wobble, and bloom.',
+    component: ShaderLab,
+  },
+  {
+    id: 'debris',
+    label: 'Debris Lab',
+    description: 'Tune ScrapRun debris spawns, paths, and debugging overlays.',
+    component: DebrisLab,
+  },
+  {
+    id: 'upgrade',
+    label: 'Upgrade Sim',
+    description: 'Placeholder for upgrade pacing and scaling experiments.',
+    component: UpgradeSim,
+  },
+  {
+    id: 'prestige',
+    label: 'Prestige Sim',
+    description: 'Placeholder for prestige loop simulations.',
+    component: PrestigeSim,
+  },
+  {
+    id: 'orbdebug',
+    label: 'Orb Debug',
+    description: 'Placeholder for orb physics and input visualizers.',
+    component: OrbDebug,
+  },
+  {
+    id: 'state',
+    label: 'Game State Inspector',
+    description: 'Live snapshot with resource editing and upgrade controls.',
+    component: GameStateInspector,
+  },
+];
+
+type Props = {
+  initialTool: string | null;
+};
+
+export default function DevToolsHub({ initialTool }: Props) {
+  const fallback = DEV_TOOLS[0];
+
+  const initialId = useMemo<DevToolId>(() => {
+    const match = DEV_TOOLS.find((tool) => tool.id === initialTool);
+    return match?.id ?? fallback.id;
+  }, [initialTool, fallback.id]);
+
+  const [activeTool, setActiveTool] = useState<DevToolId>(initialId);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('devTool', activeTool);
+    const url = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState(null, '', url);
+  }, [activeTool]);
+
+  const active = DEV_TOOLS.find((tool) => tool.id === activeTool) ?? fallback;
+  const ActiveComponent = active.component;
+
+  return (
+    <div className="relative min-h-screen bg-slate-950 text-slate-100">
+      <ActiveComponent />
+
+      <div className="fixed top-4 right-4 z-[60] w-80 max-h-[75vh] overflow-hidden rounded-xl border border-slate-800 bg-slate-900/90 shadow-2xl backdrop-blur">
+        <div className="px-4 py-3 border-b border-slate-800">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Dev Tools</div>
+          <div className="text-sm text-slate-200">Switch panels (devTool=true)</div>
+        </div>
+        <div className="divide-y divide-slate-800 overflow-y-auto max-h-[65vh]">
+          {DEV_TOOLS.map((tool) => (
+            <button
+              key={tool.id}
+              onClick={() => setActiveTool(tool.id)}
+              className={`w-full text-left px-4 py-3 transition hover:bg-slate-800/70 ${
+                activeTool === tool.id ? 'bg-slate-800/80' : ''
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="text-sm font-semibold text-white">{tool.label}</div>
+                {activeTool === tool.id && (
+                  <span className="text-[11px] text-cyan-400 font-semibold">Active</span>
+                )}
+              </div>
+              <div className="text-xs text-slate-400 mt-1 leading-snug">{tool.description}</div>
+              <div className="text-[11px] text-slate-500 mt-1">?devTool={tool.id}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/devtools/GameStateInspector.tsx">
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useGameStore } from '../core/GameState';
+import { SCRAP_UPGRADE_CATEGORIES, ScrapUpgradeId } from '../core/ScrapUnlocks';
+
+const ENERGY_STEP = [100, 1000, 5000];
+const SCRAP_STEP = [100, 500, 2000];
+const BASE_COOLDOWN_MS = 2 * 60 * 1000;
+
+export default function GameStateInspector() {
+  const {
+    energy,
+    totalEnergy,
+    scrap,
+    totalScrap,
+    charge,
+    prestigeLevel,
+    cosmicEssence,
+    lastRunTime,
+    scrapRunActive,
+    upgrades,
+    devSetState,
+    devReset,
+    devAdjustUpgrade,
+  } = useGameStore();
+
+  const [cooldownRemaining, setCooldownRemaining] = useState(0);
+
+  const effectiveCooldown = useMemo(() => {
+    const cooldownReduction = (upgrades.warpCooldown ?? 0) * 2 * 60 * 1000;
+    return Math.max(30_000, BASE_COOLDOWN_MS - cooldownReduction);
+  }, [upgrades.warpCooldown]);
+
+  useEffect(() => {
+    const tick = () => {
+      const remaining = Math.max(0, effectiveCooldown - (Date.now() - lastRunTime));
+      setCooldownRemaining(remaining);
+    };
+    tick();
+    const id = setInterval(tick, 250);
+    return () => clearInterval(id);
+  }, [effectiveCooldown, lastRunTime]);
+
+  const adjustEnergy = (delta: number) => {
+    const nextEnergy = Math.max(0, energy + delta);
+    const totalDelta = delta > 0 ? delta : 0;
+    devSetState?.({
+      energy: nextEnergy,
+      totalEnergy: Math.max(0, totalEnergy + totalDelta),
+    });
+  };
+
+  const adjustScrap = (delta: number) => {
+    const nextScrap = Math.max(0, scrap + delta);
+    const totalDelta = delta > 0 ? delta : 0;
+    devSetState?.({
+      scrap: nextScrap,
+      totalScrap: Math.max(0, totalScrap + totalDelta),
+    });
+  };
+
+  const setCooldownReady = () => devSetState?.({ lastRunTime: 0 });
+  const setCooldownRecent = () => devSetState?.({ lastRunTime: Date.now() - 10_000 });
+
+  const formatMs = (ms: number) => {
+    const mins = Math.floor(ms / 60000);
+    const secs = Math.floor((ms % 60000) / 1000);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleUpgradeChange = (id: ScrapUpgradeId, delta: number) => {
+    devAdjustUpgrade?.(id, delta);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-mono">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+        <div className="md:col-span-2 bg-slate-900/80 border border-slate-700 rounded-xl p-5 shadow-lg">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <div className="text-xs text-slate-400">DEV TOOL</div>
+              <div className="text-2xl font-bold text-cyan-300">Game State Inspector</div>
+            </div>
+            <button
+              onClick={() => devReset?.()}
+              className="px-3 py-2 bg-red-600 hover:bg-red-500 rounded text-sm font-bold"
+            >
+              Reset Save
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Panel title="Resources">
+              <ResourceRow
+                label="Energy"
+                value={energy}
+                steps={ENERGY_STEP}
+                onAdjust={adjustEnergy}
+              />
+              <ResourceRow
+                label="Scrap"
+                value={scrap}
+                steps={SCRAP_STEP}
+                onAdjust={adjustScrap}
+              />
+              <SimpleField
+                label="Charge"
+                value={`${(charge * 100).toFixed(0)}%`}
+                onSet={(val) => devSetState?.({ charge: Math.min(1, Math.max(0, val / 100)) })}
+              />
+              <SimpleField
+                label="Cosmic Essence"
+                value={cosmicEssence}
+                onSet={(val) => devSetState?.({ cosmicEssence: Math.max(0, Math.floor(val)) })}
+              />
+              <SimpleField
+                label="Prestige Level"
+                value={prestigeLevel}
+                onSet={(val) => devSetState?.({ prestigeLevel: Math.max(0, Math.floor(val)) })}
+              />
+            </Panel>
+
+            <Panel title="Runs & Cooldown">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <div className="text-xs text-slate-500">Cooldown Remaining</div>
+                  <div className="text-lg text-amber-300">{formatMs(cooldownRemaining)}</div>
+                </div>
+                <div className="space-x-2">
+                  <button
+                    onClick={setCooldownReady}
+                    className="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 rounded text-sm"
+                  >
+                    Reset Cooldown
+                  </button>
+                  <button
+                    onClick={setCooldownRecent}
+                    className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm"
+                  >
+                    Simulate Run
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="text-sm">
+                  Scrap Run Active: <span className="text-cyan-300">{scrapRunActive ? 'Yes' : 'No'}</span>
+                </div>
+                <button
+                  onClick={() => devSetState?.({ scrapRunActive: !scrapRunActive })}
+                  className="px-3 py-1 rounded bg-purple-700 hover:bg-purple-600 text-xs"
+                >
+                  Toggle
+                </button>
+              </div>
+            </Panel>
+
+            <Panel title="Upgrades">
+              <div className="space-y-3 max-h-[340px] overflow-y-auto pr-1">
+                {SCRAP_UPGRADE_CATEGORIES.map((category) => (
+                  <div key={category.id}>
+                    <div className="text-xs text-slate-500 uppercase tracking-wide mb-1">
+                      {category.label}
+                    </div>
+                    <div className="space-y-2">
+                      {category.upgrades.map((upgrade) => {
+                        const level = upgrades[upgrade.id] ?? 0;
+                        return (
+                          <div
+                            key={upgrade.id}
+                            className="flex items-center justify-between rounded border border-slate-700 bg-slate-800/60 px-3 py-2"
+                          >
+                            <div>
+                              <div className="text-sm text-white">{upgrade.label}</div>
+                              <div className="text-[11px] text-slate-400">
+                                Level {level}/{upgrade.max}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => handleUpgradeChange(upgrade.id, -1)}
+                                className="px-2 py-1 bg-slate-700 hover:bg-slate-600 rounded text-xs"
+                              >
+                                -
+                              </button>
+                              <span className="w-6 text-center text-cyan-300">{level}</span>
+                              <button
+                                onClick={() => handleUpgradeChange(upgrade.id, 1)}
+                                className="px-2 py-1 bg-slate-700 hover:bg-slate-600 rounded text-xs"
+                              >
+                                +
+                              </button>
+                              <button
+                                onClick={() => handleUpgradeChange(upgrade.id, upgrade.max)}
+                                className="px-2 py-1 bg-emerald-700 hover:bg-emerald-600 rounded text-xs"
+                              >
+                                Max
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Panel>
+
+            <Panel title="Quick Fill">
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => adjustEnergy(10_000)}
+                  className="px-3 py-2 bg-cyan-700 hover:bg-cyan-600 rounded text-sm"
+                >
+                  +10k Energy
+                </button>
+                <button
+                  onClick={() => adjustEnergy(-energy)}
+                  className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm"
+                >
+                  Zero Energy
+                </button>
+                <button
+                  onClick={() => adjustScrap(5_000)}
+                  className="px-3 py-2 bg-amber-700 hover:bg-amber-600 rounded text-sm"
+                >
+                  +5k Scrap
+                </button>
+                <button
+                  onClick={() => adjustScrap(-scrap)}
+                  className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm"
+                >
+                  Zero Scrap
+                </button>
+              </div>
+              <div className="mt-4 text-xs text-slate-400 leading-relaxed">
+                Use query `?devTool=state` to open this panel. All changes use in-memory dev actions
+                so you can experiment without touching the main loop flow.
+              </div>
+            </Panel>
+          </div>
+        </div>
+
+        <div className="bg-slate-900/80 border border-slate-700 rounded-xl p-5 shadow-lg space-y-4">
+          <div>
+            <div className="text-xs text-slate-500">Status</div>
+            <div className="text-lg text-emerald-300 font-bold">Live Game Snapshot</div>
+          </div>
+          <StatusRow label="Energy" value={Math.floor(energy).toLocaleString()} />
+          <StatusRow label="Total Energy" value={Math.floor(totalEnergy).toLocaleString()} />
+          <StatusRow label="Scrap" value={Math.floor(scrap).toLocaleString()} />
+          <StatusRow label="Total Scrap" value={Math.floor(totalScrap).toLocaleString()} />
+          <StatusRow label="Charge" value={`${(charge * 100).toFixed(0)}%`} />
+          <StatusRow label="Prestige" value={`Lv ${prestigeLevel}`} />
+          <StatusRow label="Essence" value={cosmicEssence.toString()} />
+          <StatusRow label="Run Active" value={scrapRunActive ? 'Yes' : 'No'} />
+          <div className="text-[11px] text-slate-500 pt-2 border-t border-slate-800">
+            Dev toggles are guarded by `__DEV_TOOLS__`. Flip the Vite define to disable in prod.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Panel({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div className="rounded-lg border border-slate-800 bg-slate-900/70 p-4">
+      <div className="text-sm text-slate-300 font-semibold mb-3">{title}</div>
+      {children}
+    </div>
+  );
+}
+
+function StatusRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between text-sm">
+      <span className="text-slate-400">{label}</span>
+      <span className="text-white font-semibold">{value}</span>
+    </div>
+  );
+}
+
+function ResourceRow({
+  label,
+  value,
+  steps,
+  onAdjust,
+}: {
+  label: string;
+  value: number;
+  steps: number[];
+  onAdjust: (n: number) => void;
+}) {
+  return (
+    <div className="mb-3">
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-white">{label}</div>
+        <div className="text-sm text-cyan-300">{Math.floor(value)}</div>
+      </div>
+      <div className="flex gap-2 mt-2">
+        {steps.map((step) => (
+          <button
+            key={`add-${step}`}
+            onClick={() => onAdjust(step)}
+            className="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs"
+          >
+            +{step}
+          </button>
+        ))}
+        {steps.map((step) => (
+          <button
+            key={`sub-${step}`}
+            onClick={() => onAdjust(-step)}
+            className="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs"
+          >
+            -{step}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SimpleField({
+  label,
+  value,
+  onSet,
+}: {
+  label: string;
+  value: number | string;
+  onSet: (val: number) => void;
+}) {
+  const [local, setLocal] = useState(value.toString());
+
+  useEffect(() => {
+    setLocal(value.toString());
+  }, [value]);
+
+  return (
+    <div className="mb-3">
+      <div className="text-sm text-white mb-1">{label}</div>
+      <div className="flex gap-2">
+        <input
+          value={local}
+          onChange={(e) => setLocal(e.target.value)}
+          className="w-24 px-2 py-1 rounded bg-slate-800 border border-slate-700 text-sm text-white"
+          inputMode="numeric"
+        />
+        <button
+          onClick={() => {
+            const parsed = Number(local);
+            if (!Number.isNaN(parsed)) {
+              onSet(parsed);
+            }
+          }}
+          className="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs"
+        >
+          Set
+        </button>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/devtools/OrbDebug.tsx">
+import PlaceholderTool from './PlaceholderTool';
+
+export default function OrbDebug() {
+  return <PlaceholderTool name="OrbDebug" hint="Use ?devTool=orbdebug for physics readouts." />;
+}
+</file>
+
+<file path="src/devtools/PlaceholderTool.tsx">
+type Props = {
+  name: string;
+  hint?: string;
+};
+
+export default function PlaceholderTool({ name, hint }: Props) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100">
+      <div className="text-center space-y-3">
+        <div className="text-xs text-slate-500 uppercase tracking-wide">Dev Tool</div>
+        <div className="text-3xl font-bold text-cyan-300">{name}</div>
+        <div className="text-sm text-slate-400 max-w-md mx-auto px-6">
+          Scaffold ready. Wire the detailed UI and logic when you are ready to iterate on {name}.
+        </div>
+        {hint && <div className="text-xs text-slate-500">{hint}</div>}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/devtools/PrestigeSim.tsx">
+import PlaceholderTool from './PlaceholderTool';
+
+export default function PrestigeSim() {
+  return <PlaceholderTool name="PrestigeSim" hint="Use ?devTool=prestige to model pacing." />;
+}
+</file>
+
+<file path="src/devtools/ShaderLab.tsx">
+import { useEffect, useMemo, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { createOrbMaterial } from '../orb/orbMaterial';
+import { CALM_IDLE_PRESET } from '../orb/orbPresets';
+
+type ControlState = {
+  color1: string;
+  color2: string;
+  chargeColor: string;
+  charge: number;
+  wobbleIntensity: number;
+  patternScale: number;
+  fresnelIntensity: number;
+  particleCount: number;
+  bloomStrength: number;
+  bloomThreshold: number;
+};
+
+const PRESETS: Record<string, Partial<ControlState>> = {
+  calm: {
+    color1: CALM_IDLE_PRESET.uniforms.color1,
+    color2: CALM_IDLE_PRESET.uniforms.color2,
+    chargeColor: CALM_IDLE_PRESET.uniforms.chargeColor,
+    charge: CALM_IDLE_PRESET.uniforms.chargeLevel,
+    wobbleIntensity: CALM_IDLE_PRESET.uniforms.wobbleIntensity,
+    patternScale: CALM_IDLE_PRESET.uniforms.patternScale,
+    fresnelIntensity: CALM_IDLE_PRESET.uniforms.fresnelIntensity,
+    particleCount: CALM_IDLE_PRESET.particles,
+    bloomStrength: CALM_IDLE_PRESET.bloom.strength,
+    bloomThreshold: CALM_IDLE_PRESET.bloom.threshold,
+  },
+  overcharged: {
+    color1: '#8b5cf6',
+    color2: '#ec4899',
+    chargeColor: '#f97316',
+    charge: 1,
+    wobbleIntensity: 1.8,
+    patternScale: 3.6,
+    fresnelIntensity: 1.4,
+    particleCount: 220,
+    bloomStrength: 1.8,
+    bloomThreshold: 0.3,
+  },
+  critical: {
+    color1: '#0f172a',
+    color2: '#38bdf8',
+    chargeColor: '#f43f5e',
+    charge: 0.8,
+    wobbleIntensity: 1.4,
+    patternScale: 4.2,
+    fresnelIntensity: 2.1,
+    particleCount: 180,
+    bloomStrength: 1.3,
+    bloomThreshold: 0.2,
+  },
+};
+
+const DEFAULT_CONTROLS: ControlState = {
+  color1: CALM_IDLE_PRESET.uniforms.color1,
+  color2: CALM_IDLE_PRESET.uniforms.color2,
+  chargeColor: CALM_IDLE_PRESET.uniforms.chargeColor,
+  charge: CALM_IDLE_PRESET.uniforms.chargeLevel,
+  wobbleIntensity: CALM_IDLE_PRESET.uniforms.wobbleIntensity,
+  patternScale: CALM_IDLE_PRESET.uniforms.patternScale,
+  fresnelIntensity: CALM_IDLE_PRESET.uniforms.fresnelIntensity,
+  particleCount: CALM_IDLE_PRESET.particles,
+  bloomStrength: CALM_IDLE_PRESET.bloom.strength,
+  bloomThreshold: CALM_IDLE_PRESET.bloom.threshold,
+};
+
+export default function ShaderLab() {
+  const mountRef = useRef<HTMLDivElement>(null);
+  const particlesRef = useRef<THREE.Points | null>(null);
+  const particleGeometryRef = useRef<THREE.BufferGeometry | null>(null);
+  const stateRef = useRef<ControlState>(DEFAULT_CONTROLS);
+
+  const [controls, setControls] = useState<ControlState>(DEFAULT_CONTROLS);
+
+  stateRef.current = controls;
+
+  const presetOptions = useMemo(
+    () => [
+      { id: 'calm', label: 'Calm Idle' },
+      { id: 'overcharged', label: 'Overcharged' },
+      { id: 'critical', label: 'Critical Surge' },
+    ],
+    []
+  );
+
+  useEffect(() => {
+    if (!mountRef.current) return;
+
+    const container = mountRef.current;
+    const getDimensions = () => {
+      const width = container.clientWidth || window.innerWidth;
+      const height = container.clientHeight || Math.max(400, window.innerHeight * 0.6);
+      return { width, height };
+    };
+    const { width: initialWidth, height: initialHeight } = getDimensions();
+    container.style.minHeight = `${initialHeight}px`;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#05070f');
+
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      initialWidth / initialHeight,
+      0.1,
+      100
+    );
+    camera.position.set(0, 0, 5);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(initialWidth, initialHeight);
+    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
+    container.appendChild(renderer.domElement);
+
+    const orbGeometry = new THREE.SphereGeometry(1, 64, 64);
+    const orbMaterial = createOrbMaterial({
+      color1: controls.color1,
+      color2: controls.color2,
+      chargeColor: controls.chargeColor,
+      chargeLevel: controls.charge,
+      wobbleIntensity: controls.wobbleIntensity,
+      patternScale: controls.patternScale,
+      fresnelIntensity: controls.fresnelIntensity,
+    });
+
+    const orb = new THREE.Mesh(orbGeometry, orbMaterial);
+    scene.add(orb);
+
+    const light = new THREE.PointLight(controls.chargeColor, 2, 8);
+    light.position.set(0, 0, 3);
+    scene.add(light);
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.1);
+    scene.add(ambient);
+
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(container.clientWidth, container.clientHeight),
+      controls.bloomStrength,
+      0.8,
+      controls.bloomThreshold
+    );
+    composer.addPass(bloomPass);
+
+    const rebuildParticles = (count: number) => {
+      if (particlesRef.current) {
+        scene.remove(particlesRef.current);
+        particleGeometryRef.current?.dispose();
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(count * 3);
+      const velocities: number[] = [];
+      for (let i = 0; i < count; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 2;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 2;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 2;
+        velocities.push((Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02);
+      }
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('velocity', new THREE.BufferAttribute(new Float32Array(velocities), 3));
+
+      const material = new THREE.PointsMaterial({
+        color: controls.chargeColor,
+        size: 0.05,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
+      });
+
+      const points = new THREE.Points(geometry, material);
+      particlesRef.current = points;
+      particleGeometryRef.current = geometry;
+      scene.add(points);
+    };
+
+    rebuildParticles(controls.particleCount);
+
+    const clock = new THREE.Clock();
+    let animationId = 0;
+
+    const animate = () => {
+      animationId = requestAnimationFrame(animate);
+      const elapsed = clock.getElapsedTime();
+      const delta = clock.getDelta();
+      const current = stateRef.current!;
+
+      orbMaterial.uniforms.time.value = elapsed;
+      orbMaterial.uniforms.chargeLevel.value = current.charge;
+      orbMaterial.uniforms.color1.value.set(current.color1);
+      orbMaterial.uniforms.color2.value.set(current.color2);
+      orbMaterial.uniforms.chargeColor.value.set(current.chargeColor);
+      orbMaterial.uniforms.wobbleIntensity.value = current.wobbleIntensity;
+      orbMaterial.uniforms.patternScale.value = current.patternScale;
+      orbMaterial.uniforms.fresnelIntensity.value = current.fresnelIntensity;
+
+      light.color = new THREE.Color(current.chargeColor);
+      light.intensity = 2 + current.charge * 2;
+
+      if (particlesRef.current) {
+        const positions = particlesRef.current.geometry.attributes.position as THREE.BufferAttribute;
+        const velocities = particlesRef.current.geometry.attributes.velocity as THREE.BufferAttribute;
+        for (let i = 0; i < positions.count; i++) {
+          const vx = velocities.getX(i);
+          const vy = velocities.getY(i);
+          const vz = velocities.getZ(i);
+          positions.setXYZ(i, positions.getX(i) + vx * (1 + current.charge * 5), positions.getY(i) + vy * (1 + current.charge * 5), positions.getZ(i) + vz * (1 + current.charge * 5));
+          const dist = Math.sqrt(
+            positions.getX(i) ** 2 + positions.getY(i) ** 2 + positions.getZ(i) ** 2
+          );
+          if (dist > 2) {
+            positions.setXYZ(i, (Math.random() - 0.5) * 0.2, (Math.random() - 0.5) * 0.2, (Math.random() - 0.5) * 0.2);
+          }
+        }
+        positions.needsUpdate = true;
+      }
+
+      bloomPass.strength = current.bloomStrength;
+      bloomPass.threshold = current.bloomThreshold;
+
+      const heartbeat = 1 + Math.sin(elapsed * 2) * 0.05;
+      orb.rotation.y += delta * (0.6 + current.charge * 3);
+      orb.rotation.x = Math.sin(elapsed * 0.5) * 0.2;
+      orb.scale.setScalar(heartbeat + current.charge * 0.2);
+      orb.position.y = Math.sin(elapsed * 1.5) * 0.1;
+
+      composer.render();
+    };
+
+    animate();
+
+    const handleResize = () => {
+      if (!container) return;
+      const { width, height } = getDimensions();
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+      composer.setSize(width, height);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', handleResize);
+      orbGeometry.dispose();
+      orbMaterial.dispose();
+      particleGeometryRef.current?.dispose();
+      renderer.dispose();
+      container.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (particlesRef.current && particleGeometryRef.current) {
+      const material = particlesRef.current.material as THREE.PointsMaterial;
+      material.color = new THREE.Color(controls.chargeColor);
+    }
+  }, [controls.chargeColor]);
+
+  useEffect(() => {
+    if (!particlesRef.current || !particleGeometryRef.current || !mountRef.current) return;
+    const scene = particlesRef.current.parent;
+    if (!scene) return;
+
+    const rebuild = () => {
+      const count = controls.particleCount;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(count * 3);
+      const velocities: number[] = [];
+      for (let i = 0; i < count; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 2;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 2;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 2;
+        velocities.push((Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02);
+      }
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('velocity', new THREE.BufferAttribute(new Float32Array(velocities), 3));
+      const material = particlesRef.current!.material;
+      scene.remove(particlesRef.current!);
+      particleGeometryRef.current?.dispose();
+      const next = new THREE.Points(geometry, material);
+      particlesRef.current = next;
+      particleGeometryRef.current = geometry;
+      scene.add(next);
+    };
+
+    rebuild();
+  }, [controls.particleCount]);
+
+  const applyPreset = (id: string) => {
+    const preset = PRESETS[id];
+    if (!preset) return;
+    setControls((c) => ({ ...c, ...preset }));
+  };
+
+  const exportConfig = () => {
+    const payload = {
+      uniforms: {
+        color1: controls.color1,
+        color2: controls.color2,
+        chargeColor: controls.chargeColor,
+        chargeLevel: controls.charge,
+        wobbleIntensity: controls.wobbleIntensity,
+        patternScale: controls.patternScale,
+        fresnelIntensity: controls.fresnelIntensity,
+      },
+      particles: controls.particleCount,
+      bloom: {
+        strength: controls.bloomStrength,
+        threshold: controls.bloomThreshold,
+      },
+    };
+    // eslint-disable-next-line no-console
+    console.log('ShaderLab preset', payload);
+  };
+
+  const ControlSlider = ({
+    label,
+    value,
+    min,
+    max,
+    step,
+    onChange,
+  }: {
+    label: string;
+    value: number;
+    min: number;
+    max: number;
+    step: number;
+    onChange: (n: number) => void;
+  }) => (
+    <div>
+      <div className="flex justify-between text-xs text-slate-400 mb-1">
+        <span>{label}</span>
+        <span className="text-slate-200">{value.toFixed(2)}</span>
+      </div>
+      <input
+        type="range"
+        className="w-full"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+      />
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 grid grid-cols-1 lg:grid-cols-[2fr_1fr]">
+      <div className="relative">
+        <div ref={mountRef} className="w-full h-[60vh] lg:h-screen" />
+        <div className="absolute top-4 left-4 bg-black/50 px-3 py-2 rounded text-xs text-slate-300">
+          Dev Tool: ShaderLab — use ?devTool=shader
+        </div>
+      </div>
+      <div className="p-6 space-y-4 bg-slate-900/80 border-l border-slate-800 overflow-y-auto">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-xs text-slate-500 uppercase">Presets</div>
+            <div className="text-lg font-semibold">Orb Shader Playground</div>
+          </div>
+          <select
+            className="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-sm"
+            defaultValue=""
+            onChange={(e) => {
+              if (e.target.value) applyPreset(e.target.value);
+            }}
+          >
+            <option value="">Choose</option>
+            {presetOptions.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <ColorInput
+            label="Color 1"
+            value={controls.color1}
+            onChange={(color) => setControls((c) => ({ ...c, color1: color }))}
+          />
+          <ColorInput
+            label="Color 2"
+            value={controls.color2}
+            onChange={(color) => setControls((c) => ({ ...c, color2: color }))}
+          />
+          <ColorInput
+            label="Charge Color"
+            value={controls.chargeColor}
+            onChange={(color) => setControls((c) => ({ ...c, chargeColor: color }))}
+          />
+        </div>
+
+        <ControlSlider
+          label="Charge Level"
+          value={controls.charge}
+          min={0}
+          max={1}
+          step={0.01}
+          onChange={(n) => setControls((c) => ({ ...c, charge: n }))}
+        />
+        <ControlSlider
+          label="Wobble Intensity"
+          value={controls.wobbleIntensity}
+          min={0}
+          max={3}
+          step={0.05}
+          onChange={(n) => setControls((c) => ({ ...c, wobbleIntensity: n }))}
+        />
+        <ControlSlider
+          label="Pattern Scale"
+          value={controls.patternScale}
+          min={0.5}
+          max={6}
+          step={0.05}
+          onChange={(n) => setControls((c) => ({ ...c, patternScale: n }))}
+        />
+        <ControlSlider
+          label="Fresnel Intensity"
+          value={controls.fresnelIntensity}
+          min={0}
+          max={3}
+          step={0.05}
+          onChange={(n) => setControls((c) => ({ ...c, fresnelIntensity: n }))}
+        />
+        <ControlSlider
+          label="Particle Count"
+          value={controls.particleCount}
+          min={20}
+          max={400}
+          step={10}
+          onChange={(n) => setControls((c) => ({ ...c, particleCount: Math.floor(n) }))}
+        />
+        <ControlSlider
+          label="Bloom Strength"
+          value={controls.bloomStrength}
+          min={0}
+          max={2.5}
+          step={0.05}
+          onChange={(n) => setControls((c) => ({ ...c, bloomStrength: n }))}
+        />
+        <ControlSlider
+          label="Bloom Threshold"
+          value={controls.bloomThreshold}
+          min={0}
+          max={1}
+          step={0.01}
+          onChange={(n) => setControls((c) => ({ ...c, bloomThreshold: n }))}
+        />
+
+        <button
+          onClick={exportConfig}
+          className="w-full py-2 rounded bg-cyan-700 hover:bg-cyan-600 text-sm font-semibold"
+        >
+          Export Preset to Console
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ColorInput({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+}) {
+  return (
+    <label className="text-xs text-slate-300 space-y-1">
+      <span className="block">{label}</span>
+      <input
+        type="color"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full h-10 rounded border border-slate-700 bg-slate-800"
+      />
+    </label>
+  );
+}
+</file>
+
+<file path="src/devtools/UpgradeSim.tsx">
+import PlaceholderTool from './PlaceholderTool';
+
+export default function UpgradeSim() {
+  return <PlaceholderTool name="UpgradeSim" hint="Use ?devTool=upgrade to inspect scaling." />;
+}
+</file>
+
+<file path="src/index.css">
+@import url('https://fonts.googleapis.com/css2?family=Saira:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+:root {
+  font-family: 'Saira', 'DM Mono', 'Fira Code', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #f8f7ff;
+  background: radial-gradient(circle at 20% 20%, #0b1027, #05070f 45%);
 }
 
 body {
@@ -426,13 +1778,6 @@ body {
 
 button {
   font-family: inherit;
-}
-
-.glass {
-  background: rgba(18, 20, 34, 0.8);
-  border: 1px solid rgba(126, 87, 194, 0.4);
-  box-shadow: 0 10px 40px rgba(108, 35, 255, 0.2);
-  backdrop-filter: blur(8px);
 }
 </file>
 
@@ -455,6 +1800,146 @@ ReactDOM.createRoot(rootElement).render(
 );
 </file>
 
+<file path="src/orb/orbMaterial.ts">
+import * as THREE from 'three';
+import { CALM_IDLE_PRESET } from './orbPresets';
+
+type ColorInput = THREE.Color | number | string;
+
+export type OrbUniformValues = {
+  chargeLevel: number;
+  color1: ColorInput;
+  color2: ColorInput;
+  chargeColor: ColorInput;
+  wobbleIntensity: number;
+  patternScale: number;
+  fresnelIntensity: number;
+};
+
+const defaultColors = {
+  color1: new THREE.Color(CALM_IDLE_PRESET.uniforms.color1).getHex(),
+  color2: new THREE.Color(CALM_IDLE_PRESET.uniforms.color2).getHex(),
+  chargeColor: new THREE.Color(CALM_IDLE_PRESET.uniforms.chargeColor).getHex(),
+};
+
+const asColor = (value: ColorInput | undefined, fallback: number) => {
+  if (value instanceof THREE.Color) return value;
+  if (value !== undefined) return new THREE.Color(value);
+  return new THREE.Color(fallback);
+};
+
+export const DEFAULT_ORB_UNIFORMS: OrbUniformValues = {
+  chargeLevel: CALM_IDLE_PRESET.uniforms.chargeLevel,
+  color1: asColor(undefined, defaultColors.color1),
+  color2: asColor(undefined, defaultColors.color2),
+  chargeColor: asColor(undefined, defaultColors.chargeColor),
+  wobbleIntensity: CALM_IDLE_PRESET.uniforms.wobbleIntensity,
+  patternScale: CALM_IDLE_PRESET.uniforms.patternScale,
+  fresnelIntensity: CALM_IDLE_PRESET.uniforms.fresnelIntensity,
+};
+
+export function createOrbMaterial(initial?: Partial<OrbUniformValues>): THREE.ShaderMaterial {
+  const uniforms: Record<keyof OrbUniformValues | 'time', { value: any }> = {
+    time: { value: 0 },
+    chargeLevel: { value: initial?.chargeLevel ?? DEFAULT_ORB_UNIFORMS.chargeLevel },
+    color1: { value: asColor(initial?.color1, defaultColors.color1) },
+    color2: { value: asColor(initial?.color2, defaultColors.color2) },
+    chargeColor: { value: asColor(initial?.chargeColor, defaultColors.chargeColor) },
+    wobbleIntensity: { value: initial?.wobbleIntensity ?? DEFAULT_ORB_UNIFORMS.wobbleIntensity },
+    patternScale: { value: initial?.patternScale ?? DEFAULT_ORB_UNIFORMS.patternScale },
+    fresnelIntensity: { value: initial?.fresnelIntensity ?? DEFAULT_ORB_UNIFORMS.fresnelIntensity },
+  };
+
+  return new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader: `
+      varying vec3 vNormal;
+      varying vec3 vPosition;
+      uniform float time;
+      uniform float chargeLevel;
+      uniform float wobbleIntensity;
+      uniform float patternScale;
+
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        vPosition = position;
+
+        vec3 pos = position;
+        float wobble = sin(time * 2.0 + position.y * 3.0) * 0.05 * chargeLevel * wobbleIntensity;
+        pos += normal * wobble;
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform float time;
+      uniform float chargeLevel;
+      uniform vec3 color1;
+      uniform vec3 color2;
+      uniform vec3 chargeColor;
+      uniform float patternScale;
+      uniform float fresnelIntensity;
+      varying vec3 vNormal;
+      varying vec3 vPosition;
+
+      void main() {
+        float pattern = sin(vPosition.x * patternScale + time) *
+                       cos(vPosition.y * patternScale + time * 0.7) *
+                       sin(vPosition.z * patternScale + time * 0.5);
+
+        vec3 baseColor = mix(color1, color2, pattern * 0.5 + 0.5);
+        vec3 finalColor = mix(baseColor, chargeColor, chargeLevel * 0.7);
+
+        float fresnel = pow(1.0 - dot(vNormal, vec3(0, 0, 1)), 2.0);
+        finalColor += fresnel * chargeColor * chargeLevel * 0.5 * fresnelIntensity;
+
+        float particles = step(0.95, sin(vPosition.x * 20.0 + time * 5.0) *
+                                     cos(vPosition.y * 20.0 + time * 3.0));
+        finalColor += particles * chargeColor * chargeLevel;
+
+        gl_FragColor = vec4(finalColor, 1.0);
+      }
+    `,
+  });
+}
+</file>
+
+<file path="src/orb/orbPresets.ts">
+export type OrbVisualPreset = {
+  uniforms: {
+    color1: string;
+    color2: string;
+    chargeColor: string;
+    chargeLevel: number;
+    wobbleIntensity: number;
+    patternScale: number;
+    fresnelIntensity: number;
+  };
+  particles: number;
+  bloom: {
+    strength: number;
+    threshold: number;
+  };
+};
+
+export const CALM_IDLE_PRESET: OrbVisualPreset = {
+  uniforms: {
+    color1: '#666666',
+    color2: '#301e0d',
+    chargeColor: '#506f4d',
+    chargeLevel: 0.03,
+    wobbleIntensity: 2.7,
+    patternScale: 4.9,
+    fresnelIntensity: 2.55,
+  },
+  particles: 30,
+  bloom: {
+    strength: 0,
+    threshold: 0.08,
+  },
+};
+</file>
+
 <file path="src/orb/OrbScene.tsx">
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
@@ -462,14 +1947,14 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { useGameStore } from '../core/GameState';
+import { createOrbMaterial } from './orbMaterial';
+import { CALM_IDLE_PRESET } from './orbPresets';
 
 type Props = {
   isHolding: boolean;
 };
 
-const ORB_COLOR_A = 0x4a0e78;
-const ORB_COLOR_B = 0x0e4a78;
-const CHARGE_COLOR = 0xff00ff;
+const CHARGE_COLOR = new THREE.Color(CALM_IDLE_PRESET.uniforms.chargeColor).getHex();
 
 export default function OrbScene({ isHolding }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -478,6 +1963,7 @@ export default function OrbScene({ isHolding }: Props) {
   const physics = useGameStore((s) => s.physics);
   const upgrades = useGameStore((s) => s.upgrades);
   const prestigeLevel = useGameStore((s) => s.prestigeLevel);
+  const scrap = useGameStore((s) => s.scrap);
 
   const stateRef = useRef({
     velocity: 0,
@@ -505,6 +1991,9 @@ export default function OrbScene({ isHolding }: Props) {
     prestigeRef.current = prestigeLevel;
   }, [prestigeLevel]);
 
+  const scrapUpdaterRef = useRef<((scrapValue: number) => void) | null>(null);
+  const scrapGroupRef = useRef<THREE.Group | null>(null);
+
   useEffect(() => {
     if (!mountRef.current) return;
 
@@ -521,64 +2010,63 @@ export default function OrbScene({ isHolding }: Props) {
     camera.position.z = 5;
 
     const orbGeometry = new THREE.SphereGeometry(1, 64, 64);
-    const orbMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 0 },
-        chargeLevel: { value: 0 },
-        color1: { value: new THREE.Color(ORB_COLOR_A) },
-        color2: { value: new THREE.Color(ORB_COLOR_B) },
-        chargeColor: { value: new THREE.Color(CHARGE_COLOR) },
-      },
-      vertexShader: `
-        varying vec3 vNormal;
-        varying vec3 vPosition;
-        uniform float time;
-        uniform float chargeLevel;
-
-        void main() {
-          vNormal = normalize(normalMatrix * normal);
-          vPosition = position;
-
-          vec3 pos = position;
-          float wobble = sin(time * 2.0 + position.y * 3.0) * 0.05 * chargeLevel;
-          pos += normal * wobble;
-
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float time;
-        uniform float chargeLevel;
-        uniform vec3 color1;
-        uniform vec3 color2;
-        uniform vec3 chargeColor;
-        varying vec3 vNormal;
-        varying vec3 vPosition;
-
-        void main() {
-          float pattern = sin(vPosition.x * 3.0 + time) *
-                         cos(vPosition.y * 3.0 + time * 0.7) *
-                         sin(vPosition.z * 3.0 + time * 0.5);
-
-          vec3 baseColor = mix(color1, color2, pattern * 0.5 + 0.5);
-          vec3 finalColor = mix(baseColor, chargeColor, chargeLevel * 0.7);
-
-          float fresnel = pow(1.0 - dot(vNormal, vec3(0, 0, 1)), 2.0);
-          finalColor += fresnel * chargeColor * chargeLevel * 0.5;
-
-          float particles = step(0.95, sin(vPosition.x * 20.0 + time * 5.0) *
-                                       cos(vPosition.y * 20.0 + time * 3.0));
-          finalColor += particles * chargeColor * chargeLevel;
-
-          gl_FragColor = vec4(finalColor, 1.0);
-        }
-      `,
-    });
+    const orbMaterial = createOrbMaterial({ chargeColor: CHARGE_COLOR });
 
     const orb = new THREE.Mesh(orbGeometry, orbMaterial);
     scene.add(orb);
 
-    const particleCount = 120;
+    const scrapGroup = new THREE.Group();
+    orb.add(scrapGroup);
+    scrapGroupRef.current = scrapGroup;
+
+    const scrapMaterials = [
+      new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.4, roughness: 0.35 }),
+      new THREE.MeshStandardMaterial({ color: 0xfbbf24, metalness: 0.35, roughness: 0.3 }),
+      new THREE.MeshStandardMaterial({ color: 0xeab308, metalness: 0.45, roughness: 0.28 }),
+    ];
+    const scrapGeometries = [
+      new THREE.BoxGeometry(0.22, 0.14, 0.1),
+      new THREE.ConeGeometry(0.12, 0.24, 5),
+      new THREE.OctahedronGeometry(0.18, 0),
+      new THREE.CylinderGeometry(0.08, 0.08, 0.24, 6),
+    ];
+
+    scrapUpdaterRef.current = (scrapValue: number) => {
+      const group = scrapGroupRef.current;
+      if (!group) return;
+
+      const maxPieces = 50;
+      const count = Math.min(maxPieces, Math.max(0, Math.floor(scrapValue)));
+      group.clear();
+
+      for (let i = 0; i < count; i++) {
+        const geometry = scrapGeometries[i % scrapGeometries.length];
+        const material = scrapMaterials[i % scrapMaterials.length];
+        const scrapPiece = new THREE.Mesh(geometry, material);
+        scrapPiece.castShadow = true;
+
+        const direction = new THREE.Vector3(
+          Math.random() - 0.5,
+          Math.random() - 0.5,
+          Math.random() - 0.5
+        ).normalize();
+        const radius = 1.05 + Math.random() * 0.35;
+        scrapPiece.position.copy(direction.multiplyScalar(radius));
+        scrapPiece.rotation.set(
+          Math.random() * Math.PI,
+          Math.random() * Math.PI,
+          Math.random() * Math.PI
+        );
+        const scale = 0.7 + Math.random() * 0.6;
+        scrapPiece.scale.setScalar(scale);
+
+        group.add(scrapPiece);
+      }
+    };
+
+    scrapUpdaterRef.current(scrap);
+
+    const particleCount = CALM_IDLE_PRESET.particles;
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
     const particleVelocities: { x: number; y: number; z: number }[] = [];
@@ -619,9 +2107,9 @@ export default function OrbScene({ isHolding }: Props) {
     composer.addPass(new RenderPass(scene, camera));
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(window.innerWidth, window.innerHeight),
-      0.5,
+      CALM_IDLE_PRESET.bloom.strength,
       0.8,
-      0.85
+      CALM_IDLE_PRESET.bloom.threshold
     );
     composer.addPass(bloomPass);
 
@@ -698,7 +2186,7 @@ export default function OrbScene({ isHolding }: Props) {
       particleGeometry.attributes.position.needsUpdate = true;
       pointLight.intensity = localState.charge * 5;
 
-      bloomPass.strength = Math.max(0.4, localState.charge * 2);
+      bloomPass.strength = Math.max(CALM_IDLE_PRESET.bloom.strength, localState.charge * 2);
       composer.render();
     };
 
@@ -719,6 +2207,9 @@ export default function OrbScene({ isHolding }: Props) {
       if (mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
+      scrapGroup.clear();
+      scrapGeometries.forEach((geo) => geo.dispose());
+      scrapMaterials.forEach((mat) => mat.dispose());
       orbGeometry.dispose();
       orbMaterial.dispose();
       particleGeometry.dispose();
@@ -727,7 +2218,59 @@ export default function OrbScene({ isHolding }: Props) {
     };
   }, [addEnergy, setCharge]);
 
+  useEffect(() => {
+    scrapUpdaterRef.current?.(scrap);
+  }, [scrap]);
+
   return <div ref={mountRef} className="fixed inset-0" />;
+}
+</file>
+
+<file path="src/scraprun/config.ts">
+import { ScrapUpgradeId } from '../core/ScrapUnlocks';
+
+export type ScrapRunConfig = {
+  innerOrbit: number;
+  outerOrbit: number;
+  orbitSpeed: number;
+  strafeSpeed: number;
+  maxStrafe: number;
+  debrisSpeed: number;
+  spawnDistance: number;
+  despawnDistance: number;
+  spawnInterval: number;
+  curvatureStrength: number;
+  goodRatio: number;
+};
+
+export const BASE_GAME_CONFIG: ScrapRunConfig = {
+  innerOrbit: -2,
+  outerOrbit: 1,
+  orbitSpeed: 0.08,
+  strafeSpeed: 0.1,
+  maxStrafe: 3,
+  debrisSpeed: 0.15,
+  spawnDistance: -40,
+  despawnDistance: 8,
+  spawnInterval: 1000,
+  curvatureStrength: 0.15,
+  goodRatio: 0.7,
+};
+
+export function applyUpgradesToConfig(
+  base: ScrapRunConfig,
+  upgrades: Record<ScrapUpgradeId, number>
+): ScrapRunConfig {
+  const afterburners = upgrades.afterburners ?? 0;
+  const timeDilation = upgrades.timeDilation ?? 0;
+
+  return {
+    ...base,
+    strafeSpeed: base.strafeSpeed + afterburners * 0.04,
+    maxStrafe: base.maxStrafe + afterburners * 0.5,
+    debrisSpeed: base.debrisSpeed * (1 - timeDilation * 0.12),
+    spawnInterval: base.spawnInterval * (1 + timeDilation * 0.15),
+  };
 }
 </file>
 
@@ -762,26 +2305,36 @@ import { useEffect, useRef, useState } from 'react';
 import type { MouseEvent, TouchEvent } from 'react';
 import * as THREE from 'three';
 import type { ScrapUpgradeId } from '../core/ScrapUnlocks';
+import { BASE_GAME_CONFIG, applyUpgradesToConfig, type ScrapRunConfig } from './config';
+import { createOrbMaterial } from '../orb/orbMaterial';
+import { CALM_IDLE_PRESET } from '../orb/orbPresets';
 
 type Props = {
   onGameOver: (score: number, collected: number) => void;
   upgrades: Record<ScrapUpgradeId, number>;
+  config?: ScrapRunConfig;
+  showCurvatureDebug?: boolean;
+  showHitboxes?: boolean;
+  minimalUi?: boolean;
+  endless?: boolean;
 };
 
-const BASE_GAME_CONFIG = {
-  innerOrbit: -2,
-  outerOrbit: 1,
-  orbitSpeed: 0.08,
-  strafeSpeed: 0.1,
-  maxStrafe: 3,
-  debrisSpeed: 0.15,
-  spawnDistance: -40,
-  despawnDistance: 8,
-  spawnInterval: 1000,
-  curvatureStrength: 0.15,
+export type ScrapRunDebugState = {
+  score: number;
+  collected: number;
+  shields: number;
+  gameOver: boolean;
 };
 
-export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
+export default function ScrapRunScene({
+  onGameOver,
+  upgrades,
+  config = BASE_GAME_CONFIG,
+  showCurvatureDebug = false,
+  showHitboxes = false,
+  minimalUi = false,
+  endless = false,
+}: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const [isHolding, setIsHolding] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -796,16 +2349,12 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
   useEffect(() => {
     if (!mountRef.current || gameState.gameOver) return;
 
-    const afterburners = upgrades.afterburners ?? 0;
-    const timeDilation = upgrades.timeDilation ?? 0;
-    const config = {
-      ...BASE_GAME_CONFIG,
-      strafeSpeed: BASE_GAME_CONFIG.strafeSpeed + afterburners * 0.04,
-      maxStrafe: BASE_GAME_CONFIG.maxStrafe + afterburners * 0.5,
-      debrisSpeed: BASE_GAME_CONFIG.debrisSpeed * (1 - timeDilation * 0.12),
-      spawnInterval: BASE_GAME_CONFIG.spawnInterval * (1 + timeDilation * 0.15),
-      curvatureStrength: BASE_GAME_CONFIG.curvatureStrength,
-    };
+    // Clean up any previous canvas if StrictMode double-mounts.
+    if (mountRef.current.firstChild) {
+      mountRef.current.replaceChildren();
+    }
+
+    const effectiveConfig = applyUpgradesToConfig(config, upgrades);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0a0a1a);
@@ -822,6 +2371,7 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
+    renderer.domElement.style.pointerEvents = 'none';
     mountRef.current.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
@@ -858,67 +2408,69 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
     scene.add(stars);
 
     const playerGroup = new THREE.Group();
-    playerGroup.position.set(0, config.innerOrbit, 5);
+    playerGroup.position.set(0, effectiveConfig.innerOrbit, 5);
     scene.add(playerGroup);
 
-    const bodyGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.6, 8);
-    const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0xe0e0e0 });
-    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-    body.castShadow = true;
-    playerGroup.add(body);
-
-    const capGeometry = new THREE.SphereGeometry(0.3, 8, 8);
-    const topCap = new THREE.Mesh(capGeometry, bodyMaterial);
-    topCap.position.y = 0.3;
-    playerGroup.add(topCap);
-    const bottomCap = new THREE.Mesh(capGeometry, bodyMaterial);
-    bottomCap.position.y = -0.3;
-    playerGroup.add(bottomCap);
-
-    const helmetGeometry = new THREE.SphereGeometry(0.35, 16, 16);
-    const helmetMaterial = new THREE.MeshLambertMaterial({
-      color: 0x4a90e2,
-      transparent: true,
-      opacity: 0.7,
+    const orbGeometry = new THREE.SphereGeometry(0.8, 64, 64);
+    const orbMaterial = createOrbMaterial({
+      ...CALM_IDLE_PRESET.uniforms,
+      chargeLevel: 0.6,
     });
-    const helmet = new THREE.Mesh(helmetGeometry, helmetMaterial);
-    helmet.position.y = 0.6;
-    helmet.castShadow = true;
-    playerGroup.add(helmet);
+    const orbMesh = new THREE.Mesh(orbGeometry, orbMaterial);
+    orbMesh.castShadow = true;
+    playerGroup.add(orbMesh);
 
     const collectedJunk: THREE.Mesh[] = [];
     const debrisList: THREE.Mesh[] = [];
     let debrisIdCounter = 0;
     let lastSpawnTime = Date.now();
+    const shaderClock = new THREE.Clock();
 
     let currentGameState = { ...gameState };
-    let currentOrbitTarget = config.innerOrbit;
+    let currentOrbitTarget = effectiveConfig.innerOrbit;
     let currentStrafeTarget = 0;
     let currentIsHolding = false;
     let currentTouchPos: number | null = null;
 
+    const hitboxHelper =
+      showHitboxes &&
+      new THREE.Mesh(
+        new THREE.SphereGeometry(1, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true, transparent: true, opacity: 0.2 })
+      );
+    if (hitboxHelper) {
+      playerGroup.add(hitboxHelper);
+    }
+
     const animate = () => {
-      if (!currentGameState.gameOver) {
+      if (!currentGameState.gameOver || endless) {
         requestAnimationFrame(animate);
       }
 
       planet.rotation.y += 0.002;
+      const elapsed = shaderClock.getElapsedTime();
+      orbMaterial.uniforms.time.value = elapsed;
+      const visualCharge = Math.min(
+        1,
+        0.2 + currentGameState.collected * 0.05 + (currentIsHolding ? 0.4 : 0)
+      );
+      orbMaterial.uniforms.chargeLevel.value = visualCharge;
 
       const currentY = playerGroup.position.y;
-      const newY = THREE.MathUtils.lerp(currentY, currentOrbitTarget, config.orbitSpeed);
+      const newY = THREE.MathUtils.lerp(currentY, currentOrbitTarget, effectiveConfig.orbitSpeed);
       playerGroup.position.y = newY;
 
       const currentX = playerGroup.position.x;
-      const newX = THREE.MathUtils.lerp(currentX, currentStrafeTarget, config.strafeSpeed);
+      const newX = THREE.MathUtils.lerp(currentX, currentStrafeTarget, effectiveConfig.strafeSpeed);
       playerGroup.position.x = newX;
 
       playerGroup.rotation.y += 0.01;
 
       const now = Date.now();
-      if (now - lastSpawnTime > config.spawnInterval) {
+      if (now - lastSpawnTime > effectiveConfig.spawnInterval) {
         lastSpawnTime = now;
 
-        const isGood = Math.random() > 0.3;
+        const isGood = Math.random() < effectiveConfig.goodRatio;
         const geometry = isGood
           ? new THREE.BoxGeometry(0.4, 0.4, 0.4)
           : new THREE.OctahedronGeometry(0.5, 0);
@@ -930,7 +2482,7 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
         const startX = (Math.random() - 0.5) * 6;
         const startY = (Math.random() - 0.5) * 4 - 1;
 
-        debris.position.set(startX, startY, config.spawnDistance);
+        debris.position.set(startX, startY, effectiveConfig.spawnDistance);
         debris.castShadow = true;
         debris.userData = {
           id: debrisIdCounter++,
@@ -940,6 +2492,48 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
           rotationSpeed: { x: Math.random() * 0.04 - 0.02, y: Math.random() * 0.04 - 0.02 },
         };
         scene.add(debris);
+
+        if (showHitboxes) {
+          const helper = new THREE.Mesh(
+            new THREE.SphereGeometry(0.4, 12, 12),
+            new THREE.MeshBasicMaterial({
+              color: isGood ? 0x22c55e : 0xf87171,
+              wireframe: true,
+              transparent: true,
+              opacity: 0.25,
+            })
+          );
+          helper.position.copy(debris.position);
+          helper.userData.parentId = debris.userData.id;
+          scene.add(helper);
+          debris.userData.hitboxHelper = helper;
+        }
+
+        if (showCurvatureDebug) {
+          const points: THREE.Vector3[] = [];
+          const steps = 20;
+          for (let step = 0; step <= steps; step++) {
+            const t = step / steps;
+            const z = effectiveConfig.spawnDistance + t * (effectiveConfig.despawnDistance - effectiveConfig.spawnDistance);
+            const progress =
+              (z - effectiveConfig.spawnDistance) /
+              (effectiveConfig.despawnDistance - effectiveConfig.spawnDistance);
+            const curve = Math.sin(progress * Math.PI) * effectiveConfig.curvatureStrength;
+            const x = startX + startX * curve * 0.5;
+            const y = startY + Math.abs(startX) * curve;
+            points.push(new THREE.Vector3(x, y, z));
+          }
+          const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+          const lineMaterial = new THREE.LineBasicMaterial({
+            color: isGood ? 0x22c55e : 0xef4444,
+            transparent: true,
+            opacity: 0.35,
+          });
+          const line = new THREE.Line(lineGeometry, lineMaterial);
+          scene.add(line);
+          debris.userData.curveLine = line;
+        }
+
         debrisList.push(debris);
       }
 
@@ -950,12 +2544,12 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
       for (let i = debrisList.length - 1; i >= 0; i--) {
         const debris = debrisList[i];
 
-        debris.position.z += config.debrisSpeed;
+        debris.position.z += effectiveConfig.debrisSpeed;
 
         const progress =
-          (debris.position.z - config.spawnDistance) /
-          (config.despawnDistance - config.spawnDistance);
-        const curve = Math.sin(progress * Math.PI) * config.curvatureStrength;
+          (debris.position.z - effectiveConfig.spawnDistance) /
+          (effectiveConfig.despawnDistance - effectiveConfig.spawnDistance);
+        const curve = Math.sin(progress * Math.PI) * effectiveConfig.curvatureStrength;
 
         debris.position.x = debris.userData.initialX + debris.userData.initialX * curve * 0.5;
         debris.position.y = debris.userData.initialY + Math.abs(debris.userData.initialX) * curve;
@@ -963,9 +2557,23 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
         debris.rotation.x += debris.userData.rotationSpeed.x;
         debris.rotation.y += debris.userData.rotationSpeed.y;
 
+        if (debris.userData.hitboxHelper) {
+          debris.userData.hitboxHelper.position.copy(debris.position);
+        }
+
         const distance = debris.position.distanceTo(playerPos);
         if (distance < hitboxRadius + 0.3) {
           scene.remove(debris);
+          if (debris.userData.hitboxHelper) {
+            scene.remove(debris.userData.hitboxHelper);
+            debris.userData.hitboxHelper.geometry.dispose();
+            debris.userData.hitboxHelper.material.dispose();
+          }
+          if (debris.userData.curveLine) {
+            scene.remove(debris.userData.curveLine);
+            debris.userData.curveLine.geometry.dispose();
+            debris.userData.curveLine.material.dispose();
+          }
           debrisList.splice(i, 1);
 
           if (debris.userData.type === 'good') {
@@ -999,17 +2607,33 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
 
               setGameState({ ...currentGameState });
             } else {
-              currentGameState.gameOver = true;
-              setGameState({ ...currentGameState });
+              if (!endless) {
+                currentGameState.gameOver = true;
+                setGameState({ ...currentGameState });
+              }
             }
           }
           continue;
         }
 
-        if (debris.position.z > config.despawnDistance) {
+        if (debris.position.z > effectiveConfig.despawnDistance) {
           scene.remove(debris);
+          if (debris.userData.hitboxHelper) {
+            scene.remove(debris.userData.hitboxHelper);
+            debris.userData.hitboxHelper.geometry.dispose();
+            debris.userData.hitboxHelper.material.dispose();
+          }
+          if (debris.userData.curveLine) {
+            scene.remove(debris.userData.curveLine);
+            debris.userData.curveLine.geometry.dispose();
+            debris.userData.curveLine.material.dispose();
+          }
           debrisList.splice(i, 1);
         }
+      }
+
+      if (hitboxHelper) {
+        hitboxHelper.scale.setScalar(hitboxRadius);
       }
 
       renderer.render(scene, camera);
@@ -1025,11 +2649,11 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
     window.addEventListener('resize', handleResize);
 
     const stateInterval = setInterval(() => {
-      currentOrbitTarget = currentIsHolding ? config.outerOrbit : config.innerOrbit;
+      currentOrbitTarget = currentIsHolding ? effectiveConfig.outerOrbit : effectiveConfig.innerOrbit;
 
       if (currentTouchPos !== null) {
         const normalizedX = (currentTouchPos - window.innerWidth / 2) / (window.innerWidth / 2);
-        currentStrafeTarget = normalizedX * config.maxStrafe;
+        currentStrafeTarget = normalizedX * effectiveConfig.maxStrafe;
       } else {
         currentStrafeTarget = 0;
       }
@@ -1050,12 +2674,33 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
     return () => {
       window.removeEventListener('resize', handleResize);
       clearInterval(stateInterval);
-      if (mountRef.current && renderer.domElement) {
+
+      debrisList.forEach((debris) => {
+        if (debris.userData.hitboxHelper) {
+          scene.remove(debris.userData.hitboxHelper);
+          debris.userData.hitboxHelper.geometry.dispose();
+          debris.userData.hitboxHelper.material.dispose();
+        }
+        if (debris.userData.curveLine) {
+          scene.remove(debris.userData.curveLine);
+          debris.userData.curveLine.geometry.dispose();
+          debris.userData.curveLine.material.dispose();
+        }
+        scene.remove(debris);
+      });
+
+      if (hitboxHelper) {
+        playerGroup.remove(hitboxHelper);
+        hitboxHelper.geometry.dispose();
+        hitboxHelper.material.dispose();
+      }
+
+      if (mountRef.current && renderer.domElement && renderer.domElement.parentElement === mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
       renderer.dispose();
     };
-  }, [gameState.gameOver, upgrades]);
+  }, [gameState.gameOver, upgrades, config, showCurvatureDebug, showHitboxes, endless]);
 
   useEffect(() => {
     const updater = (window as unknown as Record<string, (value: any) => void>).updateHoldingState;
@@ -1117,20 +2762,22 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black">
-      <div
-        className="absolute top-5 left-0 right-0 z-10 text-center font-mono text-xl text-green-400"
-        style={{ textShadow: '0 0 10px rgba(74, 222, 128, 0.5)' }}
-      >
-        <div>SCRAP: {gameState.collected} | SCORE: {gameState.score}</div>
-        <div className="text-sm mt-1 text-purple-400">
-          {isHolding ? '↑ OUTER ORBIT' : '↓ INNER ORBIT'}
+      {!minimalUi && (
+        <div
+          className="absolute top-5 left-0 right-0 z-10 text-center font-mono text-xl text-green-400"
+          style={{ textShadow: '0 0 10px rgba(74, 222, 128, 0.5)' }}
+        >
+          <div>SCRAP: {gameState.collected} | SCORE: {gameState.score}</div>
+          <div className="text-sm mt-1 text-purple-400">
+            {isHolding ? '↑ OUTER ORBIT' : '↓ INNER ORBIT'}
+          </div>
+          {gameState.shields > 0 && (
+            <div className="text-xs text-cyan-400 mt-1">Shields: {gameState.shields}</div>
+          )}
         </div>
-        {gameState.shields > 0 && (
-          <div className="text-xs text-cyan-400 mt-1">Shields: {gameState.shields}</div>
-        )}
-      </div>
+      )}
 
-      {!gameState.gameOver && gameState.score === 0 && (
+      {!minimalUi && !gameState.gameOver && gameState.score === 0 && (
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white font-mono text-center bg-black bg-opacity-80 p-5 rounded-lg pointer-events-none">
           <div className="text-green-400 text-2xl mb-2">GREED vs GRAVITY</div>
           <div>HOLD SCREEN → OUTER ORBIT</div>
@@ -1141,7 +2788,7 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
         </div>
       )}
 
-      {gameState.gameOver && (
+      {!minimalUi && gameState.gameOver && (
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white font-mono text-2xl text-center bg-black bg-opacity-90 p-10 rounded-lg">
           <div className="text-red-500 text-3xl mb-5">WRECKED</div>
           <div>Final Score: {gameState.score}</div>
@@ -1155,7 +2802,7 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
         </div>
       )}
 
-      {!gameState.gameOver && (
+      {!minimalUi && !gameState.gameOver && (
         <button
           onClick={handleAbort}
           className="absolute top-5 right-5 z-10 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold"
@@ -1164,8 +2811,10 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
         </button>
       )}
 
+      <div ref={mountRef} className="w-full h-full pointer-events-none" />
+
       <div
-        className="absolute bottom-0 left-0 right-0 h-2/5 z-5"
+        className="absolute inset-0 z-0"
         style={{ touchAction: 'none' }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -1175,11 +2824,13 @@ export default function ScrapRunScene({ onGameOver, upgrades }: Props) {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       />
-
-      <div ref={mountRef} className="w-full h-full" />
     </div>
   );
 }
+</file>
+
+<file path="src/types.d.ts">
+declare const __DEV_TOOLS__: boolean;
 </file>
 
 <file path="src/ui/MainMenu.tsx">
@@ -1231,7 +2882,7 @@ export default function MainMenu() {
   return (
     <>
       <div className="fixed top-6 left-1/2 -translate-x-1/2 text-center z-10">
-        <div className="glass px-8 py-4 rounded-lg border border-purple-500/60">
+        <div className="px-8 py-4 rounded-2xl border border-purple-500/60 bg-white/5 backdrop-blur-lg shadow-[0_10px_40px_rgba(108,35,255,0.25)]">
           <div className="text-purple-300 text-sm mb-1 tracking-wide">ENERGY</div>
           <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-mono drop-shadow">
             {Math.floor(energy)}
@@ -1250,7 +2901,7 @@ export default function MainMenu() {
       </div>
 
       <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-10">
-        <div className="glass px-8 py-6 rounded-lg border-2 border-purple-600/60">
+        <div className="px-8 py-6 rounded-2xl border-2 border-purple-600/60 bg-white/5 backdrop-blur-lg shadow-[0_10px_40px_rgba(108,35,255,0.25)]">
           <div className="flex gap-8 items-center">
             <div className="text-center">
               <button
@@ -1294,7 +2945,7 @@ export default function MainMenu() {
         </div>
       </div>
 
-      <div className="fixed bottom-6 right-6 glass p-4 rounded-lg border border-purple-500 text-purple-200 text-sm max-w-xs">
+      <div className="fixed bottom-6 right-6 p-4 rounded-2xl border border-purple-500 bg-white/5 backdrop-blur-lg shadow-[0_10px_40px_rgba(108,35,255,0.25)] text-purple-200 text-sm max-w-xs">
         <div className="font-bold mb-2">Controls</div>
         <div>• Hold anywhere to charge the orb</div>
         <div>• Charge = more energy generation</div>
@@ -1456,8 +3107,12 @@ export default _default;
 <file path="vite.config.js">
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
+    define: {
+        __DEV_TOOLS__: JSON.stringify(true),
+    },
     server: {
         port: 5173,
     },
@@ -1467,18 +3122,17 @@ export default defineConfig({
 <file path="vite.config.ts">
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
+  define: {
+    __DEV_TOOLS__: JSON.stringify(true),
+  },
   server: {
     port: 5173,
   },
 });
-</file>
-
-<file path=".gitattributes">
-# Auto detect text files and perform LF normalization
-* text=auto
 </file>
 
 <file path=".gitignore">
@@ -1621,22 +3275,86 @@ dist/
 </file>
 
 <file path="README.md">
-# Orb Ascent
+# 🗑️ Trashball: Core Accumulator
 
-Hybrid idle orb + scrap-run mini-game built with React, Three.js, and Zustand.
+Hybrid idle/runner game where you grow a cosmic trashball to power yourself up and launch high-stakes salvage runs. Built with React, Three.js, and Zustand.
 
-## Getting started
+## 🚀 Concept: The Trashball's Ascent
 
-1. Install dependencies: `npm install`
-2. Start dev server: `npm run dev`
-3. Build for production: `npm run build` then preview with `npm run preview`
+You control a Core Accumulator—a massive orb that generates power by accumulating and compressing cosmic junk.
 
-## Structure
+1.  **Generate Mass:** Charge the orb to generate **Mass** (your primary resource).
+2.  **Launch Harvests:** Spend Mass to launch **Debris Harvest** runs (the mini-game).
+3.  **Collect Salvage:** During the run, you collect junk (physical objects) which translates to **Salvage** (your upgrade currency).
+4.  **Prestige:** When the Trashball reaches critical mass, you can **Prestige** to gain permanent Essence and restart with a stronger Core.
 
-- `src/core` — Zustand store and upgrade definitions
-- `src/orb` — 3D orb scene, energy generation
-- `src/scraprun` — full-screen runner overlay
-- `src/ui` — HUD, cooldown, upgrade panel
+## 🎮 Core Gameplay Mechanics
+
+### 1. The Core Accumulator (Idle Loop)
+
+This is the main 3D orb scene where you accumulate power:
+
+* **Charging:** **Hold the screen/mouse button** to charge the Core's energy vortex.
+    * Higher **Vortex Power** (charge level) dramatically increases **Mass** generation per tick.
+    * Releasing the hold allows the Vortex Power to slowly dampen down.
+* **Mass (Energy):** This resource tracks the Trashball's overall size/power. It is spent to launch Debris Harvests and is the requirement for Prestige.
+* **Physics:** The orb reacts to holding (Thrust) and releasing (Gravity/Damping) to create a satisfying, skill-based idle loop.
+
+### 2. Debris Harvest (Runner Mini-Game)
+
+The high-stakes mini-game where you earn your currency:
+
+* **Goal:** Navigate the Trashball through space to **Collect green junk** (earn physical mass) and **Avoid red obstacles** (lose mass/shields).
+* **Controls:**
+    * **Hold:** Moves the Trashball into the **Outer Orbit**.
+    * **Release:** Moves the Trashball into the **Inner Orbit**.
+    * **Drag/Strafe:** Allows horizontal movement to target junk and dodge obstacles.
+* **Rewards:**
+    * **Trashball Mass:** The physical junk collected is temporarily attached to the Trashball.
+    * **Salvage (Scrap):** The final score and collected mass from the run are converted into permanent Salvage currency.
+    * *Tip: Launching the run with high Vortex Power grants a bonus Salvage multiplier!*.
+
+## 🛠️ Progression and Upgrades
+
+All upgrades are purchased using **Salvage** and are grouped into specialized categories:
+
+### I. Core Density (Harmonic)
+*Focuses on Mass/Energy generation.*
+
+| Upgrade | Effect |
+| :--- | :--- |
+| **Core Compressor** (`resonanceTuner`) | Increases Mass generation rate per level. |
+| **Critical Surge** (`criticalSurge`) | Chance to multiply a Mass generation tick when holding. |
+| **Vortex Lock** (`orbitalStabilization`) | Reduces charge drain when released (more efficient idle). |
+
+### II. Acquisition (Scavenger)
+*Focuses on the Debris Harvest run's efficiency and defense.*
+
+| Upgrade | Effect |
+| :--- | :--- |
+| **Junk Magnet** (`tractorBeam`) | Wider scrap pickup radius (larger Trashball hitbox). |
+| **Shield Generator** (`shieldGenerator`) | Grants shield charges to ignore a hit from an obstacle. |
+| **Afterburners** (`afterburners`) | Faster strafe speed in the Debris Harvest run. |
+
+### III. Temporal (Chronos)
+*Focuses on mission throughput and run time control.*
+
+| Upgrade | Effect |
+| :--- | :--- |
+| **Warp Cooldown** (`warpCooldown`) | Reduces the launch cooldown timer for the Debris Harvest. |
+| **Gravity Shift** (`timeDilation`) | Debris moves slower during the run, making collection easier. |
+
+## 🏗️ Technical Structure
+
+* `src/core`: Zustand store (`GameState.ts`) and upgrade definitions (`ScrapUnlocks.ts`).
+* `src/orb`: 3D three.js scene for the Core Accumulator/idle loop (`OrbScene.tsx`).
+* `src/scraprun`: Full-screen runner mini-game (`ScrapRunScene.tsx`).
+* `src/ui`: Interface components (HUD, cooldown, Upgrade Panel).
+
+## 🔨 Getting Started
+
+1.  Install dependencies: `npm install`
+2.  Start dev server: `npm run dev`
 </file>
 
 </files>
