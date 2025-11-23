@@ -79,3 +79,7 @@ All upgrades are purchased using **Salvage** and are grouped into specialized ca
 
 1.  Install dependencies: `npm install`
 2.  Start dev server: `npm run dev`
+
+## Asset Credits
+
+FBX garbage models were sourced from https://rojatzo.itch.io/garbage-assets.

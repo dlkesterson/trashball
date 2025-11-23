@@ -34,34 +34,34 @@ export const CALM_IDLE_PRESET: OrbVisualPreset = {
 
 export const OVERCHARGED_PRESET: OrbVisualPreset = {
   uniforms: {
-    color1: '#8b5cf6',
-    color2: '#ec4899',
-    chargeColor: '#f97316',
+    color1: '#121212',
+    color2: '#f766f9',
+    chargeColor: '#0fa997',
     chargeLevel: 1,
-    wobbleIntensity: 1.8,
-    patternScale: 3.6,
-    fresnelIntensity: 1.4,
+    wobbleIntensity: 0,
+    patternScale: 1.55,
+    fresnelIntensity: 1.85,
   },
-  particles: 220,
+  particles: 400,
   bloom: {
-    strength: 1.8,
-    threshold: 0.3,
+    strength: 1.25,
+    threshold: 0.28,
   },
 };
 
 export const SUPER_CRITICAL_PRESET: OrbVisualPreset = {
   uniforms: {
-    color1: '#0f172a',
-    color2: '#38bdf8',
-    chargeColor: '#f43f5e',
+    color1: '#e2a66e',
+    color2: '#f3311b',
+    chargeColor: '#b23434',
     chargeLevel: 1,
-    wobbleIntensity: 2.1,
-    patternScale: 4.2,
-    fresnelIntensity: 2.4,
+    wobbleIntensity: 3,
+    patternScale: 0.5,
+    fresnelIntensity: 2.45,
   },
-  particles: 180,
+  particles: 160,
   bloom: {
-    strength: 1.3,
-    threshold: 0.2,
+    strength: 2.45,
+    threshold: 0,
   },
 };
