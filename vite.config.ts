@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  base: '/orb-ascent/',
+  base: '/trashball/',
   plugins: [react(), tailwindcss()],
   define: {
     __DEV_TOOLS__: JSON.stringify(true),
