@@ -44,80 +44,80 @@ export default function MainMenu() {
   };
 
   return (
-    <>
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 text-center z-10">
-        <div className="px-8 py-4 rounded-2xl border border-purple-500/60 bg-white/5 backdrop-blur-lg shadow-[0_10px_40px_rgba(108,35,255,0.25)]">
-          <div className="text-purple-300 text-sm mb-1 tracking-wide">ENERGY</div>
-          <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-mono drop-shadow">
-            {Math.floor(energy)}
-          </div>
-          <div className="text-xs text-gray-400 mt-1">{(charge * 100).toFixed(0)}% charged</div>
-        </div>
-      </div>
-
-      <div className="fixed top-28 left-1/2 -translate-x-1/2 z-10">
-        <div className="w-64 h-4 bg-gray-800 rounded-full overflow-hidden border-2 border-purple-500">
-          <div
-            className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-100"
-            style={{ width: `${charge * 100}%` }}
-          />
-        </div>
-      </div>
-
-      <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-10">
-        <div className="px-8 py-6 rounded-2xl border-2 border-purple-600/60 bg-white/5 backdrop-blur-lg shadow-[0_10px_40px_rgba(108,35,255,0.25)]">
-          <div className="flex gap-8 items-center">
-            <div className="text-center">
-              <button
-                onClick={startScrapRun}
-                disabled={!canLaunch}
-                className={`px-8 py-4 rounded-lg font-bold text-lg transition-all ${
-                  canLaunch
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg shadow-purple-500/50 border-0'
-                    : 'bg-gray-700 text-gray-500 cursor-not-allowed border border-gray-700'
-                }`}
-              >
-                {canLaunch ? 'LAUNCH SCRAP RUN' : `COOLDOWN ${formatTime(cooldownRemaining)}`}
-              </button>
-              <div className="text-xs text-gray-400 mt-2">
-                {Math.floor(scrap)} Scrap | Best: {bestRunScore}
+    <div className="pointer-events-none absolute inset-0 flex flex-col justify-end p-4 sm:p-6">
+      <div className="pointer-events-auto w-full max-w-3xl mx-auto space-y-3 sm:space-y-4">
+        <div className="rounded-3xl border border-lime-500/25 bg-black/70 backdrop-blur-lg shadow-2xl shadow-lime-900/30 p-4 sm:p-5">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className="text-xs uppercase tracking-[0.2em] text-lime-300">Trashball Energy Yard</div>
+              <div className="text-[11px] text-slate-400 mt-1">
+                Hold to overcharge the trashball. Release to launch and harvest junk from the belt.
               </div>
             </div>
+            <div className="text-right">
+              <div className="text-[11px] text-slate-400 uppercase tracking-wide">Burn Output</div>
+              <div className="text-3xl sm:text-4xl font-bold text-lime-200 font-mono">
+                {Math.floor(energy)}
+              </div>
+              <div className="text-xs text-slate-400 mt-1">{(charge * 100).toFixed(0)}% charged</div>
+            </div>
+          </div>
 
-            <div className="text-center border-l-2 border-purple-700 pl-8">
+          <div className="mt-3 h-2 rounded-full bg-slate-900 overflow-hidden border border-slate-800">
+            <div
+              className="h-full bg-gradient-to-r from-lime-400 to-emerald-400 transition-all duration-150"
+              style={{ width: `${Math.min(100, charge * 100)}%` }}
+            />
+          </div>
+
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-300">
+            <span className="px-2 py-1 rounded-full bg-lime-500/10 text-lime-300 font-mono">
+              Trash Hauled: {Math.floor(scrap)}
+            </span>
+            <span className="px-2 py-1 rounded-full bg-slate-800 text-slate-200">
+              Best Burn Output: {bestRunScore}
+            </span>
+            <span className="px-2 py-1 rounded-full bg-amber-500/10 text-amber-300">
+              Prestige {prestigeLevel} | Essence {cosmicEssence}
+            </span>
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-slate-800 bg-black/70 backdrop-blur-lg shadow-xl p-4 sm:p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-[1.6fr_1fr] gap-3 sm:gap-4 items-stretch">
+            <button
+              onClick={startScrapRun}
+              disabled={!canLaunch}
+              className={`w-full py-4 sm:py-5 rounded-2xl text-lg font-semibold tracking-wide transition-all active:scale-[0.99] ${
+                canLaunch
+                  ? 'bg-gradient-to-r from-lime-400 to-emerald-500 text-black shadow-[0_10px_40px_rgba(74,222,128,0.35)]'
+                  : 'bg-slate-900 text-slate-600 border border-slate-800 cursor-not-allowed'
+              }`}
+            >
+              {canLaunch ? 'Start Trash Run' : `Cooldown ${formatTime(cooldownRemaining)}`}
+            </button>
+
+            <div className="flex flex-col gap-2 text-sm text-slate-200">
               <button
                 onClick={prestige}
                 disabled={!canPrestige}
-                className={`px-6 py-3 rounded-lg font-bold transition-all ${
+                className={`w-full py-3 rounded-xl font-semibold transition-all active:scale-[0.99] ${
                   canPrestige
-                    ? 'bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-white'
-                    : 'bg-gray-700 text-gray-500 cursor-not-allowed border border-gray-700'
+                    ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-black shadow-[0_10px_30px_rgba(251,191,36,0.35)]'
+                    : 'bg-slate-900 text-slate-500 border border-slate-800 cursor-not-allowed'
                 }`}
               >
-                PRESTIGE
+                Ignite Prestige Core
               </button>
-              <div className="text-xs text-gray-400 mt-2">
-                Level {prestigeLevel} | ✦ {cosmicEssence} Essence
-              </div>
-              <div className="text-xs text-yellow-600 mt-1">
+              <div className="rounded-xl border border-slate-800 bg-slate-900/70 px-3 py-2 text-xs leading-relaxed text-slate-300">
                 {canPrestige
-                  ? `+${Math.floor(Math.sqrt(energy / 10000))} Essence`
-                  : 'Need 10,000 energy'}
+                  ? `Ready to mint +${Math.floor(Math.sqrt(energy / 10000))} essence from stored burn output.`
+                  : 'Bank 10,000+ burn output to distill new essence.'}
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="fixed bottom-6 right-6 p-4 rounded-2xl border border-purple-500 bg-white/5 backdrop-blur-lg shadow-[0_10px_40px_rgba(108,35,255,0.25)] text-purple-200 text-sm max-w-xs">
-        <div className="font-bold mb-2">Controls</div>
-        <div>• Hold anywhere to charge the orb</div>
-        <div>• Charge = more energy generation</div>
-        <div>• Scrap Runs grant upgrades</div>
-        <div className="mt-2 text-xs text-gray-400">
-          Higher charge when launching gives better scrap multiplier.
-        </div>
-      </div>
-    </>
+    </div>
   );
 }

@@ -54,15 +54,26 @@ export default function OrbScene({ isHolding }: Props) {
   useEffect(() => {
     if (!mountRef.current) return;
 
+    const container = mountRef.current;
+
+    const getSize = () => {
+      const rect = container.getBoundingClientRect();
+      const width = rect.width || window.innerWidth;
+      const height = rect.height || window.innerHeight;
+      return { width, height };
+    };
+
+    const { width, height } = getSize();
+
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
-    renderer.setClearColor(0x080812, 1);
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(1.75, window.devicePixelRatio || 1));
+    renderer.setClearColor(0x05070f, 1);
     renderer.domElement.style.position = 'absolute';
     renderer.domElement.style.inset = '0';
-    mountRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     camera.position.z = 5;
 
@@ -77,22 +88,25 @@ export default function OrbScene({ isHolding }: Props) {
     scrapGroupRef.current = scrapGroup;
 
     const scrapMaterials = [
-      new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.4, roughness: 0.35 }),
-      new THREE.MeshStandardMaterial({ color: 0xfbbf24, metalness: 0.35, roughness: 0.3 }),
-      new THREE.MeshStandardMaterial({ color: 0xeab308, metalness: 0.45, roughness: 0.28 }),
+      new THREE.MeshStandardMaterial({ color: 0x9ca3af, metalness: 0.3, roughness: 0.7 }),
+      new THREE.MeshStandardMaterial({ color: 0x4b5563, metalness: 0.4, roughness: 0.8 }),
+      new THREE.MeshStandardMaterial({ color: 0x6b7280, metalness: 0.2, roughness: 0.9 }),
+      new THREE.MeshStandardMaterial({ color: 0x22c55e, emissive: 0x16a34a, emissiveIntensity: 0.8 }),
     ];
     const scrapGeometries = [
-      new THREE.BoxGeometry(0.22, 0.14, 0.1),
-      new THREE.ConeGeometry(0.12, 0.24, 5),
-      new THREE.OctahedronGeometry(0.18, 0),
-      new THREE.CylinderGeometry(0.08, 0.08, 0.24, 6),
+      new THREE.BoxGeometry(0.26, 0.14, 0.08),
+      new THREE.CylinderGeometry(0.08, 0.12, 0.26, 6),
+      new THREE.TetrahedronGeometry(0.2),
+      new THREE.BoxGeometry(0.18, 0.08, 0.26),
     ];
 
     scrapUpdaterRef.current = (scrapValue: number) => {
       const group = scrapGroupRef.current;
       if (!group) return;
 
-      const maxPieces = 50;
+      const maxPiecesBase = 40;
+      const screenScale = window.innerWidth < 640 ? 0.6 : 1;
+      const maxPieces = Math.floor(maxPiecesBase * screenScale);
       const count = Math.min(maxPieces, Math.max(0, Math.floor(scrapValue)));
       group.clear();
 
@@ -163,7 +177,7 @@ export default function OrbScene({ isHolding }: Props) {
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
     const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      new THREE.Vector2(width, height),
       CALM_IDLE_PRESET.bloom.strength,
       0.8,
       CALM_IDLE_PRESET.bloom.threshold
@@ -250,10 +264,11 @@ export default function OrbScene({ isHolding }: Props) {
     animate();
 
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const { width: nextWidth, height: nextHeight } = getSize();
+      camera.aspect = nextWidth / nextHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      composer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(nextWidth, nextHeight);
+      composer.setSize(nextWidth, nextHeight);
     };
 
     window.addEventListener('resize', handleResize);
@@ -279,5 +294,5 @@ export default function OrbScene({ isHolding }: Props) {
     scrapUpdaterRef.current?.(scrap);
   }, [scrap]);
 
-  return <div ref={mountRef} className="fixed inset-0" />;
+  return <div ref={mountRef} className="absolute inset-x-0 top-0 bottom-32 sm:bottom-40" />;
 }

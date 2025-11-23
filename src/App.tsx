@@ -1,3 +1,4 @@
+import type React from 'react';
 import { useMemo, useState } from 'react';
 import OrbScene from './orb/OrbScene';
 import ScrapRunOverlay from './scraprun/ScrapRunOverlay';
@@ -24,13 +25,27 @@ export default function App() {
     return <DevToolsHub initialTool={initialTool} />;
   }
 
+  const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => {
+    if (scrapRunActive) return;
+    const touch = e.touches[0];
+    const target = e.currentTarget.getBoundingClientRect();
+    const y = touch.clientY - target.top;
+    const topBand = target.height * 0.2;
+    const bottomBand = target.height * 0.8;
+
+    if (y > topBand && y < bottomBand) {
+      e.preventDefault();
+      enableHold();
+    }
+  };
+
   return (
     <div
-      className="relative w-full h-screen overflow-hidden select-none bg-gradient-to-b from-[#0a0f2c] to-[#05060f]"
+      className="relative w-full min-h-[100dvh] overflow-hidden select-none bg-gradient-to-b from-[#05070f] to-[#020308] touch-none"
       onMouseDown={!scrapRunActive ? enableHold : undefined}
       onMouseUp={!scrapRunActive ? disableHold : undefined}
       onMouseLeave={!scrapRunActive ? disableHold : undefined}
-      onTouchStart={!scrapRunActive ? enableHold : undefined}
+      onTouchStart={handleTouchStart}
       onTouchEnd={!scrapRunActive ? disableHold : undefined}
     >
       {!scrapRunActive && <OrbScene isHolding={isHolding} />}

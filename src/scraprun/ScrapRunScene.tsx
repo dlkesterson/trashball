@@ -46,30 +46,35 @@ export default function ScrapRunScene({
   useEffect(() => {
     if (!mountRef.current || gameState.gameOver) return;
 
-    // Clean up any previous canvas if StrictMode double-mounts.
-    if (mountRef.current.firstChild) {
-      mountRef.current.replaceChildren();
+    const container = mountRef.current;
+    if (container.firstChild) {
+      container.replaceChildren();
     }
+
+    const getSize = () => {
+      const rect = container.getBoundingClientRect();
+      const width = rect.width || window.innerWidth;
+      const height = rect.height || window.innerHeight;
+      return { width, height };
+    };
 
     const effectiveConfig = applyUpgradesToConfig(config, upgrades);
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0a1a);
-    scene.fog = new THREE.Fog(0x0a0a1a, 10, 50);
+    scene.background = new THREE.Color(0x05070f);
+    scene.fog = new THREE.Fog(0x05070f, 10, 50);
 
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
+    const { width, height } = getSize();
+
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
     camera.position.set(0, 0, 10);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1));
     renderer.shadowMap.enabled = true;
     renderer.domElement.style.pointerEvents = 'none';
-    mountRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
     scene.add(ambientLight);
@@ -339,17 +344,20 @@ export default function ScrapRunScene({
     animate();
 
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const { width: nextWidth, height: nextHeight } = getSize();
+      camera.aspect = nextWidth / nextHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(nextWidth, nextHeight);
     };
     window.addEventListener('resize', handleResize);
 
     const stateInterval = setInterval(() => {
       currentOrbitTarget = currentIsHolding ? effectiveConfig.outerOrbit : effectiveConfig.innerOrbit;
 
-      if (currentTouchPos !== null) {
-        const normalizedX = (currentTouchPos - window.innerWidth / 2) / (window.innerWidth / 2);
+      const rect = mountRef.current?.getBoundingClientRect();
+      const containerWidth = rect?.width ?? window.innerWidth;
+      if (currentTouchPos !== null && containerWidth > 0) {
+        const normalizedX = (currentTouchPos - containerWidth / 2) / (containerWidth / 2);
         currentStrafeTarget = normalizedX * effectiveConfig.maxStrafe;
       } else {
         currentStrafeTarget = 0;
@@ -419,17 +427,28 @@ export default function ScrapRunScene({
     onGameOver(gameState.score, gameState.collected);
   };
 
+  const getRelativeX = (clientX: number) => {
+    const rect = mountRef.current?.getBoundingClientRect();
+    if (!rect) return null;
+    return clientX - rect.left;
+  };
+
   const handleTouchStart = (e: TouchEvent) => {
     setIsHolding(true);
     const touch = e.touches[0];
-    setTouchStart(touch.clientX);
-    setCurrentTouchX(touch.clientX);
+    const relative = getRelativeX(touch.clientX);
+    if (relative === null) return;
+    setTouchStart(relative);
+    setCurrentTouchX(relative);
   };
 
   const handleTouchMove = (e: TouchEvent) => {
     if (touchStart !== null) {
       const touch = e.touches[0];
-      setCurrentTouchX(touch.clientX);
+      const relative = getRelativeX(touch.clientX);
+      if (relative !== null) {
+        setCurrentTouchX(relative);
+      }
     }
   };
 
@@ -441,13 +460,18 @@ export default function ScrapRunScene({
 
   const handleMouseDown = (e: MouseEvent) => {
     setIsHolding(true);
-    setTouchStart(e.clientX);
-    setCurrentTouchX(e.clientX);
+    const relative = getRelativeX(e.clientX);
+    if (relative === null) return;
+    setTouchStart(relative);
+    setCurrentTouchX(relative);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
     if (touchStart !== null && isHolding) {
-      setCurrentTouchX(e.clientX);
+      const relative = getRelativeX(e.clientX);
+      if (relative !== null) {
+        setCurrentTouchX(relative);
+      }
     }
   };
 
@@ -460,52 +484,71 @@ export default function ScrapRunScene({
   return (
     <div className="fixed inset-0 bg-black">
       {!minimalUi && (
-        <div
-          className="absolute top-5 left-0 right-0 z-10 text-center font-mono text-xl text-green-400"
-          style={{ textShadow: '0 0 10px rgba(74, 222, 128, 0.5)' }}
-        >
-          <div>SCRAP: {gameState.collected} | SCORE: {gameState.score}</div>
-          <div className="text-sm mt-1 text-purple-400">
-            {isHolding ? '↑ OUTER ORBIT' : '↓ INNER ORBIT'}
+        <div className="pointer-events-none absolute inset-0 flex flex-col z-10">
+          <div className="pointer-events-auto px-4 pt-4 flex items-start justify-between text-xs text-slate-200">
+            <div>
+              <div className="uppercase tracking-[0.2em] text-lime-300">Trash Run</div>
+              <div className="text-[11px] text-slate-400">
+                Guide the trashball through the junk tunnel.
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-sm font-mono text-lime-200">{gameState.score} kJ</div>
+              <div className="text-[11px] text-slate-400">Trash hauled: {gameState.collected}</div>
+              {gameState.shields > 0 && (
+                <div className="text-[11px] text-cyan-300 mt-1">Shields: {gameState.shields}</div>
+              )}
+            </div>
           </div>
-          {gameState.shields > 0 && (
-            <div className="text-xs text-cyan-400 mt-1">Shields: {gameState.shields}</div>
+
+          {!gameState.gameOver && gameState.score === 0 && (
+            <div className="pointer-events-none flex-1 flex items-center justify-center px-4">
+              <div className="bg-black/75 border border-slate-800 rounded-2xl px-4 py-3 text-center text-sm text-slate-200 max-w-md">
+                <div className="text-lime-300 font-semibold mb-1">Charge then dive</div>
+                <div>Hold to push into the outer lane, release to fall back in.</div>
+                <div className="mt-1">Drag left/right to dodge and scoop trash.</div>
+                <div className="mt-1 text-red-300">Red junk cracks the shell.</div>
+              </div>
+            </div>
+          )}
+
+          {!gameState.gameOver && (
+            <div className="pointer-events-auto p-4">
+              <div className="rounded-2xl border border-slate-800 bg-black/70 backdrop-blur-md p-3 flex items-center justify-between text-xs text-slate-200">
+                <div>
+                  <div className="uppercase tracking-[0.2em] text-lime-300 text-[11px]">Trash hauled</div>
+                  <div className="text-base font-mono text-lime-200">{gameState.collected}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[11px] text-slate-400">Shields</div>
+                  <div className="text-sm text-cyan-300">{gameState.shields}</div>
+                </div>
+              </div>
+              <button
+                onClick={handleAbort}
+                className="mt-3 w-full py-3 rounded-xl bg-rose-500 text-black font-semibold text-sm shadow-[0_10px_30px_rgba(244,63,94,0.35)] active:scale-[0.99]"
+              >
+                Emergency Eject (Keep Trash)
+              </button>
+            </div>
+          )}
+
+          {gameState.gameOver && (
+            <div className="pointer-events-auto flex-1 flex items-center justify-center px-4 pb-6">
+              <div className="w-full max-w-sm rounded-3xl bg-black/80 border border-rose-500/60 shadow-2xl shadow-rose-900/40 p-6 text-center text-slate-100">
+                <div className="text-2xl font-bold text-rose-300 mb-2">Hull Breach</div>
+                <div className="text-sm text-slate-300">Burn Output: {gameState.score} kJ</div>
+                <div className="text-sm text-lime-300 mt-1">Trash Hauled: {gameState.collected}</div>
+                <button
+                  onClick={handleAbort}
+                  className="mt-4 w-full py-3 rounded-xl bg-lime-400 text-black font-semibold active:scale-[0.99]"
+                >
+                  Return to Yard
+                </button>
+              </div>
+            </div>
           )}
         </div>
-      )}
-
-      {!minimalUi && !gameState.gameOver && gameState.score === 0 && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white font-mono text-center bg-black bg-opacity-80 p-5 rounded-lg pointer-events-none">
-          <div className="text-green-400 text-2xl mb-2">GREED vs GRAVITY</div>
-          <div>HOLD SCREEN → OUTER ORBIT</div>
-          <div>RELEASE → INNER ORBIT</div>
-          <div className="mt-2">DRAG LEFT/RIGHT → STRAFE</div>
-          <div className="mt-2 text-green-400">✓ Collect green junk</div>
-          <div className="text-red-500">✖ Avoid red obstacles</div>
-        </div>
-      )}
-
-      {!minimalUi && gameState.gameOver && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-white font-mono text-2xl text-center bg-black bg-opacity-90 p-10 rounded-lg">
-          <div className="text-red-500 text-3xl mb-5">WRECKED</div>
-          <div>Final Score: {gameState.score}</div>
-          <div>Scrap Collected: {gameState.collected}</div>
-          <button
-            onClick={handleAbort}
-            className="mt-5 px-8 py-3 text-lg bg-green-500 hover:bg-green-600 border-0 rounded cursor-pointer font-mono text-black font-bold"
-          >
-            RETURN TO ORB
-          </button>
-        </div>
-      )}
-
-      {!minimalUi && !gameState.gameOver && (
-        <button
-          onClick={handleAbort}
-          className="absolute top-5 right-5 z-10 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold"
-        >
-          ABORT RUN
-        </button>
       )}
 
       <div ref={mountRef} className="w-full h-full pointer-events-none" />

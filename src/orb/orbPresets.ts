@@ -17,17 +17,17 @@ export type OrbVisualPreset = {
 
 export const CALM_IDLE_PRESET: OrbVisualPreset = {
   uniforms: {
-    color1: '#666666',
-    color2: '#301e0d',
-    chargeColor: '#506f4d',
-    chargeLevel: 0.03,
-    wobbleIntensity: 2.7,
-    patternScale: 4.9,
-    fresnelIntensity: 2.55,
+    color1: '#3a3a3a',
+    color2: '#1b1208',
+    chargeColor: '#8fdc3b',
+    chargeLevel: 0.05,
+    wobbleIntensity: 2.4,
+    patternScale: 3.8,
+    fresnelIntensity: 2.2,
   },
-  particles: 30,
+  particles: 40,
   bloom: {
-    strength: 0,
-    threshold: 0.08,
+    strength: 0.25,
+    threshold: 0.1,
   },
 };
