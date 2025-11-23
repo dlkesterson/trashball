@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import OrbScene from './orb/OrbScene';
 import ScrapRunOverlay from './scraprun/ScrapRunOverlay';
 import MainMenu from './ui/MainMenu';
@@ -16,9 +16,15 @@ export default function App() {
   const devTool = useMemo(() => (__DEV_TOOLS__ ? getDevToolFromLocation() : null), []);
   const scrapRunActive = useGameStore((s) => s.scrapRunActive);
   const [isHolding, setIsHolding] = useState(false);
+  const upgradePanelRef = useRef<HTMLDivElement>(null);
 
   const enableHold = () => setIsHolding(true);
   const disableHold = () => setIsHolding(false);
+
+  const isWithinUpgradePanel = (target: EventTarget | null) => {
+    if (!target || !upgradePanelRef.current) return false;
+    return upgradePanelRef.current.contains(target as Node);
+  };
 
   if (devTool) {
     const initialTool = devTool === 'true' ? null : devTool;
@@ -26,7 +32,7 @@ export default function App() {
   }
 
   const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => {
-    if (scrapRunActive) return;
+    if (scrapRunActive || isWithinUpgradePanel(e.target)) return;
     const touch = e.touches[0];
     const target = e.currentTarget.getBoundingClientRect();
     const y = touch.clientY - target.top;
@@ -42,7 +48,14 @@ export default function App() {
   return (
     <div
       className="relative w-full min-h-[100dvh] overflow-hidden select-none bg-gradient-to-b from-[#05070f] to-[#020308] touch-none"
-      onMouseDown={!scrapRunActive ? enableHold : undefined}
+      onMouseDown={
+        !scrapRunActive
+          ? (e) => {
+              if (isWithinUpgradePanel(e.target)) return;
+              enableHold();
+            }
+          : undefined
+      }
       onMouseUp={!scrapRunActive ? disableHold : undefined}
       onMouseLeave={!scrapRunActive ? disableHold : undefined}
       onTouchStart={handleTouchStart}
@@ -50,14 +63,14 @@ export default function App() {
     >
       {!scrapRunActive && <OrbScene isHolding={isHolding} />}
 
-      {scrapRunActive ? (
-        <ScrapRunOverlay />
-      ) : (
-        <>
-          <MainMenu />
-          <UpgradePanel />
-        </>
-      )}
-    </div>
-  );
-}
+        {scrapRunActive ? (
+          <ScrapRunOverlay />
+        ) : (
+          <>
+            <MainMenu />
+            <UpgradePanel ref={upgradePanelRef} />
+          </>
+        )}
+      </div>
+    );
+  }

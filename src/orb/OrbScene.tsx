@@ -1,22 +1,26 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { useGameStore } from '../core/GameState';
 import { createOrbMaterial } from './orbMaterial';
-import { CALM_IDLE_PRESET } from './orbPresets';
+import { CALM_IDLE_PRESET, OVERCHARGED_PRESET, SUPER_CRITICAL_PRESET } from './orbPresets';
 
 type Props = {
   isHolding: boolean;
 };
 
-const CHARGE_COLOR = new THREE.Color(CALM_IDLE_PRESET.uniforms.chargeColor).getHex();
+type VisualState = 'calm' | 'charging' | 'superCritical';
+
+const SUPER_CRITICAL_HOLD_TIME = 15; // seconds of continuous hold before meltdown
+const SUPER_CRITICAL_DRAIN_MULTIPLIER = 0.35; // how fast energy bleeds while super critical
 
 export default function OrbScene({ isHolding }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
   const addEnergy = useGameStore((s) => s.addEnergy);
   const setCharge = useGameStore((s) => s.setCharge);
+  const energy = useGameStore((s) => s.energy);
   const physics = useGameStore((s) => s.physics);
   const upgrades = useGameStore((s) => s.upgrades);
   const prestigeLevel = useGameStore((s) => s.prestigeLevel);
@@ -26,6 +30,13 @@ export default function OrbScene({ isHolding }: Props) {
     velocity: 0,
     charge: 0,
   });
+  const visualStateRef = useRef<VisualState>('calm');
+  const holdTimerRef = useRef({ duration: 0, superCritical: false });
+  const bloomSettingsRef = useRef({
+    strength: CALM_IDLE_PRESET.bloom.strength,
+    threshold: CALM_IDLE_PRESET.bloom.threshold,
+  });
+  const [visualState, setVisualState] = useState<VisualState>('calm');
 
   // Keep latest external values without recreating the scene.
   const holdRef = useRef(isHolding);
@@ -77,8 +88,9 @@ export default function OrbScene({ isHolding }: Props) {
 
     camera.position.z = 5;
 
+    const basePreset = CALM_IDLE_PRESET;
     const orbGeometry = new THREE.SphereGeometry(1, 64, 64);
-    const orbMaterial = createOrbMaterial({ chargeColor: CHARGE_COLOR });
+    const orbMaterial = createOrbMaterial({ ...basePreset.uniforms });
 
     const orb = new THREE.Mesh(orbGeometry, orbMaterial);
     scene.add(orb);
@@ -137,26 +149,33 @@ export default function OrbScene({ isHolding }: Props) {
 
     scrapUpdaterRef.current(scrap);
 
-    const particleCount = CALM_IDLE_PRESET.particles;
     const particleGeometry = new THREE.BufferGeometry();
-    const particlePositions = new Float32Array(particleCount * 3);
-    const particleVelocities: { x: number; y: number; z: number }[] = [];
+    let particleCount = basePreset.particles;
+    let particlePositions = new Float32Array(particleCount * 3);
+    let particleVelocities: { x: number; y: number; z: number }[] = [];
 
-    for (let i = 0; i < particleCount; i++) {
-      particlePositions[i * 3] = (Math.random() - 0.5) * 2;
-      particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 2;
-      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 2;
-      particleVelocities.push({
-        x: (Math.random() - 0.5) * 0.02,
-        y: (Math.random() - 0.5) * 0.02,
-        z: (Math.random() - 0.5) * 0.02,
-      });
-    }
+    const rebuildParticles = (count: number) => {
+      particleCount = count;
+      particlePositions = new Float32Array(count * 3);
+      particleVelocities = [];
+      for (let i = 0; i < count; i++) {
+        particlePositions[i * 3] = (Math.random() - 0.5) * 2;
+        particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 2;
+        particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 2;
+        particleVelocities.push({
+          x: (Math.random() - 0.5) * 0.02,
+          y: (Math.random() - 0.5) * 0.02,
+          z: (Math.random() - 0.5) * 0.02,
+        });
+      }
+      particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+      particleGeometry.attributes.position.needsUpdate = true;
+    };
 
-    particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    rebuildParticles(basePreset.particles);
 
     const particleMaterial = new THREE.PointsMaterial({
-      color: CHARGE_COLOR,
+      color: new THREE.Color(basePreset.uniforms.chargeColor).getHex(),
       size: 0.05,
       transparent: true,
       opacity: 0,
@@ -169,18 +188,54 @@ export default function OrbScene({ isHolding }: Props) {
     const ambientLight = new THREE.AmbientLight(0x404040, 2);
     scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(CHARGE_COLOR, 0, 10);
+    const pointLight = new THREE.PointLight(
+      new THREE.Color(basePreset.uniforms.chargeColor).getHex(),
+      0,
+      10
+    );
     pointLight.position.set(0, 0, 3);
     scene.add(pointLight);
+
+    const getPreset = (state: VisualState) => {
+      if (state === 'charging') return OVERCHARGED_PRESET;
+      if (state === 'superCritical') return SUPER_CRITICAL_PRESET;
+      return CALM_IDLE_PRESET;
+    };
+
+    const applyPreset = (state: VisualState) => {
+      if (visualStateRef.current !== state) {
+        visualStateRef.current = state;
+        setVisualState(state);
+      }
+      const preset = getPreset(state);
+      bloomSettingsRef.current = { ...preset.bloom };
+
+      orbMaterial.uniforms.color1.value.set(preset.uniforms.color1);
+      orbMaterial.uniforms.color2.value.set(preset.uniforms.color2);
+      orbMaterial.uniforms.chargeColor.value.set(preset.uniforms.chargeColor);
+      orbMaterial.uniforms.wobbleIntensity.value = preset.uniforms.wobbleIntensity;
+      orbMaterial.uniforms.patternScale.value = preset.uniforms.patternScale;
+      orbMaterial.uniforms.fresnelIntensity.value = preset.uniforms.fresnelIntensity;
+      orbMaterial.uniforms.chargeLevel.value = preset.uniforms.chargeLevel;
+
+      particleMaterial.color.set(preset.uniforms.chargeColor);
+      pointLight.color.set(preset.uniforms.chargeColor);
+
+      if (preset.particles !== particleCount) {
+        rebuildParticles(preset.particles);
+      }
+    };
+
+    applyPreset('calm');
 
     // Post-processing: bloom for high charge glow
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(width, height),
-      CALM_IDLE_PRESET.bloom.strength,
+      bloomSettingsRef.current.strength,
       0.8,
-      CALM_IDLE_PRESET.bloom.threshold
+      bloomSettingsRef.current.threshold
     );
     composer.addPass(bloomPass);
 
@@ -196,6 +251,21 @@ export default function OrbScene({ isHolding }: Props) {
       const physics = physicsRef.current;
       const upgrades = upgradesRef.current;
       const prestigeLevel = prestigeRef.current;
+      const holdTimer = holdTimerRef.current;
+
+      if (holdRef.current) {
+        holdTimer.duration += deltaTime;
+        if (!holdTimer.superCritical && holdTimer.duration >= SUPER_CRITICAL_HOLD_TIME) {
+          holdTimer.superCritical = true;
+        }
+      } else {
+        holdTimer.duration = 0;
+        if (holdTimer.superCritical) {
+          holdTimer.superCritical = false;
+        }
+      }
+
+      const isSuperCritical = holdTimer.superCritical;
 
       if (holdRef.current) {
         localState.velocity += physics.thrustForce * deltaTime;
@@ -214,13 +284,28 @@ export default function OrbScene({ isHolding }: Props) {
 
       setCharge(localState.charge);
 
+      const targetVisual: VisualState =
+        isSuperCritical && holdRef.current
+          ? 'superCritical'
+          : localState.charge > 0.4 && holdRef.current
+          ? 'charging'
+          : 'calm';
+
+      if (visualStateRef.current !== targetVisual) {
+        applyPreset(targetVisual);
+      }
+
       if (localState.charge > 0) {
         const baseGen = localState.charge * 10 * deltaTime;
-        const resonanceBonus = 1 + (upgrades.resonanceTuner ?? 0) * 0.15;
-        const prestigeBonus = 1 + prestigeLevel * 0.5;
-        const surgeChance = Math.min(1, (upgrades.criticalSurge ?? 0) * 0.05);
-        const surgeMultiplier = Math.random() < surgeChance ? 10 : 1;
-        addEnergy(baseGen * resonanceBonus * prestigeBonus * surgeMultiplier);
+        if (isSuperCritical && holdRef.current) {
+          addEnergy(-baseGen * SUPER_CRITICAL_DRAIN_MULTIPLIER);
+        } else {
+          const resonanceBonus = 1 + (upgrades.resonanceTuner ?? 0) * 0.15;
+          const prestigeBonus = 1 + prestigeLevel * 0.5;
+          const surgeChance = Math.min(1, (upgrades.criticalSurge ?? 0) * 0.05);
+          const surgeMultiplier = Math.random() < surgeChance ? 10 : 1;
+          addEnergy(baseGen * resonanceBonus * prestigeBonus * surgeMultiplier);
+        }
       }
 
       const heartbeat = 1 + Math.sin(elapsedTime * (holdRef.current ? 2 : 1)) * 0.05;
@@ -233,7 +318,7 @@ export default function OrbScene({ isHolding }: Props) {
       orbMaterial.uniforms.chargeLevel.value = localState.charge;
       orb.position.y = Math.sin(elapsedTime * 2) * 0.1 * (1 - localState.charge * 0.5);
 
-      particleMaterial.opacity = localState.charge * 0.8;
+      particleMaterial.opacity = Math.min(1, localState.charge * (isSuperCritical ? 1.2 : 0.8));
       const positions = particleGeometry.attributes.position.array as Float32Array;
 
       for (let i = 0; i < particleCount; i++) {
@@ -255,9 +340,13 @@ export default function OrbScene({ isHolding }: Props) {
       }
 
       particleGeometry.attributes.position.needsUpdate = true;
-      pointLight.intensity = localState.charge * 5;
+      pointLight.intensity = localState.charge * (isSuperCritical ? 7 : 5);
 
-      bloomPass.strength = Math.max(CALM_IDLE_PRESET.bloom.strength, localState.charge * 2);
+      bloomPass.strength = Math.max(
+        bloomSettingsRef.current.strength,
+        localState.charge * (isSuperCritical ? 3 : 2)
+      );
+      bloomPass.threshold = bloomSettingsRef.current.threshold;
       composer.render();
     };
 
@@ -294,5 +383,43 @@ export default function OrbScene({ isHolding }: Props) {
     scrapUpdaterRef.current?.(scrap);
   }, [scrap]);
 
-  return <div ref={mountRef} className="absolute inset-x-0 top-0 bottom-32 sm:bottom-40" />;
+  const stateStyles: Record<VisualState, { label: string; pillClass: string; pulse?: boolean }> = {
+    calm: {
+      label: 'CALM',
+      pillClass: 'border-lime-400/50 bg-lime-500/10 text-lime-200',
+    },
+    charging: {
+      label: 'CHARGING',
+      pillClass: 'border-cyan-300/60 bg-cyan-400/10 text-cyan-100',
+    },
+    superCritical: {
+      label: 'SUPER-CRITICAL',
+      pillClass: 'border-rose-400/70 bg-rose-500/15 text-rose-100',
+      pulse: true,
+    },
+  };
+
+  const style = stateStyles[visualState];
+
+  return (
+    <div ref={mountRef} className="absolute inset-x-0 top-0 bottom-32 sm:bottom-40">
+      <div className="pointer-events-none absolute top-3 inset-x-0 flex justify-center px-4 z-10">
+        <div className="w-full max-w-4xl flex flex-wrap items-center justify-between gap-3">
+          <div className="text-[11px] uppercase tracking-[0.25em] text-slate-300">
+            Burn Output{' '}
+            <span className="text-3xl font-bold font-mono text-lime-100 tracking-normal ml-2">
+              {Math.floor(energy).toLocaleString()}
+            </span>
+          </div>
+          <div
+            className={`flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] uppercase tracking-[0.2em] font-semibold ${
+              style.pillClass
+            } ${style.pulse ? 'animate-pulse' : ''}`}
+          >
+            {style.label}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

@@ -67,10 +67,14 @@ export const useGameStore = create<GameStore>()(
       ...buildInitialState(),
 
       addEnergy: (n) =>
-        set((state) => ({
-          energy: state.energy + n,
-          totalEnergy: state.totalEnergy + n,
-        })),
+        set((state) => {
+          const nextEnergy = Math.max(0, state.energy + n);
+          const gained = n > 0 ? n : 0;
+          return {
+            energy: nextEnergy,
+            totalEnergy: state.totalEnergy + gained,
+          };
+        }),
 
       setCharge: (n) => set({ charge: Math.max(0, Math.min(1, n)) }),
 

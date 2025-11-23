@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import type { MouseEvent, TouchEvent } from 'react';
 import * as THREE from 'three';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import type { ScrapUpgradeId } from '../core/ScrapUnlocks';
 import { BASE_GAME_CONFIG, applyUpgradesToConfig, type ScrapRunConfig } from './config';
 import { createOrbMaterial } from '../orb/orbMaterial';
 import { CALM_IDLE_PRESET } from '../orb/orbPresets';
+
+const GOOD_SCRAP_URLS = Object.values(
+  import.meta.glob('../assets/*.fbx', { eager: true, as: 'url' }) as Record<string, string>
+);
 
 type Props = {
   onGameOver: (score: number, collected: number) => void;
@@ -67,6 +72,8 @@ export default function ScrapRunScene({
     };
 
     const effectiveConfig = applyUpgradesToConfig(config, upgrades);
+    const fbxLoader = new FBXLoader();
+    const goodScrapCache = new Map<string, THREE.Object3D>();
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x05070f);
@@ -153,6 +160,22 @@ export default function ScrapRunScene({
       playerGroup.add(hitboxHelper);
     }
 
+    const disposeObject3D = (object: THREE.Object3D) => {
+      object.traverse((child) => {
+        const mesh = child as THREE.Mesh;
+        if ((mesh as unknown as { isMesh?: boolean }).isMesh && mesh.geometry) {
+          mesh.geometry.dispose();
+        }
+        const material = (mesh as unknown as { material?: THREE.Material | THREE.Material[] })
+          .material;
+        if (Array.isArray(material)) {
+          material.forEach((m) => m.dispose());
+        } else if (material) {
+          material.dispose();
+        }
+      });
+    };
+
     const disposeDebris = (debris: THREE.Mesh) => {
       if (debris.userData.hitboxHelper) {
         scene.remove(debris.userData.hitboxHelper);
@@ -164,7 +187,83 @@ export default function ScrapRunScene({
         debris.userData.curveLine.geometry.dispose();
         debris.userData.curveLine.material.dispose();
       }
+      if (debris.userData.visual) {
+        debris.remove(debris.userData.visual);
+        disposeObject3D(debris.userData.visual);
+      }
+      if (debris.geometry) {
+        debris.geometry.dispose();
+      }
+      if (Array.isArray(debris.material)) {
+        debris.material.forEach((mat) => mat.dispose());
+      } else if (debris.material) {
+        debris.material.dispose();
+      }
       scene.remove(debris);
+    };
+
+    const disposeCollectedPiece = (piece: THREE.Object3D) => {
+      playerGroup.remove(piece);
+      disposeObject3D(piece);
+    };
+
+    const refreshMeshResources = (object: THREE.Object3D) => {
+      object.traverse((child) => {
+        const mesh = child as THREE.Mesh;
+        if (!(mesh as unknown as { isMesh?: boolean }).isMesh) return;
+        if (mesh.geometry) {
+          mesh.geometry = mesh.geometry.clone();
+        }
+        const mat = mesh.material as THREE.Material | THREE.Material[];
+        if (Array.isArray(mat)) {
+          mesh.material = mat.map((m) => m.clone());
+        } else if (mat) {
+          mesh.material = mat.clone();
+        }
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      });
+    };
+
+    const normalizeGoodScrap = (visual: THREE.Object3D) => {
+      const box = new THREE.Box3().setFromObject(visual);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      const target = 0.9;
+      const scale = target / maxDim;
+      visual.scale.multiplyScalar(scale);
+      const center = box.getCenter(new THREE.Vector3());
+      visual.position.sub(center.multiplyScalar(scale));
+      refreshMeshResources(visual);
+    };
+
+    const attachGoodScrapVisual = (debris: THREE.Mesh) => {
+      if (GOOD_SCRAP_URLS.length === 0) return;
+      const url = GOOD_SCRAP_URLS[Math.floor(Math.random() * GOOD_SCRAP_URLS.length)];
+      const existing = goodScrapCache.get(url);
+      const sourcePromise =
+        existing !== undefined
+          ? Promise.resolve(existing)
+          : fbxLoader.loadAsync(url).then((obj) => {
+              goodScrapCache.set(url, obj);
+              return obj;
+            });
+
+      sourcePromise
+        .then((source) => {
+          if (!debris.parent) return;
+          const visual = source.clone(true);
+          normalizeGoodScrap(visual);
+          debris.add(visual);
+          debris.userData.visual = visual;
+          const mat = debris.material as THREE.Material & { opacity?: number; transparent?: boolean };
+          mat.transparent = true;
+          mat.opacity = 0;
+        })
+        .catch(() => {
+          // Fall back to the placeholder if loading fails; no-op.
+        });
     };
 
     const animate = () => {
@@ -209,6 +308,8 @@ export default function ScrapRunScene({
           : new THREE.OctahedronGeometry(0.5, 0);
         const material = new THREE.MeshLambertMaterial({
           color: isGood ? 0x4ade80 : 0xef4444,
+          transparent: isGood,
+          opacity: isGood ? 0 : 1,
         });
         const debris = new THREE.Mesh(geometry, material);
 
@@ -225,6 +326,10 @@ export default function ScrapRunScene({
           rotationSpeed: { x: Math.random() * 0.04 - 0.02, y: Math.random() * 0.04 - 0.02 },
         };
         scene.add(debris);
+
+        if (isGood) {
+          attachGoodScrapVisual(debris);
+        }
 
         if (showHitboxes) {
           const helper = new THREE.Mesh(
@@ -305,6 +410,11 @@ export default function ScrapRunScene({
 
         const distance = debris.position.distanceTo(playerPos);
         if (distance < hitboxRadius + 0.3) {
+          let collectedVisual: THREE.Mesh | null = null;
+          if (debris.userData.type === 'good') {
+            collectedVisual = debris.clone(true);
+            refreshMeshResources(collectedVisual);
+          }
           disposeDebris(debris);
           debrisList.splice(i, 1);
 
@@ -313,7 +423,10 @@ export default function ScrapRunScene({
             currentGameState.score += 10;
             setGameState({ ...currentGameState });
 
-            const junkPiece = debris.clone();
+            const junkPiece = collectedVisual ?? debris.clone(true);
+            if (!collectedVisual) {
+              refreshMeshResources(junkPiece);
+            }
             const angle = (collectedJunk.length / 20) * Math.PI * 2;
             const radius = 0.8 + Math.floor(collectedJunk.length / 20) * 0.3;
             junkPiece.position.set(
@@ -334,7 +447,7 @@ export default function ScrapRunScene({
 
               for (let j = 0; j < loseCount && collectedJunk.length > 0; j++) {
                 const junk = collectedJunk.pop();
-                if (junk) playerGroup.remove(junk);
+                if (junk) disposeCollectedPiece(junk);
               }
 
               setGameState({ ...currentGameState });
@@ -413,6 +526,10 @@ export default function ScrapRunScene({
 
       debrisList.forEach((debris) => {
         disposeDebris(debris);
+      });
+
+      collectedJunk.forEach((junk) => {
+        disposeCollectedPiece(junk);
       });
 
       if (hitboxHelper) {
