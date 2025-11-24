@@ -76,9 +76,6 @@ export default function MainMenu() {
               <div className="text-[11px] uppercase tracking-[0.2em] text-lime-300">
                 Trashball Energy
               </div>
-              <div className="text-[11px] text-slate-400 mt-0.5">
-                Hold to charge. Release to launch.
-              </div>
             </div>
             <div className="text-xs text-slate-400 text-right">
               <div className="font-mono text-slate-200">{(charge * 100).toFixed(0)}%</div>
