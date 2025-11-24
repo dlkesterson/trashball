@@ -23,6 +23,8 @@ class AudioBus {
   private delay = new Tone.FeedbackDelay(this.controls.delayTime, this.controls.delayFeedback);
   private reverb = new Tone.Reverb({ decay: 4, wet: this.controls.reverb });
   private volume = new Tone.Volume(this.controls.volume);
+  private wompGain = new Tone.Gain(0);
+  private wompActive = false;
 
   private pad = new Tone.PolySynth(Tone.Synth, {
     oscillator: { type: 'fatsawtooth' },
@@ -50,6 +52,21 @@ class AudioBus {
     portamento: this.controls.glide,
   });
 
+  private wompBed = new Tone.MonoSynth({
+    oscillator: { type: 'sine' },
+    envelope: {
+      attack: 0.6,
+      decay: 0.4,
+      sustain: 0.7,
+      release: 1.2,
+    },
+    filter: {
+      Q: 0.6,
+      frequency: 360,
+    },
+    portamento: 0.05,
+  });
+
   private noise = new Tone.NoiseSynth({
     noise: { type: 'brown' },
     envelope: {
@@ -63,6 +80,7 @@ class AudioBus {
   constructor() {
     this.pad.chain(this.vibrato, this.filter, this.delay, this.reverb, this.volume);
     this.bass.chain(this.filter, this.delay, this.reverb, this.volume);
+    this.wompBed.chain(this.wompGain, this.filter, this.delay, this.reverb, this.volume);
     this.noise.chain(this.filter, this.delay, this.reverb, this.volume);
     this.volume.toDestination();
 
@@ -151,7 +169,8 @@ class AudioBus {
   }
 
   async setOrbState(state: OrbAudioId) {
-    if (this.currentState === state && this.started) return;
+    const stateChanged = this.currentState !== state;
+    if (!stateChanged && this.started) return;
     await this.ensureStarted();
     this.currentState = state;
     const preset = this.getPreset(state);
@@ -159,10 +178,17 @@ class AudioBus {
     this.orbLoop.interval = this.loopIntervalFor(state);
     if (state === 'calm') {
       this.orbLoop.mute = true;
+      this.setWompBedActive(false);
       return;
     }
     this.orbLoop.mute = false;
     this.triggerChord(preset);
+    if (state === 'charging' && stateChanged) {
+      void this.playReleaseWomp(0.65, { layerWithCurrent: true });
+      this.setWompBedActive(true);
+    } else if (state !== 'charging') {
+      this.setWompBedActive(false);
+    }
   }
 
   async resume() {
@@ -170,10 +196,11 @@ class AudioBus {
     await this.ensureStarted();
   }
 
-  async playReleaseWomp(intensity = 0.5) {
+  async playReleaseWomp(intensity = 0.5, opts?: { layerWithCurrent?: boolean }) {
     if (!this.canHandleAudio()) return;
     await this.ensureStarted();
     const preset = this.getPreset('womp');
+    const activePreset = this.getPreset(this.currentState);
     const now = Tone.now();
     const velocity = clamp(0.4 + intensity * 0.6, 0.4, 1);
     const note = preset?.notes[0] ?? 'C2';
@@ -181,6 +208,13 @@ class AudioBus {
     this.bass.triggerAttackRelease(note, '1n', now, velocity);
     this.pad.triggerAttackRelease('C3', '8n', now, velocity * 0.5);
     this.noise.triggerAttackRelease('16n', now + 0.05, 0.2);
+    if (opts?.layerWithCurrent && activePreset) {
+      setTimeout(() => {
+        if (this.getPreset(this.currentState)?.id === activePreset.id) {
+          this.applyPreset(activePreset);
+        }
+      }, 120);
+    }
   }
 
   async playEvent(id: AudioEventId) {
@@ -215,6 +249,29 @@ class AudioBus {
     p.notes.forEach((note, idx) => {
       this.pad.triggerAttackRelease(note, '1n', now + idx * 0.08, 0.6);
     });
+  }
+
+  private setWompBedActive(active: boolean) {
+    const ramp = active ? 0.6 : 0.85;
+    const target = active ? 0.8 : 0;
+    if (active) {
+      if (this.wompActive) {
+        this.wompGain.gain.rampTo(target, ramp);
+        return;
+      }
+      const preset = this.getPreset('womp');
+      const note = preset?.notes[0] ?? 'C2';
+      this.wompBed.triggerAttack(note, undefined, 0.8);
+      this.wompActive = true;
+      this.wompGain.gain.rampTo(target, ramp);
+    } else {
+      if (!this.wompActive) return;
+      this.wompGain.gain.rampTo(target, ramp);
+      setTimeout(() => {
+        this.wompBed.triggerRelease();
+        this.wompActive = false;
+      }, ramp * 1000 + 50);
+    }
   }
 }
 

@@ -77,7 +77,7 @@ export const ORB_AUDIO_PRESETS: OrbAudioPreset[] = [
       reverb: 0.48,
       grit: 0.05,
       glide: 0,
-      volume: -15,
+      volume: -25,
     },
   },
   {
