@@ -86,3 +86,5 @@ All upgrades are purchased using **Salvage** and are grouped into specialized ca
 
 FBX garbage models were sourced from https://rojatzo.itch.io/garbage-assets.
 Fast-food props come from https://dglopez.itch.io/low-poly-fast-food-asset-pack.
+Kitchen props from https://sigunstudio.itch.io/toony-kitchen-models.
+Supermarket props from https://pensamientoazul.itch.io/supermarket-3d-assets.
