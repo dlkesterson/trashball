@@ -22,6 +22,7 @@ type GameValues = {
   cosmicEssence: number;
   physics: PhysicsParams;
   upgrades: Record<ScrapUpgradeId, number>;
+  lastSaveAt: number;
 };
 
 export type GameStore = GameValues & {
@@ -59,6 +60,7 @@ const buildInitialState = (): GameValues => ({
   cosmicEssence: 0,
   physics: { ...initialPhysics },
   upgrades: {} as Record<ScrapUpgradeId, number>,
+  lastSaveAt: Date.now(),
 });
 
 export const useGameStore = create<GameStore>()(
@@ -82,9 +84,15 @@ export const useGameStore = create<GameStore>()(
         set((state) => ({
           scrap: state.scrap + n,
           totalScrap: state.totalScrap + n,
+          lastSaveAt: Date.now(),
         })),
 
-      startScrapRun: () => set({ scrapRunActive: true, lastRunTime: Date.now() }),
+      startScrapRun: () =>
+        set((state) => ({
+          scrapRunActive: true,
+          lastRunTime: Date.now(),
+          lastSaveAt: state.lastSaveAt,
+        })),
 
       endScrapRun: (score, collected) =>
         set((state) => {
@@ -99,6 +107,7 @@ export const useGameStore = create<GameStore>()(
             bestRunScore: Math.max(state.bestRunScore, score),
             scrapRunActive: false,
             charge: 0,
+            lastSaveAt: Date.now(),
           };
         }),
 
@@ -114,6 +123,7 @@ export const useGameStore = create<GameStore>()(
           return {
             scrap: state.scrap - cost,
             upgrades: { ...state.upgrades, [id]: currentLevel + 1 },
+            lastSaveAt: Date.now(),
           };
         }),
 
@@ -124,6 +134,7 @@ export const useGameStore = create<GameStore>()(
           upgrades: {} as Record<ScrapUpgradeId, number>,
           prestigeLevel: state.prestigeLevel + 1,
           cosmicEssence: state.cosmicEssence + calculateEssence(state.totalEnergy),
+          lastSaveAt: Date.now(),
         })),
       devSetState: __DEV_TOOLS__
         ? (partial) =>
@@ -138,13 +149,14 @@ export const useGameStore = create<GameStore>()(
               }
 
               const { physics, upgrades, ...rest } = partial;
-              return { ...rest, ...next };
+              return { ...rest, ...next, lastSaveAt: Date.now() };
             })
         : undefined,
       devReset: __DEV_TOOLS__
         ? () =>
             set(() => ({
               ...buildInitialState(),
+              lastSaveAt: Date.now(),
             }))
         : undefined,
       devAdjustUpgrade: __DEV_TOOLS__

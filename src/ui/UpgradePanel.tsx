@@ -3,7 +3,7 @@ import { SCRAP_UPGRADE_CATEGORIES, getUpgradeCost } from '../core/ScrapUnlocks';
 import { useGameStore } from '../core/GameState';
 
 const UpgradePanel = forwardRef<HTMLDivElement>(function UpgradePanel(_, panelRef) {
-  const { scrap, upgrades, purchaseUpgrade } = useGameStore();
+  const { scrap, upgrades, prestigeLevel, purchaseUpgrade } = useGameStore();
   const [expanded, setExpanded] = useState(false);
   const [activeCategory, setActiveCategory] = useState(SCRAP_UPGRADE_CATEGORIES[0].id);
 
@@ -41,28 +41,51 @@ const UpgradePanel = forwardRef<HTMLDivElement>(function UpgradePanel(_, panelRe
 
         {expanded && (
           <div className="p-3 sm:p-4 space-y-3 max-h-[60vh] overflow-y-auto">
-            <div className="flex flex-wrap gap-2">
-              {SCRAP_UPGRADE_CATEGORIES.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
-                    activeCategory === category.id
-                      ? 'bg-amber-500/15 border-amber-400 text-amber-100 shadow-[0_4px_20px_rgba(251,191,36,0.25)]'
-                      : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
-                  }`}
-                >
-                  {category.label}
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-2">
+            {SCRAP_UPGRADE_CATEGORIES.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                disabled={category.id === 'chronos' && prestigeLevel < 1}
+                className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                  activeCategory === category.id
+                    ? 'bg-amber-500/15 border-amber-400 text-amber-100 shadow-[0_4px_20px_rgba(251,191,36,0.25)]'
+                    : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span>{category.label}</span>
+                  {category.id === 'chronos' && prestigeLevel < 1 && (
+                    <span className="px-2 py-0.5 rounded-full bg-slate-800 text-[10px] text-slate-300 border border-slate-700">
+                      Prestige 1+
+                    </span>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
 
-            <div className="space-y-3">
-              {SCRAP_UPGRADE_CATEGORIES.find((c) => c.id === activeCategory)?.upgrades.map((upgrade) => {
+          <div className="space-y-3">
+            {(() => {
+              const active = SCRAP_UPGRADE_CATEGORIES.find((c) => c.id === activeCategory);
+              const locked = active?.id === 'chronos' && prestigeLevel < 1;
+              if (!active) return null;
+              if (locked) {
+                return (
+                  <div className="p-3 rounded-xl border border-slate-800 bg-slate-900/70 text-xs text-slate-300">
+                    Time-shifted upgrades unlock after your first prestige. Keep farming mass and aim
+                    for a strong run.
+                  </div>
+                );
+              }
+
+              return active.upgrades.map((upgrade) => {
                 const level = upgrades[upgrade.id] ?? 0;
                 const cost = getUpgradeCost(upgrade.id, level);
                 const maxed = level >= upgrade.max;
                 const canAfford = scrap >= cost;
+                const nextBreakpoint = upgrade.breakpoints?.find((bp) => bp.level > level);
+                const recommended = !maxed && level === 0 && canAfford;
 
                 return (
                   <button
@@ -81,19 +104,43 @@ const UpgradePanel = forwardRef<HTMLDivElement>(function UpgradePanel(_, panelRe
                       <div>
                         <div className="font-semibold text-sm">{upgrade.label}</div>
                         <div className="text-xs text-slate-300 mt-0.5">{upgrade.desc}</div>
+                        {upgrade.perLevel && (
+                          <div className="text-[11px] text-emerald-200 mt-1">Effect: {upgrade.perLevel}</div>
+                        )}
+                        {nextBreakpoint && (
+                          <div className="text-[11px] text-cyan-200 mt-0.5">
+                            Next: Lvl {nextBreakpoint.level} - {nextBreakpoint.text}
+                          </div>
+                        )}
+                        {upgrade.hint && (
+                          <div className="text-[11px] text-slate-400 mt-0.5">{upgrade.hint}</div>
+                        )}
                       </div>
-                      <span className="text-xs text-amber-200">
-                        {maxed ? 'Maxed' : `Lvl ${level}/${upgrade.max}`}
-                      </span>
+                      <div className="flex flex-col items-end gap-1">
+                        {upgrade.role && (
+                          <span className="px-2 py-0.5 rounded-full bg-slate-800 text-[10px] text-slate-200 border border-slate-700">
+                            {upgrade.role.toUpperCase()}
+                          </span>
+                        )}
+                        {recommended && (
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-[10px] text-emerald-200 border border-emerald-400/50">
+                            Recommended
+                          </span>
+                        )}
+                        <span className="text-xs text-amber-200">
+                          {maxed ? 'Maxed' : `Lvl ${level}/${upgrade.max}`}
+                        </span>
+                      </div>
                     </div>
                     {!maxed && (
                       <div className="mt-2 text-xs text-amber-300 font-mono">Cost: {cost} trash</div>
                     )}
                   </button>
                 );
-              })}
-            </div>
+              });
+            })()}
           </div>
+        </div>
         )}
       </div>
     </div>

@@ -6,10 +6,14 @@ import type { ScrapUpgradeId } from '../core/ScrapUnlocks';
 import { BASE_GAME_CONFIG, applyUpgradesToConfig, type ScrapRunConfig } from './config';
 import { createOrbMaterial } from '../orb/orbMaterial';
 import { CALM_IDLE_PRESET } from '../orb/orbPresets';
+import { haptic } from '../utils/haptics';
+import { audioBus } from '../audio/audioBus';
 
 const GOOD_SCRAP_URLS = Object.values(
   import.meta.glob('../assets/*.fbx', { eager: true, as: 'url' }) as Record<string, string>
 );
+
+const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
 type Props = {
   onGameOver: (score: number, collected: number) => void;
@@ -44,6 +48,7 @@ export default function ScrapRunScene({
   const [isHolding, setIsHolding] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [currentTouchX, setCurrentTouchX] = useState<number | null>(null);
+  const [showIntro, setShowIntro] = useState(true);
   const [gameState, setGameState] = useState({
     score: 0,
     collected: 0,
@@ -54,7 +59,11 @@ export default function ScrapRunScene({
   const lastDragXRef = useRef<number | null>(null);
   const lastDragTimeRef = useRef<number>(0);
   const strafeBoostRef = useRef(1);
+  const strafeScaleRef = useRef(1);
+  const shakeRef = useRef(0);
   const shieldPulseUntilRef = useRef(0);
+  const startPointRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const abortTriggeredRef = useRef(false);
 
   useEffect(() => {
     if (!mountRef.current || gameState.gameOver) return;
@@ -72,6 +81,9 @@ export default function ScrapRunScene({
     };
 
     const effectiveConfig = applyUpgradesToConfig(config, upgrades);
+    const afterburnerLevel = upgrades.afterburners ?? 0;
+    const shieldLevel = upgrades.shieldGenerator ?? 0;
+    const magnetLevel = upgrades.tractorBeam ?? 0;
     const fbxLoader = new FBXLoader();
     const goodScrapCache = new Map<string, THREE.Object3D>();
 
@@ -82,7 +94,8 @@ export default function ScrapRunScene({
     const { width, height } = getSize();
 
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-    camera.position.set(0, 0, 10);
+    const cameraBase = new THREE.Vector3(0, 0, 10);
+    camera.position.copy(cameraBase);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
@@ -136,6 +149,26 @@ export default function ScrapRunScene({
     const orbMesh = new THREE.Mesh(orbGeometry, orbMaterial);
     orbMesh.castShadow = true;
     playerGroup.add(orbMesh);
+
+    const shieldAura =
+      shieldLevel > 0
+        ? new THREE.Mesh(
+            new THREE.SphereGeometry(1.15, 24, 24),
+            new THREE.MeshBasicMaterial({
+              color: 0x67e8f9,
+              transparent: true,
+              opacity: 0.12,
+              wireframe: true,
+            })
+          )
+        : null;
+    if (shieldAura) {
+      playerGroup.add(shieldAura);
+    }
+
+    const trailGeometry = new THREE.SphereGeometry(0.08, 8, 8);
+    const trailParticles: Array<{ mesh: THREE.Mesh; life: number }> = [];
+    let trailAccumulator = 0;
 
     const collectedJunk: THREE.Mesh[] = [];
     const debrisList: THREE.Mesh[] = [];
@@ -272,7 +305,8 @@ export default function ScrapRunScene({
       }
 
       planet.rotation.y += 0.002;
-      const elapsed = shaderClock.getElapsedTime();
+      const delta = shaderClock.getDelta();
+      const elapsed = shaderClock.elapsedTime;
       orbMaterial.uniforms.time.value = elapsed;
       const shieldPulseActive = performance.now() < shieldPulseUntilRef.current;
       const visualCharge = Math.min(
@@ -283,6 +317,12 @@ export default function ScrapRunScene({
           (shieldPulseActive ? 0.2 : 0)
       );
       orbMaterial.uniforms.chargeLevel.value = visualCharge;
+      if (shieldAura) {
+        shieldAura.visible = currentGameState.shields > 0 || shieldPulseActive;
+        const auraScale = 1.05 + currentGameState.shields * 0.04 + (shieldPulseActive ? 0.15 : 0);
+        shieldAura.scale.setScalar(auraScale);
+        (shieldAura.material as THREE.MeshBasicMaterial).opacity = shieldPulseActive ? 0.24 : 0.12;
+      }
 
       const currentY = playerGroup.position.y;
       const newY = THREE.MathUtils.lerp(currentY, currentOrbitTarget, effectiveConfig.orbitSpeed);
@@ -293,8 +333,55 @@ export default function ScrapRunScene({
       playerGroup.position.x = newX;
       const nextBoost = THREE.MathUtils.lerp(strafeBoostRef.current, 1, 0.08);
       strafeBoostRef.current = nextBoost;
-      currentStrafeSpeed =
-        effectiveConfig.strafeSpeed * (1 + (strafeBoostRef.current - 1) * 0.85);
+      const baseStrafe = effectiveConfig.strafeSpeed * strafeScaleRef.current;
+      currentStrafeSpeed = baseStrafe * (1 + (strafeBoostRef.current - 1) * 0.85);
+
+      const strafing = Math.abs(currentStrafeTarget) > 0.05 || Math.abs(currentX) > 0.05;
+
+      if (afterburnerLevel > 0 && strafing) {
+        const spawnRate = 10 + afterburnerLevel * 12;
+        trailAccumulator += delta * spawnRate;
+        while (trailAccumulator > 1) {
+          const particleMaterial = new THREE.MeshBasicMaterial({
+            color: 0x38bdf8,
+            transparent: true,
+            opacity: 0.7,
+          });
+          const mesh = new THREE.Mesh(trailGeometry, particleMaterial);
+          mesh.position.copy(playerGroup.position);
+          mesh.position.z -= 0.6;
+          mesh.position.y -= 0.1;
+          trailParticles.push({ mesh, life: 0.6 });
+          scene.add(mesh);
+          trailAccumulator -= 1;
+        }
+      }
+
+      for (let i = trailParticles.length - 1; i >= 0; i--) {
+        const particle = trailParticles[i];
+        particle.life -= delta;
+        const material = particle.mesh.material as THREE.MeshBasicMaterial;
+        material.opacity = Math.max(0, particle.life);
+        particle.mesh.position.z -= delta * 6;
+        particle.mesh.position.y -= delta * 0.5;
+        if (particle.life <= 0) {
+          scene.remove(particle.mesh);
+          material.dispose();
+          trailParticles.splice(i, 1);
+        }
+      }
+
+      if (shakeRef.current > 0) {
+        shakeRef.current = Math.max(0, shakeRef.current - delta * 1.5);
+        const strength = shakeRef.current * 0.25;
+        camera.position.set(
+          cameraBase.x + Math.sin(elapsed * 40) * strength,
+          cameraBase.y + Math.cos(elapsed * 32) * strength * 0.8,
+          cameraBase.z
+        );
+      } else {
+        camera.position.copy(cameraBase);
+      }
 
       playerGroup.rotation.y += 0.01;
 
@@ -399,6 +486,19 @@ export default function ScrapRunScene({
           debris.userData.hitboxHelper.position.copy(debris.position);
         }
 
+        if (magnetLevel > 0 && debris.userData.type === 'good') {
+          const bonusRadius = magnetLevel >= 5 ? 1 : 0;
+          const magnetRadius = hitboxRadius + 1.2 + magnetLevel * 0.35 + bonusRadius;
+          const magnetDistance = debris.position.distanceTo(playerPos);
+          if (magnetDistance < magnetRadius) {
+            const pullStrength = 0.01 + magnetLevel * 0.003 + (magnetLevel >= 5 ? 0.006 : 0);
+            const pull = (magnetRadius - magnetDistance) * pullStrength;
+            debris.position.lerp(playerPos, pull);
+            const mat = debris.material as THREE.MeshLambertMaterial;
+            mat.opacity = clamp(0.25 + (magnetRadius - magnetDistance) * 0.25, 0.25, 0.95);
+          }
+        }
+
         if (shieldPulseActive && debris.userData.type === 'bad') {
           const pulseDistance = debris.position.distanceTo(playerPos);
           if (pulseDistance < SHIELD_PULSE_RADIUS) {
@@ -421,6 +521,8 @@ export default function ScrapRunScene({
           if (debris.userData.type === 'good') {
             currentGameState.collected++;
             currentGameState.score += 10;
+            haptic(10);
+            audioBus.playEvent('goodScrap');
             setGameState({ ...currentGameState });
 
             const junkPiece = collectedVisual ?? debris.clone(true);
@@ -438,8 +540,12 @@ export default function ScrapRunScene({
             playerGroup.add(junkPiece);
             collectedJunk.push(junkPiece);
           } else {
+            audioBus.playEvent('badDebris');
+            shakeRef.current = 0.45;
             if (currentGameState.shields > 0) {
               currentGameState.shields -= 1;
+              haptic([12, 12, 12]);
+              audioBus.playEvent('shield');
               setGameState({ ...currentGameState });
             } else if (currentGameState.collected > 0) {
               const loseCount = Math.min(3, currentGameState.collected);
@@ -455,6 +561,8 @@ export default function ScrapRunScene({
               if (!endless) {
                 currentGameState.gameOver = true;
                 setGameState({ ...currentGameState });
+                haptic([18, 30, 18]);
+                audioBus.playEvent('gameOver');
               }
             }
           }
@@ -491,9 +599,15 @@ export default function ScrapRunScene({
       const containerWidth = rect?.width ?? window.innerWidth;
       if (currentTouchPos !== null && containerWidth > 0) {
         const normalizedX = (currentTouchPos - containerWidth / 2) / (containerWidth / 2);
-        currentStrafeTarget = normalizedX * effectiveConfig.maxStrafe;
+        const widthFactor = clamp(containerWidth / 480, 0.85, 1.25);
+        strafeScaleRef.current = widthFactor;
+        const inDeadZone = Math.abs(normalizedX) < 0.12;
+        currentStrafeTarget = (inDeadZone ? 0 : normalizedX * widthFactor) * effectiveConfig.maxStrafe;
+        currentStrafeSpeed = effectiveConfig.strafeSpeed * widthFactor;
       } else {
         currentStrafeTarget = 0;
+        currentStrafeSpeed = effectiveConfig.strafeSpeed;
+        strafeScaleRef.current = 1;
       }
     }, 16);
 
@@ -501,6 +615,8 @@ export default function ScrapRunScene({
       if (currentGameState.shields <= 0) return false;
       currentGameState.shields -= 1;
       shieldPulseUntilRef.current = performance.now() + SHIELD_PULSE_DURATION;
+      haptic([8, 6, 16]);
+      audioBus.playEvent('shield');
       setGameState({ ...currentGameState });
       return true;
     };
@@ -523,6 +639,18 @@ export default function ScrapRunScene({
       delete (window as unknown as Record<string, unknown>).activateShieldPulse;
       delete (window as unknown as Record<string, unknown>).updateHoldingState;
       delete (window as unknown as Record<string, unknown>).updateTouchPosition;
+
+      trailParticles.forEach((particle) => {
+        scene.remove(particle.mesh);
+        (particle.mesh.material as THREE.Material).dispose();
+      });
+      trailGeometry.dispose();
+
+      if (shieldAura) {
+        playerGroup.remove(shieldAura);
+        shieldAura.geometry.dispose();
+        (shieldAura.material as THREE.Material).dispose();
+      }
 
       debrisList.forEach((debris) => {
         disposeDebris(debris);
@@ -556,19 +684,27 @@ export default function ScrapRunScene({
   }, [currentTouchX]);
 
   useEffect(() => {
+    if (minimalUi) return;
+    const timer = setTimeout(() => setShowIntro(false), 3000);
+    return () => clearTimeout(timer);
+  }, [minimalUi]);
+
+  useEffect(() => {
     if (gameState.gameOver) {
       onGameOver(gameState.score, gameState.collected);
     }
   }, [gameState.gameOver, gameState.score, gameState.collected, onGameOver]);
 
   const handleAbort = () => {
+    if (gameState.gameOver) return;
+    haptic([12, 24]);
     onGameOver(gameState.score, gameState.collected);
   };
 
-  const getRelativeX = (clientX: number) => {
+  const getRelativePoint = (clientX: number, clientY: number) => {
     const rect = mountRef.current?.getBoundingClientRect();
     if (!rect) return null;
-    return clientX - rect.left;
+    return { x: clientX - rect.left, y: clientY - rect.top };
   };
 
   const trackDragSpeed = (relativeX: number) => {
@@ -586,6 +722,18 @@ export default function ScrapRunScene({
     lastDragTimeRef.current = now;
   };
 
+  const maybeAbortFromSwipe = (relativeY: number) => {
+    const start = startPointRef.current;
+    if (!start || abortTriggeredRef.current || gameState.gameOver) return;
+    const deltaY = relativeY - start.y;
+    const elapsed = performance.now() - start.time;
+    if (deltaY > 120 && elapsed < 500) {
+      abortTriggeredRef.current = true;
+      haptic([14, 24, 14]);
+      handleAbort();
+    }
+  };
+
   const maybeActivateShield = () => {
     const activator = (window as unknown as Record<string, () => boolean>).activateShieldPulse;
     if (activator) activator();
@@ -597,6 +745,8 @@ export default function ScrapRunScene({
     setCurrentTouchX(null);
     lastDragXRef.current = null;
     lastDragTimeRef.current = 0;
+    startPointRef.current = null;
+    abortTriggeredRef.current = false;
     if (isQuickTap) {
       maybeActivateShield();
     }
@@ -606,20 +756,23 @@ export default function ScrapRunScene({
     setIsHolding(true);
     pressStartRef.current = performance.now();
     const touch = e.touches[0];
-    const relative = getRelativeX(touch.clientX);
-    if (relative === null) return;
-    setTouchStart(relative);
-    setCurrentTouchX(relative);
-    trackDragSpeed(relative);
+    const relative = getRelativePoint(touch.clientX, touch.clientY);
+    if (!relative) return;
+    setTouchStart(relative.x);
+    setCurrentTouchX(relative.x);
+    startPointRef.current = { ...relative, time: performance.now() };
+    abortTriggeredRef.current = false;
+    trackDragSpeed(relative.x);
   };
 
   const handleTouchMove = (e: TouchEvent) => {
     if (touchStart !== null) {
       const touch = e.touches[0];
-      const relative = getRelativeX(touch.clientX);
-      if (relative !== null) {
-        setCurrentTouchX(relative);
-        trackDragSpeed(relative);
+      const relative = getRelativePoint(touch.clientX, touch.clientY);
+      if (relative) {
+        setCurrentTouchX(relative.x);
+        trackDragSpeed(relative.x);
+        maybeAbortFromSwipe(relative.y);
       }
     }
   };
@@ -634,19 +787,22 @@ export default function ScrapRunScene({
   const handleMouseDown = (e: MouseEvent) => {
     setIsHolding(true);
     pressStartRef.current = performance.now();
-    const relative = getRelativeX(e.clientX);
-    if (relative === null) return;
-    setTouchStart(relative);
-    setCurrentTouchX(relative);
-    trackDragSpeed(relative);
+    const relative = getRelativePoint(e.clientX, e.clientY);
+    if (!relative) return;
+    setTouchStart(relative.x);
+    setCurrentTouchX(relative.x);
+    startPointRef.current = { ...relative, time: performance.now() };
+    abortTriggeredRef.current = false;
+    trackDragSpeed(relative.x);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
     if (touchStart !== null) {
-      const relative = getRelativeX(e.clientX);
-      if (relative !== null) {
-        setCurrentTouchX(relative);
-        trackDragSpeed(relative);
+      const relative = getRelativePoint(e.clientX, e.clientY);
+      if (relative) {
+        setCurrentTouchX(relative.x);
+        trackDragSpeed(relative.x);
+        maybeAbortFromSwipe(relative.y);
       }
     }
   };
@@ -679,8 +835,12 @@ export default function ScrapRunScene({
           </div>
 
           {!gameState.gameOver && gameState.score === 0 && (
-            <div className="pointer-events-none flex-1 flex items-center justify-center px-4">
-              <div className="bg-black/75 border border-slate-800 rounded-2xl px-4 py-3 text-center text-sm text-slate-200 max-w-md">
+            <div
+              className={`pointer-events-none flex-1 flex items-center justify-center px-4 transition-opacity duration-700 ${
+                showIntro ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <div className="bg-black/75 border border-slate-800 rounded-2xl px-4 py-3 text-center text-sm text-slate-200 max-w-md shadow-lg shadow-black/40">
                 <div className="text-lime-300 font-semibold mb-1">Charge then dive</div>
                 <div>Hold to push into the outer lane, release to fall back in.</div>
                 <div className="mt-1">Drag left/right to dodge and scoop trash.</div>

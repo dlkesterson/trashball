@@ -13,6 +13,7 @@ export default function MainMenu() {
     prestigeLevel,
     cosmicEssence,
     upgrades,
+    lastSaveAt,
     startScrapRun,
     prestige,
   } = useGameStore();
@@ -24,6 +25,7 @@ export default function MainMenu() {
   );
 
   const [cooldownRemaining, setCooldownRemaining] = useState(0);
+  const [lastSaveLabel, setLastSaveLabel] = useState('Just now');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,6 +35,28 @@ export default function MainMenu() {
 
     return () => clearInterval(interval);
   }, [lastRunTime, effectiveCooldown]);
+
+  useEffect(() => {
+    const updateLabel = () => {
+      if (!lastSaveAt) {
+        setLastSaveLabel('Pending');
+        return;
+      }
+      const diff = Date.now() - lastSaveAt;
+      if (diff < 15_000) {
+        setLastSaveLabel('Just now');
+      } else if (diff < 60_000) {
+        setLastSaveLabel(`${Math.floor(diff / 1000)}s ago`);
+      } else if (diff < 3_600_000) {
+        setLastSaveLabel(`${Math.floor(diff / 60000)}m ago`);
+      } else {
+        setLastSaveLabel(`${Math.floor(diff / 3_600_000)}h ago`);
+      }
+    };
+    updateLabel();
+    const interval = setInterval(updateLabel, 10_000);
+    return () => clearInterval(interval);
+  }, [lastSaveAt]);
 
   const canLaunch = cooldownRemaining === 0;
   const canPrestige = energy >= 10000;
@@ -78,6 +102,9 @@ export default function MainMenu() {
             </span>
             <span className="px-2 py-1 rounded-full bg-amber-500/10 text-amber-200">
               Prestige {prestigeLevel} / Essence {cosmicEssence}
+            </span>
+            <span className="px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-200 border border-emerald-400/30">
+              Save: {lastSaveLabel}
             </span>
           </div>
         </div>

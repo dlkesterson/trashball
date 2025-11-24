@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState, type ComponentType } from 'react';
 import ShaderLab from './ShaderLab';
+import AudioLab from './AudioLab';
 import DebrisLab from './DebrisLab';
 import UpgradeSim from './UpgradeSim';
 import PrestigeSim from './PrestigeSim';
 import OrbDebug from './OrbDebug';
 import GameStateInspector from './GameStateInspector';
 
-type DevToolId = 'shader' | 'debris' | 'upgrade' | 'prestige' | 'orbdebug' | 'state';
+type DevToolId = 'shader' | 'audio' | 'debris' | 'upgrade' | 'prestige' | 'orbdebug' | 'state';
 
 const DEV_TOOLS: Array<{
   id: DevToolId;
@@ -19,6 +20,12 @@ const DEV_TOOLS: Array<{
     label: 'Shader Lab',
     description: 'Orb shader playground for gradients, wobble, and bloom.',
     component: ShaderLab,
+  },
+  {
+    id: 'audio',
+    label: 'Audio Lab',
+    description: 'Tone.js playground for orb states + ScrapRun one-shots.',
+    component: AudioLab,
   },
   {
     id: 'debris',

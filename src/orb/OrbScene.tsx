@@ -4,6 +4,8 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { useGameStore } from '../core/GameState';
+import { haptic } from '../utils/haptics';
+import { audioBus } from '../audio/audioBus';
 import { createOrbMaterial } from './orbMaterial';
 import { CALM_IDLE_PRESET, OVERCHARGED_PRESET, SUPER_CRITICAL_PRESET } from './orbPresets';
 
@@ -116,7 +118,13 @@ export default function OrbScene({ isHolding }: Props) {
       const group = scrapGroupRef.current;
       if (!group) return;
 
-      const maxPiecesBase = 40;
+      const upgrades = upgradesRef.current;
+      const upgradeBonus =
+        1 +
+        (upgrades.tractorBeam ?? 0) * 0.08 +
+        (upgrades.resonanceTuner ?? 0) * 0.03 +
+        prestigeRef.current * 0.05;
+      const maxPiecesBase = 40 * upgradeBonus;
       const screenScale = window.innerWidth < 640 ? 0.6 : 1;
       const maxPieces = Math.floor(maxPiecesBase * screenScale);
       const count = Math.min(maxPieces, Math.max(0, Math.floor(scrapValue)));
@@ -252,6 +260,11 @@ export default function OrbScene({ isHolding }: Props) {
       const upgrades = upgradesRef.current;
       const prestigeLevel = prestigeRef.current;
       const holdTimer = holdTimerRef.current;
+      const upgradeAura =
+        1 +
+        (upgrades.resonanceTuner ?? 0) * 0.03 +
+        (upgrades.orbitalStabilization ?? 0) * 0.02 +
+        prestigeLevel * 0.05;
 
       if (holdRef.current) {
         holdTimer.duration += deltaTime;
@@ -340,12 +353,13 @@ export default function OrbScene({ isHolding }: Props) {
       }
 
       particleGeometry.attributes.position.needsUpdate = true;
-      pointLight.intensity = localState.charge * (isSuperCritical ? 7 : 5);
+      pointLight.intensity = localState.charge * (isSuperCritical ? 7 : 5) * upgradeAura;
 
-      bloomPass.strength = Math.max(
-        bloomSettingsRef.current.strength,
-        localState.charge * (isSuperCritical ? 3 : 2)
-      );
+      bloomPass.strength =
+        Math.max(
+          bloomSettingsRef.current.strength,
+          localState.charge * (isSuperCritical ? 3 : 2)
+        ) * upgradeAura;
       bloomPass.threshold = bloomSettingsRef.current.threshold;
       composer.render();
     };
@@ -400,6 +414,18 @@ export default function OrbScene({ isHolding }: Props) {
   };
 
   const style = stateStyles[visualState];
+
+  useEffect(() => {
+    if (visualState === 'superCritical') {
+      haptic([18, 12, 18]);
+    } else if (visualState === 'charging') {
+      haptic(8);
+    }
+  }, [visualState]);
+
+  useEffect(() => {
+    audioBus.setOrbState(visualState);
+  }, [visualState]);
 
   return (
     <div ref={mountRef} className="absolute inset-x-0 top-0 bottom-32 sm:bottom-40">
