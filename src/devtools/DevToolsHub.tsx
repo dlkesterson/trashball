@@ -6,8 +6,17 @@ import UpgradeSim from './UpgradeSim';
 import PrestigeSim from './PrestigeSim';
 import OrbDebug from './OrbDebug';
 import GameStateInspector from './GameStateInspector';
+import OrbTimingLab from './OrbTimingLab';
 
-type DevToolId = 'shader' | 'audio' | 'debris' | 'upgrade' | 'prestige' | 'orbdebug' | 'state';
+type DevToolId =
+  | 'shader'
+  | 'audio'
+  | 'debris'
+  | 'upgrade'
+  | 'prestige'
+  | 'orbdebug'
+  | 'state'
+  | 'timing';
 
 const DEV_TOOLS: Array<{
   id: DevToolId;
@@ -56,6 +65,12 @@ const DEV_TOOLS: Array<{
     label: 'Game State Inspector',
     description: 'Live snapshot with resource editing and upgrade controls.',
     component: GameStateInspector,
+  },
+  {
+    id: 'timing',
+    label: 'Orb Timing Lab',
+    description: 'Tune calm/charging/super-critical thresholds and delays.',
+    component: OrbTimingLab,
   },
 ];
 

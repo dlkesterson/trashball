@@ -1,9 +1,30 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, forwardRef, type RefObject } from 'react';
 import { useGameStore } from '../core/GameState';
+import UpgradePanel from './UpgradePanel';
 
 const BASE_COOLDOWN_MS = 2 * 60 * 1000; // 2 minutes for MVP loop
 
-export default function MainMenu() {
+type Props = {
+  upgradePanelRef: RefObject<HTMLDivElement | null>;
+  statsPanelRef: RefObject<HTMLDivElement | null>;
+  isUpgradesOpen: boolean;
+  isStatsOpen: boolean;
+  openUpgrades: () => void;
+  closeUpgrades: () => void;
+  openStats: () => void;
+  closeStats: () => void;
+};
+
+export default function MainMenu({
+  upgradePanelRef,
+  statsPanelRef,
+  isUpgradesOpen,
+  isStatsOpen,
+  openUpgrades,
+  closeUpgrades,
+  openStats,
+  closeStats,
+}: Props) {
   const {
     energy,
     scrap,
@@ -70,40 +91,23 @@ export default function MainMenu() {
   return (
     <div className="pointer-events-none absolute inset-0 flex flex-col justify-end p-3 sm:p-4">
       <div className="pointer-events-auto w-full max-w-2xl mx-auto space-y-3">
-        <div className="rounded-2xl border border-lime-500/15 bg-black/60 backdrop-blur-md shadow-xl shadow-black/30 p-3 sm:p-4">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <div className="text-[11px] uppercase tracking-[0.2em] text-lime-300">
-                Trashball Energy
-              </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <IconCircleButton label="Upgrades" onClick={openUpgrades} icon="UP" />
+            <IconCircleButton label="Statistics" onClick={openStats} icon="ST" />
+          </div>
+          {canPrestige && (
+            <div className="text-[11px] uppercase tracking-[0.2em] text-amber-200">
+              Prestige ready
             </div>
-            <div className="text-xs text-slate-400 text-right">
-              <div className="font-mono text-slate-200">{(charge * 100).toFixed(0)}%</div>
-              <div className="text-[10px]">Charged</div>
-            </div>
-          </div>
+          )}
+        </div>
 
-          <div className="mt-2 h-2 rounded-full bg-slate-900 overflow-hidden border border-slate-800">
-            <div
-              className="h-full bg-gradient-to-r from-lime-400 to-emerald-500 transition-all duration-150"
-              style={{ width: `${Math.min(100, charge * 100)}%` }}
-            />
-          </div>
-
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-300">
-            <span className="px-2 py-1 rounded-full bg-lime-500/10 text-lime-200 font-mono">
-              Scrap: {Math.floor(scrap)}
-            </span>
-            <span className="px-2 py-1 rounded-full bg-slate-800 text-slate-200">
-              Best: {bestRunScore}
-            </span>
-            <span className="px-2 py-1 rounded-full bg-amber-500/10 text-amber-200">
-              Prestige {prestigeLevel} / Essence {cosmicEssence}
-            </span>
-            <span className="px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-200 border border-emerald-400/30">
-              Save: {lastSaveLabel}
-            </span>
-          </div>
+        <div className="h-2.5 rounded-full bg-slate-900/60 overflow-hidden shadow-inner">
+          <div
+            className="h-full bg-gradient-to-r from-lime-400 via-emerald-400 to-emerald-600 transition-all duration-150"
+            style={{ width: `${Math.min(100, charge * 100)}%` }}
+          />
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-black/70 backdrop-blur-md shadow-lg p-3 sm:p-4 space-y-2">
@@ -119,21 +123,129 @@ export default function MainMenu() {
             {canLaunch ? 'Start Trash Run' : `Cooldown ${formatTime(cooldownRemaining)}`}
           </button>
 
-          <button
-            onClick={prestige}
-            disabled={!canPrestige}
-            className={`w-full py-2.5 rounded-lg text-sm font-semibold transition-all active:scale-[0.99] ${
-              canPrestige
-                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-black shadow-[0_8px_20px_rgba(251,191,36,0.25)]'
-                : 'bg-slate-900 text-slate-500 border border-slate-800 cursor-not-allowed'
-            }`}
-          >
-            {canPrestige
-              ? `Prestige for +${Math.floor(Math.sqrt(energy / 10000))} essence`
-              : 'Prestige locked'}
-          </button>
+          {canPrestige && (
+            <button
+              onClick={prestige}
+              className="w-full py-2.5 rounded-lg text-sm font-semibold transition-all active:scale-[0.99] bg-gradient-to-r from-amber-400 to-orange-500 text-black shadow-[0_8px_20px_rgba(251,191,36,0.25)]"
+            >
+              {`Prestige for +${Math.floor(Math.sqrt(energy / 10000))} essence`}
+            </button>
+          )}
         </div>
       </div>
+
+      <UpgradePanel ref={upgradePanelRef} open={isUpgradesOpen} onClose={closeUpgrades} />
+      <StatisticsPanel
+        ref={statsPanelRef}
+        open={isStatsOpen}
+        onClose={closeStats}
+        scrap={scrap}
+        bestRunScore={bestRunScore}
+        prestigeLevel={prestigeLevel}
+        cosmicEssence={cosmicEssence}
+        lastSaveLabel={lastSaveLabel}
+      />
+    </div>
+  );
+}
+
+function IconCircleButton({
+  icon,
+  label,
+  onClick,
+}: {
+  icon: string;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="group flex items-center gap-2 rounded-full border border-slate-800 bg-black/50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200 shadow-lg shadow-black/30 hover:border-lime-300/60 hover:text-lime-100 transition"
+    >
+      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-base group-hover:bg-lime-500/15">
+        {icon}
+      </span>
+      {label}
+    </button>
+  );
+}
+
+type StatsProps = {
+  open: boolean;
+  onClose: () => void;
+  scrap: number;
+  bestRunScore: number;
+  prestigeLevel: number;
+  cosmicEssence: number;
+  lastSaveLabel: string;
+};
+
+type Accent = 'lime' | 'cyan' | 'amber' | 'emerald';
+
+const StatisticsPanel = forwardRef<HTMLDivElement, StatsProps>(function StatisticsPanel(
+  { open, onClose, scrap, bestRunScore, prestigeLevel, cosmicEssence, lastSaveLabel },
+  panelRef
+) {
+  if (!open) return null;
+
+  return (
+    <div
+      ref={panelRef}
+      className="pointer-events-auto fixed inset-0 z-40 flex items-end sm:items-center justify-center"
+    >
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="relative m-4 w-full max-w-xl rounded-2xl border border-slate-800 bg-black/80 shadow-[0_20px_60px_rgba(0,0,0,0.45)] overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+          <div className="text-xs uppercase tracking-[0.24em] text-lime-200">Statistics</div>
+          <button
+            onClick={onClose}
+            className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-[11px] font-semibold text-slate-200 hover:border-lime-300 hover:text-lime-100 transition"
+          >
+            Close
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4">
+          <StatTile label="Scrap" value={Math.floor(scrap).toLocaleString()} accent="lime" />
+          <StatTile label="Best Run" value={bestRunScore.toLocaleString()} accent="cyan" />
+          <StatTile
+            label="Prestige Level"
+            value={`Lv ${prestigeLevel} / ${cosmicEssence} essence`}
+            accent="amber"
+          />
+          <StatTile label="Recent Save" value={lastSaveLabel} accent="emerald" />
+        </div>
+      </div>
+    </div>
+  );
+});
+
+function StatTile({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: string;
+  accent: Accent;
+}) {
+  const accentMap: Record<Accent, string> = {
+    lime: 'from-lime-400/15 to-lime-500/5 border-lime-400/50 text-lime-100',
+    cyan: 'from-cyan-400/15 to-cyan-500/5 border-cyan-300/50 text-cyan-100',
+    amber: 'from-amber-400/15 to-amber-500/5 border-amber-300/50 text-amber-100',
+    emerald: 'from-emerald-400/15 to-emerald-500/5 border-emerald-300/50 text-emerald-100',
+  };
+
+  return (
+    <div
+      className={`rounded-xl border bg-gradient-to-br p-3 shadow-inner shadow-black/40 ${accentMap[accent]}`}
+    >
+      <div className="text-[11px] uppercase tracking-[0.2em] text-slate-300">{label}</div>
+      <div className="mt-1 text-lg font-semibold">{value}</div>
     </div>
   );
 }

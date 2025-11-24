@@ -13,6 +13,7 @@ const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(mi
 
 class AudioBus {
   private started = false;
+  private canStart = false;
   private currentState: OrbAudioId = 'calm';
   private controls: ControlState = { ...DEFAULT_CONTROLS };
   private orbLoop: Tone.Loop;
@@ -131,14 +132,21 @@ class AudioBus {
     return 1.6;
   }
 
+  private canHandleAudio() {
+    return this.started || this.canStart;
+  }
+
   private async ensureStarted() {
-    if (!this.started) {
+    if (this.started || !this.canStart) return;
+    try {
       await Tone.start();
       if (Tone.Transport.state !== 'started') {
         await Tone.Transport.start();
       }
       this.orbLoop.start(0);
       this.started = true;
+    } catch (err) {
+      // Browsers block audio until a user gesture; allow retry after resume().
     }
   }
 
@@ -158,10 +166,12 @@ class AudioBus {
   }
 
   async resume() {
+    this.canStart = true;
     await this.ensureStarted();
   }
 
   async playReleaseWomp(intensity = 0.5) {
+    if (!this.canHandleAudio()) return;
     await this.ensureStarted();
     const preset = this.getPreset('womp');
     const now = Tone.now();
@@ -174,6 +184,7 @@ class AudioBus {
   }
 
   async playEvent(id: AudioEventId) {
+    if (!this.canHandleAudio()) return;
     await this.ensureStarted();
     const now = Tone.now();
     if (id === 'goodScrap') {

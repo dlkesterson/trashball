@@ -400,8 +400,18 @@ export default function ScrapRunScene({
         });
         const debris = new THREE.Mesh(geometry, material);
 
-        const startX = (Math.random() - 0.5) * 6;
-        const startY = (Math.random() - 0.5) * 4 - 1;
+        // Keep debris paths inside the player's reachable area.
+        const { width: containerWidth } = getSize();
+        const widthFactor = clamp(containerWidth / 480, 0.85, 1.25);
+        const maxStrafeReach = effectiveConfig.maxStrafe * widthFactor;
+        const maxCurveScale = 1 + effectiveConfig.curvatureStrength * 0.5;
+        const spawnXLimit = maxStrafeReach / maxCurveScale;
+        const startX = THREE.MathUtils.randFloat(-spawnXLimit, spawnXLimit);
+        const minY = effectiveConfig.innerOrbit;
+        const maxY = effectiveConfig.outerOrbit;
+        const maxCurveRise = Math.abs(startX) * effectiveConfig.curvatureStrength;
+        const safeStartYMax = maxY - maxCurveRise;
+        const startY = THREE.MathUtils.randFloat(minY, Math.max(minY, safeStartYMax));
 
         debris.position.set(startX, startY, effectiveConfig.spawnDistance);
         debris.castShadow = true;

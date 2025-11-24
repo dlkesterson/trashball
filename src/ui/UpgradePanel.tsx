@@ -1,46 +1,47 @@
-import { useEffect, useState, forwardRef } from 'react';
+import { useState, forwardRef } from 'react';
 import { SCRAP_UPGRADE_CATEGORIES, getUpgradeCost } from '../core/ScrapUnlocks';
 import { useGameStore } from '../core/GameState';
 
-const UpgradePanel = forwardRef<HTMLDivElement>(function UpgradePanel(_, panelRef) {
+type Props = {
+  open: boolean;
+  onClose: () => void;
+};
+
+const UpgradePanel = forwardRef<HTMLDivElement, Props>(function UpgradePanel(
+  { open, onClose },
+  panelRef
+) {
   const { scrap, upgrades, prestigeLevel, purchaseUpgrade } = useGameStore();
-  const [expanded, setExpanded] = useState(false);
   const [activeCategory, setActiveCategory] = useState(SCRAP_UPGRADE_CATEGORIES[0].id);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setExpanded(false);
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  if (!open) return null;
 
   return (
-    <div className="pointer-events-none fixed top-16 right-3 sm:top-20 sm:right-6 z-30">
+    <div
+      ref={panelRef}
+      className="pointer-events-auto fixed inset-0 z-40 flex items-end sm:items-center justify-center"
+    >
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div
-        ref={panelRef}
-        className="pointer-events-auto w-64 sm:w-80 max-w-xs sm:max-w-sm rounded-2xl bg-black/80 border border-slate-800 shadow-xl backdrop-blur-lg overflow-hidden"
+        className="relative pointer-events-auto m-4 w-full max-w-2xl rounded-2xl bg-black/85 border border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.45)] overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-slate-800">
-          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-amber-200">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+          <div className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-amber-200">
             Upgrades
-            <span className="px-2 py-1 rounded-full bg-amber-500/10 text-amber-100 border border-amber-400/60 font-mono text-[11px]">
-              {Math.floor(scrap)}
+            <span className="px-2 py-1 rounded-full bg-amber-500/10 text-amber-100 border border-amber-400/60 font-mono text-[11px] shadow-inner shadow-amber-500/10">
+              {Math.floor(scrap)} scrap
             </span>
           </div>
           <button
-            onClick={() => setExpanded((v) => !v)}
-            className="rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-semibold text-slate-200 border border-slate-700 hover:border-amber-400 transition-all"
+            onClick={onClose}
+            className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-[11px] font-semibold text-slate-200 hover:border-amber-300 hover:text-amber-100 transition"
           >
-            {expanded ? 'Hide' : 'Show'}
+            Close
           </button>
         </div>
 
-        {expanded && (
-          <div className="p-3 sm:p-4 space-y-3 max-h-[60vh] overflow-y-auto">
+        <div className="p-3 sm:p-4 space-y-3 max-h-[70vh] overflow-y-auto">
           <div className="flex flex-wrap gap-2">
             {SCRAP_UPGRADE_CATEGORIES.map((category) => (
               <button
@@ -51,7 +52,7 @@ const UpgradePanel = forwardRef<HTMLDivElement>(function UpgradePanel(_, panelRe
                   activeCategory === category.id
                     ? 'bg-amber-500/15 border-amber-400 text-amber-100 shadow-[0_4px_20px_rgba(251,191,36,0.25)]'
                     : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-600'
-                }`}
+                } ${category.id === 'chronos' && prestigeLevel < 1 ? 'opacity-70' : ''}`}
               >
                 <div className="flex items-center gap-2">
                   <span>{category.label}</span>
@@ -105,7 +106,9 @@ const UpgradePanel = forwardRef<HTMLDivElement>(function UpgradePanel(_, panelRe
                         <div className="font-semibold text-sm">{upgrade.label}</div>
                         <div className="text-xs text-slate-300 mt-0.5">{upgrade.desc}</div>
                         {upgrade.perLevel && (
-                          <div className="text-[11px] text-emerald-200 mt-1">Effect: {upgrade.perLevel}</div>
+                          <div className="text-[11px] text-emerald-200 mt-1">
+                            Effect: {upgrade.perLevel}
+                          </div>
                         )}
                         {nextBreakpoint && (
                           <div className="text-[11px] text-cyan-200 mt-0.5">
@@ -141,7 +144,6 @@ const UpgradePanel = forwardRef<HTMLDivElement>(function UpgradePanel(_, panelRe
             })()}
           </div>
         </div>
-        )}
       </div>
     </div>
   );

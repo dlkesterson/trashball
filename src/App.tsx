@@ -1,9 +1,8 @@
 import type React from 'react';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import OrbScene from './orb/OrbScene';
 import ScrapRunOverlay from './scraprun/ScrapRunOverlay';
 import MainMenu from './ui/MainMenu';
-import UpgradePanel from './ui/UpgradePanel';
 import DevToolsHub from './devtools/DevToolsHub';
 import { useGameStore } from './core/GameState';
 import { haptic } from './utils/haptics';
@@ -19,7 +18,22 @@ export default function App() {
   const scrapRunActive = useGameStore((s) => s.scrapRunActive);
   const charge = useGameStore((s) => s.charge);
   const [isHolding, setIsHolding] = useState(false);
-  const upgradePanelRef = useRef<HTMLDivElement>(null);
+  const [isUpgradesOpen, setIsUpgradesOpen] = useState(false);
+  const [isStatsOpen, setIsStatsOpen] = useState(false);
+  const upgradePanelRef = useRef<HTMLDivElement | null>(null);
+  const statsPanelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const resume = () => audioBus.resume();
+    window.addEventListener('pointerdown', resume, { once: true });
+    window.addEventListener('touchstart', resume, { once: true });
+    window.addEventListener('keydown', resume, { once: true });
+    return () => {
+      window.removeEventListener('pointerdown', resume);
+      window.removeEventListener('touchstart', resume);
+      window.removeEventListener('keydown', resume);
+    };
+  }, []);
 
   const enableHold = () => {
     audioBus.resume();
@@ -32,9 +46,13 @@ export default function App() {
     setIsHolding(false);
   };
 
-  const isWithinUpgradePanel = (target: EventTarget | null) => {
-    if (!target || !upgradePanelRef.current) return false;
-    return upgradePanelRef.current.contains(target as Node);
+  const isWithinUiLayer = (target: EventTarget | null) => {
+    if (!target) return false;
+    const node = target as Node;
+    return (
+      (upgradePanelRef.current && upgradePanelRef.current.contains(node)) ||
+      (statsPanelRef.current && statsPanelRef.current.contains(node))
+    );
   };
 
   if (devTool) {
@@ -43,7 +61,7 @@ export default function App() {
   }
 
   const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => {
-    if (scrapRunActive || isWithinUpgradePanel(e.target)) return;
+    if (scrapRunActive || isWithinUiLayer(e.target)) return;
     const touch = e.touches[0];
     const target = e.currentTarget.getBoundingClientRect();
     const y = touch.clientY - target.top;
@@ -63,7 +81,7 @@ export default function App() {
       onMouseDown={
         !scrapRunActive
           ? (e) => {
-              if (isWithinUpgradePanel(e.target)) return;
+              if (isWithinUiLayer(e.target)) return;
               enableHold();
             }
           : undefined
@@ -79,8 +97,16 @@ export default function App() {
         <ScrapRunOverlay />
       ) : (
         <>
-          <MainMenu />
-          <UpgradePanel ref={upgradePanelRef} />
+          <MainMenu
+            upgradePanelRef={upgradePanelRef}
+            statsPanelRef={statsPanelRef}
+            isUpgradesOpen={isUpgradesOpen}
+            isStatsOpen={isStatsOpen}
+            openUpgrades={() => setIsUpgradesOpen(true)}
+            closeUpgrades={() => setIsUpgradesOpen(false)}
+            openStats={() => setIsStatsOpen(true)}
+            closeStats={() => setIsStatsOpen(false)}
+          />
         </>
       )}
     </div>
