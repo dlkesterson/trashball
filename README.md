@@ -85,3 +85,4 @@ All upgrades are purchased using **Salvage** and are grouped into specialized ca
 ## Asset Credits
 
 FBX garbage models were sourced from https://rojatzo.itch.io/garbage-assets.
+Fast-food props come from https://dglopez.itch.io/low-poly-fast-food-asset-pack.

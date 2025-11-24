@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { useGameStore } from '../core/GameState';
 import { haptic } from '../utils/haptics';
 import { audioBus } from '../audio/audioBus';
@@ -17,6 +18,10 @@ type VisualState = 'calm' | 'charging' | 'superCritical';
 
 const SUPER_CRITICAL_HOLD_TIME = 15; // seconds of continuous hold before meltdown
 const SUPER_CRITICAL_DRAIN_MULTIPLIER = 0.35; // how fast energy bleeds while super critical
+
+const SCRAP_FBX_URLS = Object.values(
+  import.meta.glob('../assets/*.fbx', { eager: true, as: 'url' }) as Record<string, string>
+);
 
 export default function OrbScene({ isHolding }: Props) {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -61,6 +66,7 @@ export default function OrbScene({ isHolding }: Props) {
     prestigeRef.current = prestigeLevel;
   }, [prestigeLevel]);
 
+  const scrapValueRef = useRef(scrap);
   const scrapUpdaterRef = useRef<((scrapValue: number) => void) | null>(null);
   const scrapGroupRef = useRef<THREE.Group | null>(null);
 
@@ -114,6 +120,105 @@ export default function OrbScene({ isHolding }: Props) {
       new THREE.BoxGeometry(0.18, 0.08, 0.26),
     ];
 
+    const disposeObject3D = (object: THREE.Object3D) => {
+      object.traverse((child) => {
+        const mesh = child as THREE.Mesh;
+        if ((mesh as unknown as { isMesh?: boolean }).isMesh && mesh.geometry) {
+          mesh.geometry.dispose();
+        }
+        const material = (mesh as unknown as { material?: THREE.Material | THREE.Material[] })
+          .material;
+        if (Array.isArray(material)) {
+          material.forEach((m) => m.dispose());
+        } else if (material) {
+          material.dispose();
+        }
+      });
+    };
+
+    const refreshMeshResources = (object: THREE.Object3D) => {
+      object.traverse((child) => {
+        const mesh = child as THREE.Mesh;
+        if (!(mesh as unknown as { isMesh?: boolean }).isMesh) return;
+        if (mesh.geometry) {
+          mesh.geometry = mesh.geometry.clone();
+        }
+        const mat = mesh.material as THREE.Material | THREE.Material[];
+        if (Array.isArray(mat)) {
+          mesh.material = mat.map((m) => m.clone());
+        } else if (mat) {
+          mesh.material = mat.clone();
+        }
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      });
+    };
+
+    const normalizeScrap = (visual: THREE.Object3D) => {
+      const box = new THREE.Box3().setFromObject(visual);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      const target = 0.7;
+      const scale = target / maxDim;
+      visual.scale.multiplyScalar(scale);
+      const center = box.getCenter(new THREE.Vector3());
+      visual.position.sub(center.multiplyScalar(scale));
+    };
+
+    const fbxLoader = new FBXLoader();
+    const scrapCache = new Map<string, Promise<THREE.Object3D | null>>();
+    const scrapSources: THREE.Object3D[] = [];
+
+    const loadScrapFromUrl = (url: string) => {
+      let promise = scrapCache.get(url);
+      if (!promise) {
+        promise = fbxLoader
+          .loadAsync(url)
+          .then((obj) => {
+            normalizeScrap(obj);
+            return obj;
+          })
+          .catch(() => null);
+        scrapCache.set(url, promise);
+      }
+      return promise;
+    };
+
+    SCRAP_FBX_URLS.forEach((url) => {
+      loadScrapFromUrl(url).then((obj) => {
+        if (!obj) return;
+        scrapSources.push(obj);
+        scrapUpdaterRef.current?.(scrapValueRef.current);
+      });
+    });
+
+    const buildScrapPiece = (index: number) => {
+      const container = new THREE.Group();
+      const hasAssets = scrapSources.length > 0;
+      if (hasAssets) {
+        const source = scrapSources[Math.floor(Math.random() * scrapSources.length)];
+        const visual = source.clone(true);
+        refreshMeshResources(visual);
+        container.add(visual);
+      } else {
+        const geometry = scrapGeometries[index % scrapGeometries.length];
+        const material = scrapMaterials[index % scrapMaterials.length];
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        container.add(mesh);
+      }
+      return container;
+    };
+
+    const disposeScrapPieces = () => {
+      const group = scrapGroupRef.current;
+      if (!group) return;
+      group.children.forEach((child) => disposeObject3D(child));
+      group.clear();
+    };
+
     scrapUpdaterRef.current = (scrapValue: number) => {
       const group = scrapGroupRef.current;
       if (!group) return;
@@ -128,13 +233,10 @@ export default function OrbScene({ isHolding }: Props) {
       const screenScale = window.innerWidth < 640 ? 0.6 : 1;
       const maxPieces = Math.floor(maxPiecesBase * screenScale);
       const count = Math.min(maxPieces, Math.max(0, Math.floor(scrapValue)));
-      group.clear();
+      disposeScrapPieces();
 
       for (let i = 0; i < count; i++) {
-        const geometry = scrapGeometries[i % scrapGeometries.length];
-        const material = scrapMaterials[i % scrapMaterials.length];
-        const scrapPiece = new THREE.Mesh(geometry, material);
-        scrapPiece.castShadow = true;
+        const scrapPiece = buildScrapPiece(i);
 
         const direction = new THREE.Vector3(
           Math.random() - 0.5,
@@ -382,7 +484,7 @@ export default function OrbScene({ isHolding }: Props) {
       if (mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
-      scrapGroup.clear();
+      disposeScrapPieces();
       scrapGeometries.forEach((geo) => geo.dispose());
       scrapMaterials.forEach((mat) => mat.dispose());
       orbGeometry.dispose();
@@ -394,6 +496,7 @@ export default function OrbScene({ isHolding }: Props) {
   }, [addEnergy, setCharge]);
 
   useEffect(() => {
+    scrapValueRef.current = scrap;
     scrapUpdaterRef.current?.(scrap);
   }, [scrap]);
 
