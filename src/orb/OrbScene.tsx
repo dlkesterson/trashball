@@ -644,7 +644,8 @@ export default function OrbScene({ isHolding }: Props) {
 				timingConfig.spinSpeed *
 				stateSpinMultiplier *
 				0.5;
-			orb.rotation.y = elapsedTime * rotationSpeed;
+			// Advance rotation incrementally to avoid jumps when speed changes between states.
+			orb.rotation.y += rotationSpeed * deltaTime;
 			orb.rotation.x = Math.sin(elapsedTime * 0.3) * 0.2;
 			orb.scale.setScalar(heartbeat + localState.charge * 0.2);
 
