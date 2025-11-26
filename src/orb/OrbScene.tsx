@@ -7,7 +7,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { useGameStore } from '../core/GameState';
 import { haptic } from '../utils/haptics';
 import { audioBus } from '../audio/audioBus';
-import { createOrbMaterial } from './orbMaterial';
+import { createOrbMaterial, DEFAULT_ORB_UNIFORMS, type OrbUniformValues } from './orbMaterial';
 import {
 	CALM_IDLE_PRESET,
 	OVERCHARGED_PRESET,
@@ -29,6 +29,42 @@ const SCRAP_FBX_URLS = Object.values(
 		string
 	>
 );
+
+const OPTIONAL_ORB_UNIFORMS: Array<keyof OrbUniformValues> = [
+	'bandStrength',
+	'bandFrequency',
+	'crackThreshold',
+	'crackSharpness',
+	'pulseSpeed',
+	'pulseStrength',
+	'facetSteps',
+	'glitchIntensity',
+	'wireIntensity',
+	'wireThickness',
+	'sparkIntensity',
+	'blackHoleIntensity',
+	'coreRadius',
+	'ringIntensity',
+	'warpStrength',
+	'vineIntensity',
+	'vineWidth',
+	'mossStrength',
+	'flameIntensity',
+	'flameScale',
+	'flameSpeed',
+	'flameNoiseDetail',
+	'coreIntensity',
+	'scrapIntensity',
+	'streakStrength',
+	'impactSparkIntensity',
+	'holoIntensity',
+	'scanSpeed',
+	'sludgeIntensity',
+	'dripScale',
+	'glowStrength',
+	'frostIntensity',
+	'frostSharpness',
+];
 
 export default function OrbScene({ isHolding }: Props) {
 	const mountRef = useRef<HTMLDivElement>(null);
@@ -506,6 +542,16 @@ export default function OrbScene({ isHolding }: Props) {
 				preset.uniforms.fresnelIntensity;
 			orbMaterial.uniforms.chargeLevel.value =
 				preset.uniforms.chargeLevel;
+
+			OPTIONAL_ORB_UNIFORMS.forEach((key) => {
+				const uniform = orbMaterial.uniforms[key as string];
+				if (!uniform) return;
+				const value =
+					preset.uniforms[key as keyof typeof preset.uniforms] ??
+					DEFAULT_ORB_UNIFORMS[key as keyof OrbUniformValues] ??
+					0;
+				uniform.value = value as number;
+			});
 
 			particleMaterial.color.set(preset.uniforms.chargeColor);
 			pointLight.color.set(preset.uniforms.chargeColor);

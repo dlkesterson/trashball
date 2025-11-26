@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, forwardRef, type RefObject } from 'react';
-import { useGameStore } from '../core/GameState';
+import { useGameStore, type ScrapCollectionEntry } from '../core/GameState';
 import UpgradePanel from './UpgradePanel';
+import { SCRAP_ASSET_MAP, type ScrapAsset } from '../core/scrapAssets';
 
 const BASE_COOLDOWN_MS = 2 * 60 * 1000; // 2 minutes for MVP loop
 
@@ -37,6 +38,7 @@ export default function MainMenu({
     lastSaveAt,
     startScrapRun,
     prestige,
+    scrapCollection,
   } = useGameStore();
 
   const cooldownReduction = (upgrades.warpCooldown ?? 0) * 2 * 60 * 1000;
@@ -144,6 +146,7 @@ export default function MainMenu({
         prestigeLevel={prestigeLevel}
         cosmicEssence={cosmicEssence}
         lastSaveLabel={lastSaveLabel}
+        scrapCollection={scrapCollection}
       />
     </div>
   );
@@ -179,15 +182,54 @@ type StatsProps = {
   prestigeLevel: number;
   cosmicEssence: number;
   lastSaveLabel: string;
+  scrapCollection: Record<string, ScrapCollectionEntry>;
+};
+
+type DecoratedScrapEntry = {
+  id: string;
+  entry: ScrapCollectionEntry;
+  asset: ScrapAsset;
+  totalMass: number;
+  totalBurn: number;
+  totalValue: number;
 };
 
 type Accent = 'lime' | 'cyan' | 'amber' | 'emerald';
 
 const StatisticsPanel = forwardRef<HTMLDivElement, StatsProps>(function StatisticsPanel(
-  { open, onClose, scrap, bestRunScore, prestigeLevel, cosmicEssence, lastSaveLabel },
+  { open, onClose, scrap, bestRunScore, prestigeLevel, cosmicEssence, lastSaveLabel, scrapCollection },
   panelRef
 ) {
   if (!open) return null;
+
+  const scrapEntries: DecoratedScrapEntry[] = Object.entries(scrapCollection)
+    .map(([id, entry]) => {
+      const asset = SCRAP_ASSET_MAP[id];
+      if (!asset) return null;
+      const decorated: DecoratedScrapEntry = {
+        id,
+        entry,
+        asset,
+        totalMass: asset.mass * entry.count,
+        totalBurn: asset.burnEnergy * entry.count,
+        totalValue: asset.scrapValue * entry.count,
+      };
+      return decorated;
+    })
+    .filter((entry): entry is DecoratedScrapEntry => entry !== null)
+    .sort((a, b) => b.entry.lastCollectedAt - a.entry.lastCollectedAt);
+
+  const uniqueScraps = scrapEntries.length;
+  const totalPieces = scrapEntries.reduce((sum, entry) => sum + entry.entry.count, 0);
+  const totalMass = scrapEntries.reduce((sum, entry) => sum + entry.totalMass, 0);
+  const totalBurn = scrapEntries.reduce((sum, entry) => sum + entry.totalBurn, 0);
+  const totalValue = scrapEntries.reduce((sum, entry) => sum + entry.totalValue, 0);
+
+  const formatMass = (value: number) =>
+    `${value.toLocaleString(undefined, { maximumFractionDigits: 1 })} kg`;
+  const formatBurn = (value: number) =>
+    `${Math.round(value).toLocaleString()} MJ`;
+  const formatValue = (value: number) => `${Math.round(value).toLocaleString()} scrap`;
 
   return (
     <div
@@ -219,10 +261,94 @@ const StatisticsPanel = forwardRef<HTMLDivElement, StatsProps>(function Statisti
           />
           <StatTile label="Recent Save" value={lastSaveLabel} accent="emerald" />
         </div>
+
+        <div className="border-t border-slate-800 px-4 pt-4 pb-3 space-y-3 bg-slate-950/30">
+          <div className="flex flex-col gap-2">
+            <div className="text-xs uppercase tracking-[0.24em] text-slate-300">
+              Scrap Collection
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <SummaryChip label="Unique" value={uniqueScraps.toLocaleString()} />
+              <SummaryChip label="Pieces Logged" value={totalPieces.toLocaleString()} />
+              <SummaryChip label="Mass" value={formatMass(totalMass)} />
+              <SummaryChip label="Burn Potential" value={formatBurn(totalBurn)} />
+              <SummaryChip label="Scrap Worth" value={formatValue(totalValue)} />
+            </div>
+          </div>
+          {scrapEntries.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-slate-800 bg-slate-900/30 px-4 py-6 text-center text-sm text-slate-400">
+              Haul some junk during a Trash Run to build up your scrap catalog.
+            </div>
+          ) : (
+            <div className="max-h-80 overflow-y-auto space-y-2 pr-1">
+              {scrapEntries.map((entry) => (
+                <ScrapCollectionRow key={entry.id} entry={entry} formatMass={formatMass} formatBurn={formatBurn} formatValue={formatValue} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 });
+
+function SummaryChip({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex min-w-[120px] flex-col rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-2 shadow-inner shadow-black/30">
+      <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400">{label}</span>
+      <span className="text-sm font-semibold text-slate-100">{value}</span>
+    </div>
+  );
+}
+
+function ScrapCollectionRow({
+  entry,
+  formatMass,
+  formatBurn,
+  formatValue,
+}: {
+  entry: DecoratedScrapEntry;
+  formatMass: (value: number) => string;
+  formatBurn: (value: number) => string;
+  formatValue: (value: number) => string;
+}) {
+  const { asset, entry: stats } = entry;
+  const detailLine = `${asset.materialType} / ${asset.sizeClass} / ${asset.rarity}`;
+  return (
+    <div className="rounded-xl border border-slate-800 bg-slate-900/40 px-3 py-3 shadow-inner shadow-black/30">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <div className="text-sm font-semibold text-slate-100">{asset.id}</div>
+          <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">{detailLine}</div>
+        </div>
+        <div className="text-right">
+          <div className="text-sm font-semibold text-lime-200">{stats.count.toLocaleString()}x</div>
+          <div className="text-[11px] text-slate-400">Last haul {timeAgo(stats.lastCollectedAt)}</div>
+        </div>
+      </div>
+      <div className="mt-2 grid grid-cols-3 gap-2 text-[11px] text-slate-300">
+        <div>Mass {formatMass(entry.totalMass)}</div>
+        <div>Burn {formatBurn(entry.totalBurn)}</div>
+        <div>Value {formatValue(entry.totalValue)}</div>
+      </div>
+    </div>
+  );
+}
+
+function timeAgo(timestamp: number) {
+  const diff = Date.now() - timestamp;
+  if (diff < 60_000) return 'moments ago';
+  if (diff < 3_600_000) {
+    const minutes = Math.floor(diff / 60_000);
+    return `${minutes}m ago`;
+  }
+  if (diff < 86_400_000) {
+    const hours = Math.floor(diff / 3_600_000);
+    return `${hours}h ago`;
+  }
+  const days = Math.floor(diff / 86_400_000);
+  return `${days}d ago`;
+}
 
 function StatTile({
   label,

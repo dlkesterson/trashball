@@ -4,7 +4,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { createOrbMaterial } from '../orb/orbMaterial';
-import { CALM_IDLE_PRESET } from '../orb/orbPresets';
+import { CALM_IDLE_PRESET, OVERCHARGED_PRESET, SUPER_CRITICAL_PRESET } from '../orb/orbPresets';
 
 type ControlState = {
   color1: string;
@@ -14,61 +14,149 @@ type ControlState = {
   wobbleIntensity: number;
   patternScale: number;
   fresnelIntensity: number;
+  bandStrength: number;
+  bandFrequency: number;
+  crackThreshold: number;
+  crackSharpness: number;
+  pulseSpeed: number;
+  pulseStrength: number;
+  facetSteps: number;
+  glitchIntensity: number;
+  wireIntensity: number;
+  wireThickness: number;
+  sparkIntensity: number;
+  blackHoleIntensity: number;
+  coreRadius: number;
+  ringIntensity: number;
+  warpStrength: number;
+  vineIntensity: number;
+  vineWidth: number;
+  mossStrength: number;
+  flameIntensity: number;
+  flameScale: number;
+  flameSpeed: number;
+  flameNoiseDetail: number;
+  coreIntensity: number;
+  scrapIntensity: number;
+  streakStrength: number;
+  impactSparkIntensity: number;
+  holoIntensity: number;
+  scanSpeed: number;
+  sludgeIntensity: number;
+  dripScale: number;
+  glowStrength: number;
+  frostIntensity: number;
+  frostSharpness: number;
   particleCount: number;
   bloomStrength: number;
   bloomThreshold: number;
 };
 
-const PRESETS: Record<string, Partial<ControlState>> = {
-  calm: {
-    color1: CALM_IDLE_PRESET.uniforms.color1,
-    color2: CALM_IDLE_PRESET.uniforms.color2,
-    chargeColor: CALM_IDLE_PRESET.uniforms.chargeColor,
-    charge: CALM_IDLE_PRESET.uniforms.chargeLevel,
-    wobbleIntensity: CALM_IDLE_PRESET.uniforms.wobbleIntensity,
-    patternScale: CALM_IDLE_PRESET.uniforms.patternScale,
-    fresnelIntensity: CALM_IDLE_PRESET.uniforms.fresnelIntensity,
-    particleCount: CALM_IDLE_PRESET.particles,
-    bloomStrength: CALM_IDLE_PRESET.bloom.strength,
-    bloomThreshold: CALM_IDLE_PRESET.bloom.threshold,
-  },
-  overcharged: {
-    color1: '#121212',
-    color2: '#f766f9',
-    chargeColor: '#0fa997',
-    charge: 1,
-    wobbleIntensity: 0,
-    patternScale: 1.55,
-    fresnelIntensity: 1.85,
-    particleCount: 400,
-    bloomStrength: 1.25,
-    bloomThreshold: 0.28,
-  },
-  critical: {
-    color1: '#e2a66e',
-    color2: '#f3311b',
-    chargeColor: '#b23434',
-    charge: 1,
-    wobbleIntensity: 3,
-    patternScale: 0.5,
-    fresnelIntensity: 2.45,
-    particleCount: 160,
-    bloomStrength: 2.45,
-    bloomThreshold: 0,
-  },
+const NUMERIC_UNIFORM_KEYS: Array<keyof ControlState> = [
+  'charge',
+  'wobbleIntensity',
+  'patternScale',
+  'fresnelIntensity',
+  'bandStrength',
+  'bandFrequency',
+  'crackThreshold',
+  'crackSharpness',
+  'pulseSpeed',
+  'pulseStrength',
+  'facetSteps',
+  'glitchIntensity',
+  'wireIntensity',
+  'wireThickness',
+  'sparkIntensity',
+  'blackHoleIntensity',
+  'coreRadius',
+  'ringIntensity',
+  'warpStrength',
+  'vineIntensity',
+  'vineWidth',
+  'mossStrength',
+  'flameIntensity',
+  'flameScale',
+  'flameSpeed',
+  'flameNoiseDetail',
+  'coreIntensity',
+  'scrapIntensity',
+  'streakStrength',
+  'impactSparkIntensity',
+  'holoIntensity',
+  'scanSpeed',
+  'sludgeIntensity',
+  'dripScale',
+  'glowStrength',
+  'frostIntensity',
+  'frostSharpness',
+];
+
+const presetToControls = (preset: typeof CALM_IDLE_PRESET): ControlState => ({
+  color1: preset.uniforms.color1,
+  color2: preset.uniforms.color2,
+  chargeColor: preset.uniforms.chargeColor,
+  charge: preset.uniforms.chargeLevel,
+  wobbleIntensity: preset.uniforms.wobbleIntensity,
+  patternScale: preset.uniforms.patternScale,
+  fresnelIntensity: preset.uniforms.fresnelIntensity,
+  bandStrength: preset.uniforms.bandStrength ?? 0,
+  bandFrequency: preset.uniforms.bandFrequency ?? 6,
+  crackThreshold: preset.uniforms.crackThreshold ?? 0.75,
+  crackSharpness: preset.uniforms.crackSharpness ?? 0,
+  pulseSpeed: preset.uniforms.pulseSpeed ?? 2.5,
+  pulseStrength: preset.uniforms.pulseStrength ?? 0,
+  facetSteps: preset.uniforms.facetSteps ?? 0,
+  glitchIntensity: preset.uniforms.glitchIntensity ?? 0,
+  wireIntensity: preset.uniforms.wireIntensity ?? 0,
+  wireThickness: preset.uniforms.wireThickness ?? 0.25,
+  sparkIntensity: preset.uniforms.sparkIntensity ?? 0,
+  blackHoleIntensity: preset.uniforms.blackHoleIntensity ?? 0,
+  coreRadius: preset.uniforms.coreRadius ?? 0.75,
+  ringIntensity: preset.uniforms.ringIntensity ?? 0,
+  warpStrength: preset.uniforms.warpStrength ?? 0,
+  vineIntensity: preset.uniforms.vineIntensity ?? 0,
+  vineWidth: preset.uniforms.vineWidth ?? 0.35,
+  mossStrength: preset.uniforms.mossStrength ?? 0,
+  flameIntensity: preset.uniforms.flameIntensity ?? 0,
+  flameScale: preset.uniforms.flameScale ?? 1.5,
+  flameSpeed: preset.uniforms.flameSpeed ?? 1.2,
+  flameNoiseDetail: preset.uniforms.flameNoiseDetail ?? 1,
+  coreIntensity: preset.uniforms.coreIntensity ?? 0,
+  scrapIntensity: preset.uniforms.scrapIntensity ?? 0,
+  streakStrength: preset.uniforms.streakStrength ?? 0,
+  impactSparkIntensity: preset.uniforms.impactSparkIntensity ?? 0,
+  holoIntensity: preset.uniforms.holoIntensity ?? 0,
+  scanSpeed: preset.uniforms.scanSpeed ?? 1,
+  sludgeIntensity: preset.uniforms.sludgeIntensity ?? 0,
+  dripScale: preset.uniforms.dripScale ?? 1.2,
+  glowStrength: preset.uniforms.glowStrength ?? 0.2,
+  frostIntensity: preset.uniforms.frostIntensity ?? 0,
+  frostSharpness: preset.uniforms.frostSharpness ?? 10,
+  particleCount: preset.particles,
+  bloomStrength: preset.bloom.strength,
+  bloomThreshold: preset.bloom.threshold,
+});
+
+const PRESETS: Record<string, ControlState> = {
+  calm: presetToControls(CALM_IDLE_PRESET),
+  overcharged: presetToControls(OVERCHARGED_PRESET),
+  critical: presetToControls(SUPER_CRITICAL_PRESET),
 };
 
-const DEFAULT_CONTROLS: ControlState = {
-  color1: CALM_IDLE_PRESET.uniforms.color1,
-  color2: CALM_IDLE_PRESET.uniforms.color2,
-  chargeColor: CALM_IDLE_PRESET.uniforms.chargeColor,
-  charge: CALM_IDLE_PRESET.uniforms.chargeLevel,
-  wobbleIntensity: CALM_IDLE_PRESET.uniforms.wobbleIntensity,
-  patternScale: CALM_IDLE_PRESET.uniforms.patternScale,
-  fresnelIntensity: CALM_IDLE_PRESET.uniforms.fresnelIntensity,
-  particleCount: CALM_IDLE_PRESET.particles,
-  bloomStrength: CALM_IDLE_PRESET.bloom.strength,
-  bloomThreshold: CALM_IDLE_PRESET.bloom.threshold,
+const DEFAULT_CONTROLS: ControlState = PRESETS.calm;
+
+const buildMaterialConfig = (state: ControlState) => {
+  const uniforms: Record<string, number | string> = {
+    color1: state.color1,
+    color2: state.color2,
+    chargeColor: state.chargeColor,
+  };
+  NUMERIC_UNIFORM_KEYS.forEach((key) => {
+    const uniformName = key === 'charge' ? 'chargeLevel' : key;
+    uniforms[uniformName] = state[key];
+  });
+  return uniforms;
 };
 
 export default function ShaderLab() {
@@ -77,7 +165,7 @@ export default function ShaderLab() {
   const particleGeometryRef = useRef<THREE.BufferGeometry | null>(null);
   const stateRef = useRef<ControlState>(DEFAULT_CONTROLS);
 
-  const [controls, setControls] = useState<ControlState>(DEFAULT_CONTROLS);
+  const [controls, setControls] = useState<ControlState>(() => ({ ...DEFAULT_CONTROLS }));
 
   stateRef.current = controls;
 
@@ -122,15 +210,7 @@ export default function ShaderLab() {
     container.appendChild(renderer.domElement);
 
     const orbGeometry = new THREE.SphereGeometry(1, 64, 64);
-    const orbMaterial = createOrbMaterial({
-      color1: controls.color1,
-      color2: controls.color2,
-      chargeColor: controls.chargeColor,
-      chargeLevel: controls.charge,
-      wobbleIntensity: controls.wobbleIntensity,
-      patternScale: controls.patternScale,
-      fresnelIntensity: controls.fresnelIntensity,
-    });
+    const orbMaterial = createOrbMaterial(buildMaterialConfig(controls));
 
     const orb = new THREE.Mesh(orbGeometry, orbMaterial);
     scene.add(orb);
@@ -203,6 +283,13 @@ export default function ShaderLab() {
       orbMaterial.uniforms.wobbleIntensity.value = current.wobbleIntensity;
       orbMaterial.uniforms.patternScale.value = current.patternScale;
       orbMaterial.uniforms.fresnelIntensity.value = current.fresnelIntensity;
+      NUMERIC_UNIFORM_KEYS.forEach((key) => {
+        if (key === 'charge') return;
+        const uniform = orbMaterial.uniforms[key as keyof typeof orbMaterial.uniforms];
+        if (uniform) {
+          uniform.value = current[key];
+        }
+      });
 
       light.color = new THREE.Color(current.chargeColor);
       light.intensity = 2 + current.charge * 2;
@@ -300,20 +387,12 @@ export default function ShaderLab() {
   const applyPreset = (id: string) => {
     const preset = PRESETS[id];
     if (!preset) return;
-    setControls((c) => ({ ...c, ...preset }));
+    setControls({ ...preset });
   };
 
   const exportConfig = () => {
     const payload = {
-      uniforms: {
-        color1: controls.color1,
-        color2: controls.color2,
-        chargeColor: controls.chargeColor,
-        chargeLevel: controls.charge,
-        wobbleIntensity: controls.wobbleIntensity,
-        patternScale: controls.patternScale,
-        fresnelIntensity: controls.fresnelIntensity,
-      },
+      uniforms: buildMaterialConfig(controls),
       particles: controls.particleCount,
       bloom: {
         strength: controls.bloomStrength,
@@ -436,6 +515,63 @@ export default function ShaderLab() {
           step={0.05}
           onChange={(n) => setControls((c) => ({ ...c, fresnelIntensity: n }))}
         />
+        <div className="pt-4 border-t border-slate-800">
+          <div className="text-xs uppercase tracking-[0.3em] text-slate-500 mb-2">Structure</div>
+          <ControlSlider label="Band Strength" value={controls.bandStrength} min={0} max={1} step={0.01} onChange={(n) => setControls((c) => ({ ...c, bandStrength: n }))} />
+          <ControlSlider label="Band Frequency" value={controls.bandFrequency} min={2} max={20} step={0.5} onChange={(n) => setControls((c) => ({ ...c, bandFrequency: n }))} />
+          <ControlSlider label="Crack Threshold" value={controls.crackThreshold} min={0} max={1} step={0.01} onChange={(n) => setControls((c) => ({ ...c, crackThreshold: n }))} />
+          <ControlSlider label="Crack Sharpness" value={controls.crackSharpness} min={0} max={10} step={0.2} onChange={(n) => setControls((c) => ({ ...c, crackSharpness: n }))} />
+          <ControlSlider label="Pulse Speed" value={controls.pulseSpeed} min={0} max={8} step={0.1} onChange={(n) => setControls((c) => ({ ...c, pulseSpeed: n }))} />
+          <ControlSlider label="Pulse Strength" value={controls.pulseStrength} min={0} max={1.5} step={0.05} onChange={(n) => setControls((c) => ({ ...c, pulseStrength: n }))} />
+          <ControlSlider label="Facet Steps" value={controls.facetSteps} min={0} max={32} step={1} onChange={(n) => setControls((c) => ({ ...c, facetSteps: Math.max(0, Math.round(n)) }))} />
+          <ControlSlider label="Glitch Intensity" value={controls.glitchIntensity} min={0} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, glitchIntensity: n }))} />
+        </div>
+        <div className="pt-4 border-t border-slate-800">
+          <div className="text-xs uppercase tracking-[0.3em] text-slate-500 mb-2">Barbed Wire</div>
+          <ControlSlider label="Wire Intensity" value={controls.wireIntensity} min={0} max={1} step={0.01} onChange={(n) => setControls((c) => ({ ...c, wireIntensity: n }))} />
+          <ControlSlider label="Wire Thickness" value={controls.wireThickness} min={0.05} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, wireThickness: n }))} />
+          <ControlSlider label="Spark Intensity" value={controls.sparkIntensity} min={0} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, sparkIntensity: n }))} />
+        </div>
+        <div className="pt-4 border-t border-slate-800">
+          <div className="text-xs uppercase tracking-[0.3em] text-slate-500 mb-2">Singularity</div>
+          <ControlSlider label="Gravity Intensity" value={controls.blackHoleIntensity} min={0} max={1} step={0.01} onChange={(n) => setControls((c) => ({ ...c, blackHoleIntensity: n }))} />
+          <ControlSlider label="Core Radius" value={controls.coreRadius} min={0.2} max={1} step={0.02} onChange={(n) => setControls((c) => ({ ...c, coreRadius: n }))} />
+          <ControlSlider label="Ring Intensity" value={controls.ringIntensity} min={0} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, ringIntensity: n }))} />
+          <ControlSlider label="Warp Strength" value={controls.warpStrength} min={0} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, warpStrength: n }))} />
+        </div>
+        <div className="pt-4 border-t border-slate-800">
+          <div className="text-xs uppercase tracking-[0.3em] text-slate-500 mb-2">Vine Growth</div>
+          <ControlSlider label="Vine Intensity" value={controls.vineIntensity} min={0} max={1} step={0.01} onChange={(n) => setControls((c) => ({ ...c, vineIntensity: n }))} />
+          <ControlSlider label="Vine Width" value={controls.vineWidth} min={0.05} max={1} step={0.02} onChange={(n) => setControls((c) => ({ ...c, vineWidth: n }))} />
+          <ControlSlider label="Moss Strength" value={controls.mossStrength} min={0} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, mossStrength: n }))} />
+        </div>
+        <div className="pt-4 border-t border-slate-800">
+          <div className="text-xs uppercase tracking-[0.3em] text-slate-500 mb-2">Flame Core</div>
+          <ControlSlider label="Flame Intensity" value={controls.flameIntensity} min={0} max={1.5} step={0.05} onChange={(n) => setControls((c) => ({ ...c, flameIntensity: n }))} />
+          <ControlSlider label="Flame Scale" value={controls.flameScale} min={0.5} max={3.5} step={0.1} onChange={(n) => setControls((c) => ({ ...c, flameScale: n }))} />
+          <ControlSlider label="Flame Speed" value={controls.flameSpeed} min={0} max={5} step={0.1} onChange={(n) => setControls((c) => ({ ...c, flameSpeed: n }))} />
+          <ControlSlider label="Noise Detail" value={controls.flameNoiseDetail} min={0.3} max={3} step={0.05} onChange={(n) => setControls((c) => ({ ...c, flameNoiseDetail: n }))} />
+          <ControlSlider label="Core Intensity" value={controls.coreIntensity} min={0} max={1.5} step={0.05} onChange={(n) => setControls((c) => ({ ...c, coreIntensity: n }))} />
+        </div>
+        <div className="pt-4 border-t border-slate-800">
+          <div className="text-xs uppercase tracking-[0.3em] text-slate-500 mb-2">Scrap Magnet</div>
+          <ControlSlider label="Scrap Intensity" value={controls.scrapIntensity} min={0} max={1} step={0.01} onChange={(n) => setControls((c) => ({ ...c, scrapIntensity: n }))} />
+          <ControlSlider label="Streak Strength" value={controls.streakStrength} min={0} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, streakStrength: n }))} />
+          <ControlSlider label="Impact Sparks" value={controls.impactSparkIntensity} min={0} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, impactSparkIntensity: n }))} />
+        </div>
+        <div className="pt-4 border-t border-slate-800">
+          <div className="text-xs uppercase tracking-[0.3em] text-slate-500 mb-2">Hologram & Sludge</div>
+          <ControlSlider label="Holo Intensity" value={controls.holoIntensity} min={0} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, holoIntensity: n }))} />
+          <ControlSlider label="Scan Speed" value={controls.scanSpeed} min={0} max={4} step={0.1} onChange={(n) => setControls((c) => ({ ...c, scanSpeed: n }))} />
+          <ControlSlider label="Sludge Intensity" value={controls.sludgeIntensity} min={0} max={1} step={0.05} onChange={(n) => setControls((c) => ({ ...c, sludgeIntensity: n }))} />
+          <ControlSlider label="Drip Scale" value={controls.dripScale} min={0.2} max={3} step={0.1} onChange={(n) => setControls((c) => ({ ...c, dripScale: n }))} />
+          <ControlSlider label="Glow Strength" value={controls.glowStrength} min={0} max={0.6} step={0.02} onChange={(n) => setControls((c) => ({ ...c, glowStrength: n }))} />
+        </div>
+        <div className="pt-4 border-t border-slate-800">
+          <div className="text-xs uppercase tracking-[0.3em] text-slate-500 mb-2">Frost</div>
+          <ControlSlider label="Frost Intensity" value={controls.frostIntensity} min={0} max={1} step={0.01} onChange={(n) => setControls((c) => ({ ...c, frostIntensity: n }))} />
+          <ControlSlider label="Shard Sharpness" value={controls.frostSharpness} min={1} max={20} step={0.5} onChange={(n) => setControls((c) => ({ ...c, frostSharpness: n }))} />
+        </div>
         <ControlSlider
           label="Particle Count"
           value={controls.particleCount}

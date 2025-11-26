@@ -7,6 +7,7 @@ import PrestigeSim from './PrestigeSim';
 import OrbDebug from './OrbDebug';
 import GameStateInspector from './GameStateInspector';
 import OrbTimingLab from './OrbTimingLab';
+import OrbShaderVariantsLab from './OrbShaderVariantsLab';
 
 type DevToolId =
   | 'shader'
@@ -16,7 +17,8 @@ type DevToolId =
   | 'prestige'
   | 'orbdebug'
   | 'state'
-  | 'timing';
+  | 'timing'
+  | 'orbthemes';
 
 const DEV_TOOLS: Array<{
   id: DevToolId;
@@ -29,6 +31,12 @@ const DEV_TOOLS: Array<{
     label: 'Shader Lab',
     description: 'Orb shader playground for gradients, wobble, and bloom.',
     component: ShaderLab,
+  },
+  {
+    id: 'orbthemes',
+    label: 'Orb Theme Lab',
+    description: 'Preview curated orb variants like ice, nature, and void cores.',
+    component: OrbShaderVariantsLab,
   },
   {
     id: 'audio',

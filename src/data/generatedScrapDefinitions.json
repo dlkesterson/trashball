@@ -1,0 +1,7724 @@
+[
+  {
+    "id": "advocado-half",
+    "assetPath": "assets/advocado-half.fbx",
+    "size": {
+      "width": 10.3637,
+      "height": 21.374,
+      "depth": 17.3435
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3841.8108,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 3841.8108,
+    "burnEnergy": 8451.9837,
+    "scrapValue": 345763,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "apple",
+    "assetPath": "assets/apple.fbx",
+    "size": {
+      "width": 19.6295,
+      "height": 19.0753,
+      "depth": 19.6295
+    },
+    "sizeClass": "XL",
+    "approxVolume": 7350.0255,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 6615.023,
+    "burnEnergy": 13230.0459,
+    "scrapValue": 463052,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "Apple",
+    "assetPath": "assets/Apple.fbx",
+    "size": {
+      "width": 1.2488,
+      "height": 1.3861,
+      "depth": 1.2488
+    },
+    "sizeClass": "M",
+    "approxVolume": 2.1616,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.0683,
+      "g": 0.2236,
+      "b": 0.007
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 1.9454,
+    "burnEnergy": 3.8908,
+    "scrapValue": 68,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "apple-half",
+    "assetPath": "assets/apple-half.fbx",
+    "size": {
+      "width": 9.8147,
+      "height": 19.0753,
+      "depth": 19.6295
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3675.0128,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 3307.5115,
+    "burnEnergy": 6615.023,
+    "scrapValue": 231526,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "aubergine",
+    "assetPath": "assets/aubergine.fbx",
+    "size": {
+      "width": 3.8309,
+      "height": 5.38,
+      "depth": 1.0186
+    },
+    "sizeClass": "L",
+    "approxVolume": 20.9925,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 18.8933,
+    "burnEnergy": 37.7866,
+    "scrapValue": 952,
+    "rarity": "rare",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "avocado",
+    "assetPath": "assets/avocado.fbx",
+    "size": {
+      "width": 15.0199,
+      "height": 21.374,
+      "depth": 17.3435
+    },
+    "sizeClass": "XL",
+    "approxVolume": 5567.843,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 5567.843,
+    "burnEnergy": 12249.2546,
+    "scrapValue": 501106,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "bacon",
+    "assetPath": "assets/bacon.fbx",
+    "size": {
+      "width": 13,
+      "height": 3,
+      "depth": 52
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2028,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 1825.2,
+    "burnEnergy": 3650.4,
+    "scrapValue": 127764,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "bacon-raw",
+    "assetPath": "assets/bacon-raw.fbx",
+    "size": {
+      "width": 13,
+      "height": 3,
+      "depth": 52
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2028,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 1825.2,
+    "burnEnergy": 3650.4,
+    "scrapValue": 127764,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "bag",
+    "assetPath": "assets/bag.fbx",
+    "size": {
+      "width": 22.01,
+      "height": 59.9759,
+      "depth": 41.18
+    },
+    "sizeClass": "XL",
+    "approxVolume": 54360.4596,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 59796.5056,
+    "burnEnergy": 478372.0446,
+    "scrapValue": 2690843,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "bag-flat",
+    "assetPath": "assets/bag-flat.fbx",
+    "size": {
+      "width": 65,
+      "height": 19.0526,
+      "depth": 46.75
+    },
+    "sizeClass": "XL",
+    "approxVolume": 57895.9634,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 63685.5597,
+    "burnEnergy": 509484.4775,
+    "scrapValue": 2865850,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "Bag&Box",
+    "assetPath": "assets/Bag&Box.fbx",
+    "size": {
+      "width": 11.9758,
+      "height": 9.8669,
+      "depth": 12.592
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1487.9211,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.6217,
+      "g": 0.547,
+      "b": 0.5045
+    },
+    "shininess": 0.3,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 1636.7133,
+    "burnEnergy": 13093.706,
+    "scrapValue": 73652,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "banana",
+    "assetPath": "assets/banana.fbx",
+    "size": {
+      "width": 0.8766,
+      "height": 0.699,
+      "depth": 0.1994
+    },
+    "sizeClass": "S",
+    "approxVolume": 0.1222,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.1289,
+      "g": 0.3893,
+      "b": 0.0084
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 0.1099,
+    "burnEnergy": 0.2199,
+    "scrapValue": 3,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "barrel",
+    "assetPath": "assets/barrel.fbx",
+    "size": {
+      "width": 76,
+      "height": 67.8906,
+      "depth": 67.8906
+    },
+    "sizeClass": "XL",
+    "approxVolume": 350294.3304,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 350294.3304,
+    "burnEnergy": 770647.527,
+    "scrapValue": 31526490,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "beet",
+    "assetPath": "assets/beet.fbx",
+    "size": {
+      "width": 9.7982,
+      "height": 26.5345,
+      "depth": 9.7982
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2547.4481,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 2547.4481,
+    "burnEnergy": 5604.3858,
+    "scrapValue": 229270,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "BolsaA",
+    "assetPath": "assets/BolsaA.fbx",
+    "size": {
+      "width": 2.6134,
+      "height": 2.7891,
+      "depth": 2.4897
+    },
+    "sizeClass": "M",
+    "approxVolume": 18.1474,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0,
+      "g": 0.0298,
+      "b": 0.0298
+    },
+    "shininess": 0.2,
+    "emissive": true,
+    "density": 1,
+    "mass": 18.1474,
+    "burnEnergy": 39.9243,
+    "scrapValue": 817,
+    "rarity": "uncommon",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "BolsaN1",
+    "assetPath": "assets/BolsaN1.fbx",
+    "size": {
+      "width": 2.1337,
+      "height": 2.2106,
+      "depth": 2.4892
+    },
+    "sizeClass": "M",
+    "approxVolume": 11.7407,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.0698,
+      "g": 0.0034,
+      "b": 0.0034
+    },
+    "shininess": 0.2,
+    "emissive": true,
+    "density": 1,
+    "mass": 11.7407,
+    "burnEnergy": 25.8296,
+    "scrapValue": 528,
+    "rarity": "uncommon",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "BolsaN2",
+    "assetPath": "assets/BolsaN2.fbx",
+    "size": {
+      "width": 2.1337,
+      "height": 3.1209,
+      "depth": 2.0024
+    },
+    "sizeClass": "M",
+    "approxVolume": 13.3341,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.0698,
+      "g": 0.0034,
+      "b": 0.0034
+    },
+    "shininess": 0.2,
+    "emissive": true,
+    "density": 1,
+    "mass": 13.3341,
+    "burnEnergy": 29.335,
+    "scrapValue": 600,
+    "rarity": "uncommon",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "BolsaNa",
+    "assetPath": "assets/BolsaNa.fbx",
+    "size": {
+      "width": 2.418,
+      "height": 2.7898,
+      "depth": 2.8305
+    },
+    "sizeClass": "M",
+    "approxVolume": 19.0935,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.1622,
+      "g": 0.043,
+      "b": 0
+    },
+    "shininess": 0.2,
+    "emissive": true,
+    "density": 1,
+    "mass": 19.0935,
+    "burnEnergy": 42.0057,
+    "scrapValue": 859,
+    "rarity": "uncommon",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "bottle-ketchup",
+    "assetPath": "assets/bottle-ketchup.fbx",
+    "size": {
+      "width": 14.4107,
+      "height": 39.312,
+      "depth": 16.64
+    },
+    "sizeClass": "XL",
+    "approxVolume": 9426.7585,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 8484.0826,
+    "burnEnergy": 16968.1653,
+    "scrapValue": 237554,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "bottle-musterd",
+    "assetPath": "assets/bottle-musterd.fbx",
+    "size": {
+      "width": 14.4107,
+      "height": 39.312,
+      "depth": 16.64
+    },
+    "sizeClass": "XL",
+    "approxVolume": 9426.7585,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 10369.4343,
+    "burnEnergy": 82955.4747,
+    "scrapValue": 466625,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "bottle-oil",
+    "assetPath": "assets/bottle-oil.fbx",
+    "size": {
+      "width": 14,
+      "height": 62.18,
+      "depth": 14
+    },
+    "sizeClass": "XL",
+    "approxVolume": 12187.2801,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 13406.0081,
+    "burnEnergy": 107248.0645,
+    "scrapValue": 603270,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "bowl",
+    "assetPath": "assets/bowl.fbx",
+    "size": {
+      "width": 50.2153,
+      "height": 21.3825,
+      "depth": 57.9836
+    },
+    "sizeClass": "XL",
+    "approxVolume": 62258.6427,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 62258.6427,
+    "burnEnergy": 136969.014,
+    "scrapValue": 5603278,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "bowl-broth",
+    "assetPath": "assets/bowl-broth.fbx",
+    "size": {
+      "width": 52.6208,
+      "height": 29.0309,
+      "depth": 57.9836
+    },
+    "sizeClass": "XL",
+    "approxVolume": 88577.5396,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 88577.5396,
+    "burnEnergy": 194870.5871,
+    "scrapValue": 7971979,
+    "rarity": "legendary",
+    "smellLevel": 0.32,
+    "toxicity": 0.3
+  },
+  {
+    "id": "bowl-cereal",
+    "assetPath": "assets/bowl-cereal.fbx",
+    "size": {
+      "width": 50.2153,
+      "height": 41.9278,
+      "depth": 63.4564
+    },
+    "sizeClass": "XL",
+    "approxVolume": 133602.1412,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 133602.1412,
+    "burnEnergy": 293924.7106,
+    "scrapValue": 12024193,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "bowl-soup",
+    "assetPath": "assets/bowl-soup.fbx",
+    "size": {
+      "width": 50.2153,
+      "height": 21.3825,
+      "depth": 57.9836
+    },
+    "sizeClass": "XL",
+    "approxVolume": 62258.643,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 56032.7787,
+    "burnEnergy": 112065.5574,
+    "scrapValue": 3922295,
+    "rarity": "legendary",
+    "smellLevel": 0.82,
+    "toxicity": 0.2
+  },
+  {
+    "id": "Box&Bottles",
+    "assetPath": "assets/Box&Bottles.fbx",
+    "size": {
+      "width": 11.9758,
+      "height": 8.018,
+      "depth": 12.592
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1209.1137,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.8487,
+      "g": 0.8188,
+      "b": 0.8018
+    },
+    "shininess": 0.3,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 1330.0251,
+    "burnEnergy": 10640.2009,
+    "scrapValue": 59851,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "bread",
+    "assetPath": "assets/bread.fbx",
+    "size": {
+      "width": 0.1864,
+      "height": 0.1622,
+      "depth": 0.2879
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0087,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0078,
+    "burnEnergy": 0.0157,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "broccoli",
+    "assetPath": "assets/broccoli.fbx",
+    "size": {
+      "width": 37.518,
+      "height": 42.1668,
+      "depth": 37.518
+    },
+    "sizeClass": "XL",
+    "approxVolume": 59353.9185,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 59353.9185,
+    "burnEnergy": 130578.6206,
+    "scrapValue": 5341853,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "burger",
+    "assetPath": "assets/burger.fbx",
+    "size": {
+      "width": 0.1874,
+      "height": 0.1142,
+      "depth": 0.1876
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.004,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.353,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0036,
+    "burnEnergy": 0.0072,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "burger-cheese",
+    "assetPath": "assets/burger-cheese.fbx",
+    "size": {
+      "width": 37.8,
+      "height": 22,
+      "depth": 37.8
+    },
+    "sizeClass": "XL",
+    "approxVolume": 31434.4789,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 28291.031,
+    "burnEnergy": 56582.0621,
+    "scrapValue": 1980372,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "burger-cheese-double",
+    "assetPath": "assets/burger-cheese-double.fbx",
+    "size": {
+      "width": 37.8,
+      "height": 32,
+      "depth": 37.8
+    },
+    "sizeClass": "XL",
+    "approxVolume": 45722.8786,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 41150.5907,
+    "burnEnergy": 82301.1814,
+    "scrapValue": 2880541,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "burger-double",
+    "assetPath": "assets/burger-double.fbx",
+    "size": {
+      "width": 40.4096,
+      "height": 36,
+      "depth": 40.4096
+    },
+    "sizeClass": "XL",
+    "approxVolume": 58785.6778,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 52907.11,
+    "burnEnergy": 105814.2201,
+    "scrapValue": 3703498,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cabbage",
+    "assetPath": "assets/cabbage.fbx",
+    "size": {
+      "width": 37.945,
+      "height": 30.7391,
+      "depth": 40.3613
+    },
+    "sizeClass": "XL",
+    "approxVolume": 47077.3594,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 51785.0954,
+    "burnEnergy": 414280.7629,
+    "scrapValue": 2330329,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "cake",
+    "assetPath": "assets/cake.fbx",
+    "size": {
+      "width": 63.92,
+      "height": 27.3077,
+      "depth": 63.92
+    },
+    "sizeClass": "XL",
+    "approxVolume": 111573.0155,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 111573.0155,
+    "burnEnergy": 245460.6341,
+    "scrapValue": 10041571,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cake-birthday",
+    "assetPath": "assets/cake-birthday.fbx",
+    "size": {
+      "width": 63.92,
+      "height": 36.3774,
+      "depth": 63.92
+    },
+    "sizeClass": "XL",
+    "approxVolume": 148629.4774,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 148629.4774,
+    "burnEnergy": 326984.8502,
+    "scrapValue": 13376653,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cake-slicer",
+    "assetPath": "assets/cake-slicer.fbx",
+    "size": {
+      "width": 72.4629,
+      "height": 6.9238,
+      "depth": 19
+    },
+    "sizeClass": "XL",
+    "approxVolume": 9532.7224,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 9532.7224,
+    "burnEnergy": 20971.9892,
+    "scrapValue": 857945,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "can",
+    "assetPath": "assets/can.fbx",
+    "size": {
+      "width": 30,
+      "height": 32,
+      "depth": 30
+    },
+    "sizeClass": "XL",
+    "approxVolume": 28800.0037,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 28800.0037,
+    "burnEnergy": 63360.0081,
+    "scrapValue": 2592000,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "can-open",
+    "assetPath": "assets/can-open.fbx",
+    "size": {
+      "width": 30,
+      "height": 40.7061,
+      "depth": 30
+    },
+    "sizeClass": "XL",
+    "approxVolume": 36635.5019,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 36635.5019,
+    "burnEnergy": 80598.1043,
+    "scrapValue": 3297195,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "can-small",
+    "assetPath": "assets/can-small.fbx",
+    "size": {
+      "width": 30,
+      "height": 16.1122,
+      "depth": 30
+    },
+    "sizeClass": "XL",
+    "approxVolume": 14501.0054,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 14501.0054,
+    "burnEnergy": 31902.2118,
+    "scrapValue": 1305090,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "candy-bar",
+    "assetPath": "assets/candy-bar.fbx",
+    "size": {
+      "width": 29.2448,
+      "height": 6.5292,
+      "depth": 7.4536
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1423.2369,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 1423.2369,
+    "burnEnergy": 3131.1212,
+    "scrapValue": 128091,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "candy-bar-wrapper",
+    "assetPath": "assets/candy-bar-wrapper.fbx",
+    "size": {
+      "width": 29.2448,
+      "height": 8.1204,
+      "depth": 11.6944
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2777.1855,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 2777.1855,
+    "burnEnergy": 6109.808,
+    "scrapValue": 249947,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "carrot",
+    "assetPath": "assets/carrot.fbx",
+    "size": {
+      "width": 1.452,
+      "height": 1.5356,
+      "depth": 1.1428
+    },
+    "sizeClass": "M",
+    "approxVolume": 2.5479,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 2.2931,
+    "burnEnergy": 4.5863,
+    "scrapValue": 80,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "carton",
+    "assetPath": "assets/carton.fbx",
+    "size": {
+      "width": 23,
+      "height": 59.0546,
+      "depth": 23
+    },
+    "sizeClass": "XL",
+    "approxVolume": 31239.8974,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 31239.8974,
+    "burnEnergy": 68727.7743,
+    "scrapValue": 2811591,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "carton-small",
+    "assetPath": "assets/carton-small.fbx",
+    "size": {
+      "width": 23,
+      "height": 39.0546,
+      "depth": 23
+    },
+    "sizeClass": "XL",
+    "approxVolume": 20659.8994,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 20659.8994,
+    "burnEnergy": 45451.7787,
+    "scrapValue": 1859391,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cashier",
+    "assetPath": "assets/cashier.fbx",
+    "size": {
+      "width": 20.3986,
+      "height": 6.237,
+      "depth": 2.5241
+    },
+    "sizeClass": "XL",
+    "approxVolume": 321.1277,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.0957,
+      "g": 0.1109,
+      "b": 0.1031
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 7.5,
+    "mass": 2408.458,
+    "burnEnergy": 7707.0654,
+    "scrapValue": 325142,
+    "rarity": "rare",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "cauliflower",
+    "assetPath": "assets/cauliflower.fbx",
+    "size": {
+      "width": 37.945,
+      "height": 30.7391,
+      "depth": 40.3613
+    },
+    "sizeClass": "XL",
+    "approxVolume": 47077.3594,
+    "materialType": "organic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.8,
+    "mass": 37661.8875,
+    "burnEnergy": 56492.8313,
+    "scrapValue": 2259713,
+    "rarity": "legendary",
+    "smellLevel": 0.6,
+    "toxicity": 0.35
+  },
+  {
+    "id": "celery-stick",
+    "assetPath": "assets/celery-stick.fbx",
+    "size": {
+      "width": 4.5961,
+      "height": 54,
+      "depth": 8.82
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2189.0116,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 2189.0116,
+    "burnEnergy": 4815.8255,
+    "scrapValue": 197011,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cheese",
+    "assetPath": "assets/cheese.fbx",
+    "size": {
+      "width": 0.2965,
+      "height": 0.1386,
+      "depth": 0.3007
+    },
+    "sizeClass": "S",
+    "approxVolume": 0.0124,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0111,
+    "burnEnergy": 0.0222,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cheese-cut",
+    "assetPath": "assets/cheese-cut.fbx",
+    "size": {
+      "width": 38.4,
+      "height": 2.048,
+      "depth": 26.4
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2076.1804,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 1868.5624,
+    "burnEnergy": 3737.1247,
+    "scrapValue": 130799,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cheese-slicer",
+    "assetPath": "assets/cheese-slicer.fbx",
+    "size": {
+      "width": 61.8423,
+      "height": 2.9238,
+      "depth": 19.18
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3468.0796,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 3121.2716,
+    "burnEnergy": 6242.5432,
+    "scrapValue": 218489,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cherries",
+    "assetPath": "assets/cherries.fbx",
+    "size": {
+      "width": 8.8,
+      "height": 17.0709,
+      "depth": 16.1905
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2432.1965,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 2432.1965,
+    "burnEnergy": 5350.8322,
+    "scrapValue": 218898,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "chicken",
+    "assetPath": "assets/chicken.fbx",
+    "size": {
+      "width": 0.0956,
+      "height": 0.0809,
+      "depth": 0.1973
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0015,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0014,
+    "burnEnergy": 0.0027,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "ChickenLeg",
+    "assetPath": "assets/ChickenLeg.fbx",
+    "size": {
+      "width": 0.5133,
+      "height": 1.0887,
+      "depth": 0.6693
+    },
+    "sizeClass": "M",
+    "approxVolume": 0.374,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.4554,
+      "g": 0.4484,
+      "b": 0.4555
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 0.3366,
+    "burnEnergy": 0.6733,
+    "scrapValue": 12,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "chinese",
+    "assetPath": "assets/chinese.fbx",
+    "size": {
+      "width": 45.385,
+      "height": 56.7075,
+      "depth": 55.7526
+    },
+    "sizeClass": "XL",
+    "approxVolume": 143488.9425,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 143488.9425,
+    "burnEnergy": 315675.6736,
+    "scrapValue": 12914005,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "chips",
+    "assetPath": "assets/chips.fbx",
+    "size": {
+      "width": 0.212,
+      "height": 0.1536,
+      "depth": 0.212
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0069,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 1,
+    "mass": 0.0069,
+    "burnEnergy": 0.0152,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "chocolate",
+    "assetPath": "assets/chocolate.fbx",
+    "size": {
+      "width": 0.1372,
+      "height": 0.0268,
+      "depth": 0.2776
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.001,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.532,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0009,
+    "burnEnergy": 0.0018,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "chocolate-wrapper",
+    "assetPath": "assets/chocolate-wrapper.fbx",
+    "size": {
+      "width": 29.2448,
+      "height": 6.4948,
+      "depth": 20.1983
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3836.4421,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 3452.7979,
+    "burnEnergy": 6905.5958,
+    "scrapValue": 241696,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "chopstic-decorative",
+    "assetPath": "assets/chopstic-decorative.fbx",
+    "size": {
+      "width": 2,
+      "height": 2,
+      "depth": 45
+    },
+    "sizeClass": "XL",
+    "approxVolume": 180,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 180,
+    "burnEnergy": 396,
+    "scrapValue": 16200,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "chopstick",
+    "assetPath": "assets/chopstick.fbx",
+    "size": {
+      "width": 2,
+      "height": 2,
+      "depth": 45
+    },
+    "sizeClass": "XL",
+    "approxVolume": 180,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 180,
+    "burnEnergy": 396,
+    "scrapValue": 16200,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cocktail",
+    "assetPath": "assets/cocktail.fbx",
+    "size": {
+      "width": 26.0682,
+      "height": 50.5898,
+      "depth": 36.1483
+    },
+    "sizeClass": "XL",
+    "approxVolume": 47671.8149,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 47671.8149,
+    "burnEnergy": 104877.9928,
+    "scrapValue": 4290463,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "coconut",
+    "assetPath": "assets/coconut.fbx",
+    "size": {
+      "width": 24.84,
+      "height": 24.84,
+      "depth": 24.84
+    },
+    "sizeClass": "XL",
+    "approxVolume": 15326.9173,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 15326.9173,
+    "burnEnergy": 33719.218,
+    "scrapValue": 1379423,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "coconut-half",
+    "assetPath": "assets/coconut-half.fbx",
+    "size": {
+      "width": 24.84,
+      "height": 12.42,
+      "depth": 24.84
+    },
+    "sizeClass": "XL",
+    "approxVolume": 7663.4575,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 7663.4575,
+    "burnEnergy": 16859.6065,
+    "scrapValue": 689711,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "coffee",
+    "assetPath": "assets/coffee.fbx",
+    "size": {
+      "width": 0.1544,
+      "height": 0.223,
+      "depth": 0.1528
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0053,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.5187,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0047,
+    "burnEnergy": 0.0095,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.8,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cookie",
+    "assetPath": "assets/cookie.fbx",
+    "size": {
+      "width": 0.1116,
+      "height": 0.0508,
+      "depth": 0.1085
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0006,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0006,
+    "burnEnergy": 0.0011,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cookie-chocolate",
+    "assetPath": "assets/cookie-chocolate.fbx",
+    "size": {
+      "width": 12.1244,
+      "height": 6.52,
+      "depth": 14
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1106.7112,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 996.04,
+    "burnEnergy": 1992.0801,
+    "scrapValue": 69723,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cooking-fork",
+    "assetPath": "assets/cooking-fork.fbx",
+    "size": {
+      "width": 68.2672,
+      "height": 7.2117,
+      "depth": 7.4928
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3688.8761,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 3688.8761,
+    "burnEnergy": 8115.5274,
+    "scrapValue": 331999,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cooking-knife",
+    "assetPath": "assets/cooking-knife.fbx",
+    "size": {
+      "width": 71.625,
+      "height": 4,
+      "depth": 13.267
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3801.005,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 3801.005,
+    "burnEnergy": 8362.211,
+    "scrapValue": 342090,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cooking-knife-chopping",
+    "assetPath": "assets/cooking-knife-chopping.fbx",
+    "size": {
+      "width": 60,
+      "height": 4,
+      "depth": 22.267
+    },
+    "sizeClass": "XL",
+    "approxVolume": 5344.0886,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 5344.0886,
+    "burnEnergy": 11756.995,
+    "scrapValue": 480968,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cooking-spatula",
+    "assetPath": "assets/cooking-spatula.fbx",
+    "size": {
+      "width": 68.2672,
+      "height": 7.2117,
+      "depth": 19
+    },
+    "sizeClass": "XL",
+    "approxVolume": 9354.0789,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 9354.0789,
+    "burnEnergy": 20578.9735,
+    "scrapValue": 841867,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cooking-spoon",
+    "assetPath": "assets/cooking-spoon.fbx",
+    "size": {
+      "width": 66.5597,
+      "height": 2.44,
+      "depth": 17.28
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2806.3695,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 2806.3695,
+    "burnEnergy": 6174.0129,
+    "scrapValue": 252573,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cookwares",
+    "assetPath": "assets/cookwares.fbx",
+    "size": {
+      "width": 26.2918,
+      "height": 9.9319,
+      "depth": 1.289
+    },
+    "sizeClass": "XL",
+    "approxVolume": 336.6005,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.4924,
+      "g": 0.3995,
+      "b": 0.3853
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 2524.5034,
+    "burnEnergy": 8078.4109,
+    "scrapValue": 473344,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "corn",
+    "assetPath": "assets/corn.fbx",
+    "size": {
+      "width": 2.0633,
+      "height": 1.7307,
+      "depth": 1.612
+    },
+    "sizeClass": "M",
+    "approxVolume": 5.7563,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 5.1807,
+    "burnEnergy": 10.3614,
+    "scrapValue": 181,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "corn-dog",
+    "assetPath": "assets/corn-dog.fbx",
+    "size": {
+      "width": 60.4392,
+      "height": 9.4003,
+      "depth": 10.8545
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6166.9059,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 5550.2153,
+    "burnEnergy": 11100.4307,
+    "scrapValue": 388515,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "crates",
+    "assetPath": "assets/crates.fbx",
+    "size": {
+      "width": 4.6586,
+      "height": 7.9488,
+      "depth": 2.1
+    },
+    "sizeClass": "L",
+    "approxVolume": 77.764,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 1,
+    "mass": 77.764,
+    "burnEnergy": 171.0808,
+    "scrapValue": 5039,
+    "rarity": "rare",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "croissant",
+    "assetPath": "assets/croissant.fbx",
+    "size": {
+      "width": 34.609,
+      "height": 19.3609,
+      "depth": 47.7657
+    },
+    "sizeClass": "XL",
+    "approxVolume": 32005.8804,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 32005.8804,
+    "burnEnergy": 70412.9368,
+    "scrapValue": 2880529,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "CrushedBottle",
+    "assetPath": "assets/CrushedBottle.fbx",
+    "size": {
+      "width": 10.0839,
+      "height": 5.7679,
+      "depth": 3.1289
+    },
+    "sizeClass": "XL",
+    "approxVolume": 181.9877,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.1947,
+      "g": 0.1297,
+      "b": 0.1297
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 200.1865,
+    "burnEnergy": 1601.4922,
+    "scrapValue": 9008,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "cucumber",
+    "assetPath": "assets/cucumber.fbx",
+    "size": {
+      "width": 3.1815,
+      "height": 2.6517,
+      "depth": 0.5792
+    },
+    "sizeClass": "M",
+    "approxVolume": 4.8864,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 4.3978,
+    "burnEnergy": 8.7956,
+    "scrapValue": 154,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cup",
+    "assetPath": "assets/cup.fbx",
+    "size": {
+      "width": 23,
+      "height": 20,
+      "depth": 29.2117
+    },
+    "sizeClass": "XL",
+    "approxVolume": 13437.3655,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 14781.1021,
+    "burnEnergy": 118248.8167,
+    "scrapValue": 665150,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "cup-coffee",
+    "assetPath": "assets/cup-coffee.fbx",
+    "size": {
+      "width": 21.629,
+      "height": 14,
+      "depth": 28.6649
+    },
+    "sizeClass": "XL",
+    "approxVolume": 8679.9119,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 7811.9207,
+    "burnEnergy": 15623.8413,
+    "scrapValue": 218734,
+    "rarity": "common",
+    "smellLevel": 0.8,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cup-saucer",
+    "assetPath": "assets/cup-saucer.fbx",
+    "size": {
+      "width": 35.671,
+      "height": 3.8,
+      "depth": 35.671
+    },
+    "sizeClass": "XL",
+    "approxVolume": 4835.1859,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 4351.6673,
+    "burnEnergy": 8703.3346,
+    "scrapValue": 121847,
+    "rarity": "common",
+    "smellLevel": 0.82,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cup-tea",
+    "assetPath": "assets/cup-tea.fbx",
+    "size": {
+      "width": 23.6928,
+      "height": 20,
+      "depth": 29.2117
+    },
+    "sizeClass": "XL",
+    "approxVolume": 13842.1182,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 15226.33,
+    "burnEnergy": 121810.6401,
+    "scrapValue": 685185,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "cupcake",
+    "assetPath": "assets/cupcake.fbx",
+    "size": {
+      "width": 0.1227,
+      "height": 0.136,
+      "depth": 0.1202
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.002,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0018,
+    "burnEnergy": 0.0036,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "cutting-board",
+    "assetPath": "assets/cutting-board.fbx",
+    "size": {
+      "width": 58,
+      "height": 6,
+      "depth": 82
+    },
+    "sizeClass": "XL",
+    "approxVolume": 28536.0027,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 28536.0027,
+    "burnEnergy": 62779.2058,
+    "scrapValue": 2568240,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "cutting-board-japanese",
+    "assetPath": "assets/cutting-board-japanese.fbx",
+    "size": {
+      "width": 49,
+      "height": 8,
+      "depth": 84
+    },
+    "sizeClass": "XL",
+    "approxVolume": 32927.9974,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 246959.9808,
+    "burnEnergy": 790271.9385,
+    "scrapValue": 46304996,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "cutting-board-round",
+    "assetPath": "assets/cutting-board-round.fbx",
+    "size": {
+      "width": 80,
+      "height": 6,
+      "depth": 80
+    },
+    "sizeClass": "XL",
+    "approxVolume": 38400,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 38400,
+    "burnEnergy": 84480,
+    "scrapValue": 3456000,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "deepfryer",
+    "assetPath": "assets/deepfryer.fbx",
+    "size": {
+      "width": 1.4906,
+      "height": 3.1907,
+      "depth": 1.1376
+    },
+    "sizeClass": "M",
+    "approxVolume": 5.4107,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.0079,
+      "g": 0.0338,
+      "b": 0.2255
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 4.8696,
+    "burnEnergy": 9.7393,
+    "scrapValue": 341,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "dim-sum",
+    "assetPath": "assets/dim-sum.fbx",
+    "size": {
+      "width": 16.0734,
+      "height": 12,
+      "depth": 18.56
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3579.8745,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 3579.8745,
+    "burnEnergy": 7875.7238,
+    "scrapValue": 322189,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "donut",
+    "assetPath": "assets/donut.fbx",
+    "size": {
+      "width": 0.2488,
+      "height": 0.1758,
+      "depth": 0.2537
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0111,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.01,
+    "burnEnergy": 0.02,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "donut-chocolate",
+    "assetPath": "assets/donut-chocolate.fbx",
+    "size": {
+      "width": 24.5059,
+      "height": 8.8892,
+      "depth": 28.2969
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6164.1468,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 5547.7321,
+    "burnEnergy": 11095.4642,
+    "scrapValue": 388341,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "donut-sprinkles",
+    "assetPath": "assets/donut-sprinkles.fbx",
+    "size": {
+      "width": 24.5059,
+      "height": 9.4992,
+      "depth": 28.2969
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6587.1451,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 5928.4306,
+    "burnEnergy": 11856.8612,
+    "scrapValue": 414990,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "Door",
+    "assetPath": "assets/Door.fbx",
+    "size": {
+      "width": 13.9096,
+      "height": 14.9144,
+      "depth": 1.154
+    },
+    "sizeClass": "XL",
+    "approxVolume": 239.3999,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.3287,
+      "g": 0.3445,
+      "b": 0.3277
+    },
+    "shininess": 0.3,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 1795.499,
+    "burnEnergy": 5745.5969,
+    "scrapValue": 242392,
+    "rarity": "rare",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "drink",
+    "assetPath": "assets/drink.fbx",
+    "size": {
+      "width": 0.1071,
+      "height": 0.1898,
+      "depth": 0.1044
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0021,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.8008,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 0.0023,
+    "burnEnergy": 0.0187,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "drinks",
+    "assetPath": "assets/drinks.fbx",
+    "size": {
+      "width": 3.1084,
+      "height": 0.525,
+      "depth": 1.4487
+    },
+    "sizeClass": "M",
+    "approxVolume": 2.3642,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 2.6006,
+    "burnEnergy": 20.8049,
+    "scrapValue": 211,
+    "rarity": "rare",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "Dumpster",
+    "assetPath": "assets/Dumpster.fbx",
+    "size": {
+      "width": 474.0295,
+      "height": 413.0287,
+      "depth": 233.6897
+    },
+    "sizeClass": "XL",
+    "approxVolume": 45753586.5554,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.3071,
+      "g": 0.3071,
+      "b": 0.3071
+    },
+    "shininess": 0.1316,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 343151899.1651,
+    "burnEnergy": 1098086077.3285,
+    "scrapValue": 64340981093,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "DwarfBottle",
+    "assetPath": "assets/DwarfBottle.fbx",
+    "size": {
+      "width": 4.5867,
+      "height": 5.7633,
+      "depth": 4.5261
+    },
+    "sizeClass": "L",
+    "approxVolume": 119.6462,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.1947,
+      "g": 0.1297,
+      "b": 0.1297
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 131.6109,
+    "burnEnergy": 1052.8869,
+    "scrapValue": 5922,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "egg",
+    "assetPath": "assets/egg.fbx",
+    "size": {
+      "width": 0.0646,
+      "height": 0.078,
+      "depth": 0.063
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0003,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0003,
+    "burnEnergy": 0.0006,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.88,
+    "toxicity": 0.2
+  },
+  {
+    "id": "egg-cooked",
+    "assetPath": "assets/egg-cooked.fbx",
+    "size": {
+      "width": 41.4074,
+      "height": 2.82,
+      "depth": 38.1702
+    },
+    "sizeClass": "XL",
+    "approxVolume": 4457.095,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 4011.3855,
+    "burnEnergy": 8022.7709,
+    "scrapValue": 280797,
+    "rarity": "legendary",
+    "smellLevel": 0.88,
+    "toxicity": 0.2
+  },
+  {
+    "id": "egg-cup",
+    "assetPath": "assets/egg-cup.fbx",
+    "size": {
+      "width": 15.8121,
+      "height": 15,
+      "depth": 18.2582
+    },
+    "sizeClass": "XL",
+    "approxVolume": 4330.5168,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 3897.4651,
+    "burnEnergy": 7794.9303,
+    "scrapValue": 109129,
+    "rarity": "common",
+    "smellLevel": 0.88,
+    "toxicity": 0.2
+  },
+  {
+    "id": "egg-half",
+    "assetPath": "assets/egg-half.fbx",
+    "size": {
+      "width": 11.6089,
+      "height": 10.62,
+      "depth": 13.4048
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1652.6309,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 1487.3678,
+    "burnEnergy": 2974.7356,
+    "scrapValue": 104116,
+    "rarity": "legendary",
+    "smellLevel": 0.88,
+    "toxicity": 0.2
+  },
+  {
+    "id": "EggCarton",
+    "assetPath": "assets/EggCarton.fbx",
+    "size": {
+      "width": 94.862,
+      "height": 63.8805,
+      "depth": 52.3219
+    },
+    "sizeClass": "XL",
+    "approxVolume": 317062.0955,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.1329,
+      "g": 0.1329,
+      "b": 0.1329
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 285355.8859,
+    "burnEnergy": 570711.7719,
+    "scrapValue": 19974912,
+    "rarity": "legendary",
+    "smellLevel": 0.88,
+    "toxicity": 0.2
+  },
+  {
+    "id": "eggplant",
+    "assetPath": "assets/eggplant.fbx",
+    "size": {
+      "width": 20.4036,
+      "height": 40.5198,
+      "depth": 21.5557
+    },
+    "sizeClass": "XL",
+    "approxVolume": 17821.1324,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 16039.0192,
+    "burnEnergy": 32078.0383,
+    "scrapValue": 1122731,
+    "rarity": "legendary",
+    "smellLevel": 0.88,
+    "toxicity": 0.2
+  },
+  {
+    "id": "Eggs",
+    "assetPath": "assets/Eggs.fbx",
+    "size": {
+      "width": 6.0001,
+      "height": 2.0646,
+      "depth": 5
+    },
+    "sizeClass": "L",
+    "approxVolume": 61.9398,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6013,
+      "g": 0.6533,
+      "b": 0.4333
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 55.7459,
+    "burnEnergy": 111.4917,
+    "scrapValue": 2810,
+    "rarity": "rare",
+    "smellLevel": 0.88,
+    "toxicity": 0.2
+  },
+  {
+    "id": "EmptyBottle",
+    "assetPath": "assets/EmptyBottle.fbx",
+    "size": {
+      "width": 2.8946,
+      "height": 7.743,
+      "depth": 2.8946
+    },
+    "sizeClass": "L",
+    "approxVolume": 64.8746,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.3,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 71.3621,
+    "burnEnergy": 570.8964,
+    "scrapValue": 3211,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "fastfood",
+    "assetPath": "assets/fastfood.fbx",
+    "size": {
+      "width": 3.5273,
+      "height": 4.015,
+      "depth": 1.2652
+    },
+    "sizeClass": "L",
+    "approxVolume": 17.9174,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.5537,
+      "g": 0.5542,
+      "b": 0.5591
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 1,
+    "mass": 17.9174,
+    "burnEnergy": 39.4184,
+    "scrapValue": 1161,
+    "rarity": "rare",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "FilledTrashcan",
+    "assetPath": "assets/FilledTrashcan.fbx",
+    "size": {
+      "width": 51.7743,
+      "height": 101.79,
+      "depth": 42.777
+    },
+    "sizeClass": "XL",
+    "approxVolume": 225438.9107,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.6627,
+      "g": 0.6537,
+      "b": 0.652
+    },
+    "shininess": 0.2615,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 1690791.8306,
+    "burnEnergy": 5410533.8578,
+    "scrapValue": 126809387,
+    "rarity": "common",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "fish",
+    "assetPath": "assets/fish.fbx",
+    "size": {
+      "width": 18.1578,
+      "height": 7.3103,
+      "depth": 6.264
+    },
+    "sizeClass": "XL",
+    "approxVolume": 831.4842,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.0233,
+      "g": 0.0546,
+      "b": 0.0884
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 748.3358,
+    "burnEnergy": 1496.6716,
+    "scrapValue": 52384,
+    "rarity": "legendary",
+    "smellLevel": 0.9,
+    "toxicity": 0.2
+  },
+  {
+    "id": "fish-bones",
+    "assetPath": "assets/fish-bones.fbx",
+    "size": {
+      "width": 31.1264,
+      "height": 7.2578,
+      "depth": 63.5799
+    },
+    "sizeClass": "XL",
+    "approxVolume": 14363.3301,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 12926.9971,
+    "burnEnergy": 25853.9942,
+    "scrapValue": 904890,
+    "rarity": "legendary",
+    "smellLevel": 0.9,
+    "toxicity": 0.2
+  },
+  {
+    "id": "fish2",
+    "assetPath": "assets/fish2.fbx",
+    "size": {
+      "width": 26.5211,
+      "height": 10.4858,
+      "depth": 12.0706
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3356.7768,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.1414,
+      "g": 0.1466,
+      "b": 0.2088
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 3021.0991,
+    "burnEnergy": 6042.1983,
+    "scrapValue": 211477,
+    "rarity": "legendary",
+    "smellLevel": 0.9,
+    "toxicity": 0.2
+  },
+  {
+    "id": "FlatBottle",
+    "assetPath": "assets/FlatBottle.fbx",
+    "size": {
+      "width": 3.307,
+      "height": 1.463,
+      "depth": 10.0461
+    },
+    "sizeClass": "XL",
+    "approxVolume": 48.6048,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.1947,
+      "g": 0.1297,
+      "b": 0.1297
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 53.4653,
+    "burnEnergy": 427.7225,
+    "scrapValue": 2406,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "frappe",
+    "assetPath": "assets/frappe.fbx",
+    "size": {
+      "width": 25.4069,
+      "height": 49.9299,
+      "depth": 25.4069
+    },
+    "sizeClass": "XL",
+    "approxVolume": 32230.2315,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 32230.2315,
+    "burnEnergy": 70906.5092,
+    "scrapValue": 2900721,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "french_fries",
+    "assetPath": "assets/french_fries.fbx",
+    "size": {
+      "width": 0.1372,
+      "height": 0.1769,
+      "depth": 0.0764
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0019,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0017,
+    "burnEnergy": 0.0033,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "Frezer",
+    "assetPath": "assets/Frezer.fbx",
+    "size": {
+      "width": 21.9615,
+      "height": 15.4065,
+      "depth": 4.0282
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1362.9317,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.1155,
+      "g": 0.1065,
+      "b": 0.1533
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 1,
+    "mass": 1362.9317,
+    "burnEnergy": 2998.4497,
+    "scrapValue": 122664,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "Frezer2",
+    "assetPath": "assets/Frezer2.fbx",
+    "size": {
+      "width": 33.1189,
+      "height": 11.9391,
+      "depth": 28.9488
+    },
+    "sizeClass": "XL",
+    "approxVolume": 11446.6561,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.4849,
+      "g": 0.3033,
+      "b": 0.271
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 1,
+    "mass": 11446.6561,
+    "burnEnergy": 25182.6434,
+    "scrapValue": 1030199,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "fried_egg",
+    "assetPath": "assets/fried_egg.fbx",
+    "size": {
+      "width": 0.1157,
+      "height": 0.0202,
+      "depth": 0.1286
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0003,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.5937,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0003,
+    "burnEnergy": 0.0005,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.88,
+    "toxicity": 0.2
+  },
+  {
+    "id": "fries",
+    "assetPath": "assets/fries.fbx",
+    "size": {
+      "width": 18.2967,
+      "height": 39.7722,
+      "depth": 26.526
+    },
+    "sizeClass": "XL",
+    "approxVolume": 19303.0355,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 17372.732,
+    "burnEnergy": 34745.464,
+    "scrapValue": 1216091,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "fries-empty",
+    "assetPath": "assets/fries-empty.fbx",
+    "size": {
+      "width": 16.3548,
+      "height": 23.6,
+      "depth": 26.526
+    },
+    "sizeClass": "XL",
+    "approxVolume": 10238.345,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 9214.5105,
+    "burnEnergy": 18429.021,
+    "scrapValue": 645016,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "frikandel-speciaal",
+    "assetPath": "assets/frikandel-speciaal.fbx",
+    "size": {
+      "width": 63.5978,
+      "height": 10.8702,
+      "depth": 16.6096
+    },
+    "sizeClass": "XL",
+    "approxVolume": 11482.545,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 11482.545,
+    "burnEnergy": 25261.599,
+    "scrapValue": 1033429,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "frying-pan",
+    "assetPath": "assets/frying-pan.fbx",
+    "size": {
+      "width": 65.7449,
+      "height": 12.0649,
+      "depth": 102.2002
+    },
+    "sizeClass": "XL",
+    "approxVolume": 81065.6272,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 607992.204,
+    "burnEnergy": 1945575.0529,
+    "scrapValue": 113998538,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "frying-pan-lid",
+    "assetPath": "assets/frying-pan-lid.fbx",
+    "size": {
+      "width": 57.6692,
+      "height": 10.84,
+      "depth": 60.637
+    },
+    "sizeClass": "XL",
+    "approxVolume": 37906.2533,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.8762,
+      "g": 0.9263,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 284296.9001,
+    "burnEnergy": 909750.0803,
+    "scrapValue": 53305669,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "ginger-bread",
+    "assetPath": "assets/ginger-bread.fbx",
+    "size": {
+      "width": 26.0363,
+      "height": 3,
+      "depth": 23.5559
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1839.928,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 1655.9352,
+    "burnEnergy": 3311.8704,
+    "scrapValue": 115915,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "ginger-bread-cutter",
+    "assetPath": "assets/ginger-bread-cutter.fbx",
+    "size": {
+      "width": 29.1941,
+      "height": 4.2,
+      "depth": 26.9322
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3302.2963,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 2972.0667,
+    "burnEnergy": 5944.1334,
+    "scrapValue": 208045,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "glass",
+    "assetPath": "assets/glass.fbx",
+    "size": {
+      "width": 15.9626,
+      "height": 28.5143,
+      "depth": 18.432
+    },
+    "sizeClass": "XL",
+    "approxVolume": 8389.5429,
+    "materialType": "glass",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 2.5,
+    "mass": 20973.8574,
+    "burnEnergy": 8389.5429,
+    "scrapValue": 3146079,
+    "rarity": "legendary",
+    "smellLevel": 0.07,
+    "toxicity": 0.25
+  },
+  {
+    "id": "glass-wine",
+    "assetPath": "assets/glass-wine.fbx",
+    "size": {
+      "width": 22.6765,
+      "height": 49.9862,
+      "depth": 19.693
+    },
+    "sizeClass": "XL",
+    "approxVolume": 22322.2614,
+    "materialType": "glass",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 2.5,
+    "mass": 55805.6534,
+    "burnEnergy": 22322.2614,
+    "scrapValue": 8370848,
+    "rarity": "legendary",
+    "smellLevel": 0.07,
+    "toxicity": 0.25
+  },
+  {
+    "id": "glasses",
+    "assetPath": "assets/glasses.fbx",
+    "size": {
+      "width": 0.9017,
+      "height": 2.8019,
+      "depth": 1.2169
+    },
+    "sizeClass": "M",
+    "approxVolume": 3.0742,
+    "materialType": "glass",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 2.5,
+    "mass": 7.6856,
+    "burnEnergy": 3.0742,
+    "scrapValue": 576,
+    "rarity": "uncommon",
+    "smellLevel": 0.07,
+    "toxicity": 0.25
+  },
+  {
+    "id": "grapes",
+    "assetPath": "assets/grapes.fbx",
+    "size": {
+      "width": 0.7167,
+      "height": 1.0626,
+      "depth": 1.0199
+    },
+    "sizeClass": "M",
+    "approxVolume": 0.7767,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.0527,
+      "g": 0.0749,
+      "b": 0.0054
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 0.6991,
+    "burnEnergy": 1.3981,
+    "scrapValue": 24,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "ham",
+    "assetPath": "assets/ham.fbx",
+    "size": {
+      "width": 0.4378,
+      "height": 0.2365,
+      "depth": 0.2476
+    },
+    "sizeClass": "S",
+    "approxVolume": 0.0256,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0231,
+    "burnEnergy": 0.0461,
+    "scrapValue": 1,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "honey",
+    "assetPath": "assets/honey.fbx",
+    "size": {
+      "width": 32.604,
+      "height": 31.6018,
+      "depth": 32.604
+    },
+    "sizeClass": "XL",
+    "approxVolume": 33593.3704,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 33593.3704,
+    "burnEnergy": 73905.4148,
+    "scrapValue": 3023403,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "hot_dog",
+    "assetPath": "assets/hot_dog.fbx",
+    "size": {
+      "width": 0.871,
+      "height": 3.9783,
+      "depth": 0.8426
+    },
+    "sizeClass": "L",
+    "approxVolume": 2.9198,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.2833,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 2.6278,
+    "burnEnergy": 5.2556,
+    "scrapValue": 132,
+    "rarity": "rare",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "hot-dog",
+    "assetPath": "assets/hot-dog.fbx",
+    "size": {
+      "width": 58.59,
+      "height": 15.2549,
+      "depth": 20.2554
+    },
+    "sizeClass": "XL",
+    "approxVolume": 18104.0078,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 18104.0078,
+    "burnEnergy": 39828.8171,
+    "scrapValue": 1629361,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "hot-dog-raw",
+    "assetPath": "assets/hot-dog-raw.fbx",
+    "size": {
+      "width": 58.59,
+      "height": 9.6648,
+      "depth": 11.16
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6319.4971,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 6319.4971,
+    "burnEnergy": 13902.8935,
+    "scrapValue": 568755,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "ice_cream",
+    "assetPath": "assets/ice_cream.fbx",
+    "size": {
+      "width": 0.1711,
+      "height": 0.2493,
+      "depth": 0.1652
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.007,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.2571,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0063,
+    "burnEnergy": 0.0127,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "ice-cream",
+    "assetPath": "assets/ice-cream.fbx",
+    "size": {
+      "width": 23.5246,
+      "height": 46.322,
+      "depth": 27.1639
+    },
+    "sizeClass": "XL",
+    "approxVolume": 29600.6704,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 29600.6704,
+    "burnEnergy": 65121.475,
+    "scrapValue": 2664060,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "ice-cream-cne",
+    "assetPath": "assets/ice-cream-cne.fbx",
+    "size": {
+      "width": 18.4463,
+      "height": 29.82,
+      "depth": 21.3
+    },
+    "sizeClass": "XL",
+    "approxVolume": 11716.4871,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 11716.4871,
+    "burnEnergy": 25776.2715,
+    "scrapValue": 1054484,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "ice-cream-cup",
+    "assetPath": "assets/ice-cream-cup.fbx",
+    "size": {
+      "width": 20.1065,
+      "height": 18.04,
+      "depth": 23.217
+    },
+    "sizeClass": "XL",
+    "approxVolume": 8421.3036,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 9263.434,
+    "burnEnergy": 74107.472,
+    "scrapValue": 416855,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "ice-cream-scoop-chocolate",
+    "assetPath": "assets/ice-cream-scoop-chocolate.fbx",
+    "size": {
+      "width": 23.5246,
+      "height": 16.502,
+      "depth": 27.1639
+    },
+    "sizeClass": "XL",
+    "approxVolume": 10545.0905,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 9490.5814,
+    "burnEnergy": 18981.1628,
+    "scrapValue": 664341,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "ice-cream-scoop-mint",
+    "assetPath": "assets/ice-cream-scoop-mint.fbx",
+    "size": {
+      "width": 23.5246,
+      "height": 16.502,
+      "depth": 27.1639
+    },
+    "sizeClass": "XL",
+    "approxVolume": 10545.0898,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 10545.0898,
+    "burnEnergy": 23199.1975,
+    "scrapValue": 949058,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "IceCream",
+    "assetPath": "assets/IceCream.fbx",
+    "size": {
+      "width": 2.5986,
+      "height": 2.2375,
+      "depth": 2.5986
+    },
+    "sizeClass": "M",
+    "approxVolume": 15.1089,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.4679,
+      "g": 0.2419,
+      "b": 0.4905
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 13.598,
+    "burnEnergy": 27.1961,
+    "scrapValue": 476,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "jelly",
+    "assetPath": "assets/jelly.fbx",
+    "size": {
+      "width": 0.1035,
+      "height": 0.0991,
+      "depth": 0.1035
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0011,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.7838,
+    "emissive": true,
+    "density": 1,
+    "mass": 0.0011,
+    "burnEnergy": 0.0023,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "Juice",
+    "assetPath": "assets/Juice.fbx",
+    "size": {
+      "width": 0.4482,
+      "height": 0.4482,
+      "depth": 0.9181
+    },
+    "sizeClass": "S",
+    "approxVolume": 0.1844,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.0852,
+      "g": 0.0655,
+      "b": 0.1597
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 1.1,
+    "mass": 0.2029,
+    "burnEnergy": 1.6229,
+    "scrapValue": 9,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "ketchup",
+    "assetPath": "assets/ketchup.fbx",
+    "size": {
+      "width": 0.0714,
+      "height": 0.2315,
+      "depth": 0.075
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0012,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.4424,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0011,
+    "burnEnergy": 0.0022,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "knife-block",
+    "assetPath": "assets/knife-block.fbx",
+    "size": {
+      "width": 63.5911,
+      "height": 66.2444,
+      "depth": 22.176
+    },
+    "sizeClass": "XL",
+    "approxVolume": 93417.6737,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 93417.6737,
+    "burnEnergy": 205518.8822,
+    "scrapValue": 8407591,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "Lata",
+    "assetPath": "assets/Lata.fbx",
+    "size": {
+      "width": 2,
+      "height": 3,
+      "depth": 2
+    },
+    "sizeClass": "M",
+    "approxVolume": 12,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.4174,
+      "g": 0.4174,
+      "b": 0.4174
+    },
+    "shininess": 0.0306,
+    "emissive": true,
+    "density": 1,
+    "mass": 12,
+    "burnEnergy": 26.4,
+    "scrapValue": 540,
+    "rarity": "uncommon",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "leek",
+    "assetPath": "assets/leek.fbx",
+    "size": {
+      "width": 27.2941,
+      "height": 84.743,
+      "depth": 27.2941
+    },
+    "sizeClass": "XL",
+    "approxVolume": 63130.6549,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 63130.6549,
+    "burnEnergy": 138887.4408,
+    "scrapValue": 5681759,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "lemon",
+    "assetPath": "assets/lemon.fbx",
+    "size": {
+      "width": 17.3205,
+      "height": 22.4,
+      "depth": 20
+    },
+    "sizeClass": "XL",
+    "approxVolume": 7759.587,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 7759.587,
+    "burnEnergy": 17071.0915,
+    "scrapValue": 698363,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "lemon-half",
+    "assetPath": "assets/lemon-half.fbx",
+    "size": {
+      "width": 17.3205,
+      "height": 11.2,
+      "depth": 20
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3879.7935,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 3879.7935,
+    "burnEnergy": 8535.5457,
+    "scrapValue": 349181,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "lettuce",
+    "assetPath": "assets/lettuce.fbx",
+    "size": {
+      "width": 3.0068,
+      "height": 3.3024,
+      "depth": 1.5461
+    },
+    "sizeClass": "M",
+    "approxVolume": 15.3522,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 13.817,
+    "burnEnergy": 27.634,
+    "scrapValue": 484,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "loaf",
+    "assetPath": "assets/loaf.fbx",
+    "size": {
+      "width": 57.9744,
+      "height": 44.2321,
+      "depth": 36.5904
+    },
+    "sizeClass": "XL",
+    "approxVolume": 93829.77,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 93829.77,
+    "burnEnergy": 206425.494,
+    "scrapValue": 8444679,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "loaf-baguette",
+    "assetPath": "assets/loaf-baguette.fbx",
+    "size": {
+      "width": 83,
+      "height": 25,
+      "depth": 25
+    },
+    "sizeClass": "XL",
+    "approxVolume": 51875,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 57062.5,
+    "burnEnergy": 456500,
+    "scrapValue": 2567813,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "loaf-round",
+    "assetPath": "assets/loaf-round.fbx",
+    "size": {
+      "width": 77.171,
+      "height": 29.318,
+      "depth": 51.4473
+    },
+    "sizeClass": "XL",
+    "approxVolume": 116399.2959,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 116399.2959,
+    "burnEnergy": 256078.451,
+    "scrapValue": 10475937,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "lollypop",
+    "assetPath": "assets/lollypop.fbx",
+    "size": {
+      "width": 3.8512,
+      "height": 37.98,
+      "depth": 18.7523
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2742.8774,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 2742.8774,
+    "burnEnergy": 6034.3303,
+    "scrapValue": 246859,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "maki-roe",
+    "assetPath": "assets/maki-roe.fbx",
+    "size": {
+      "width": 12,
+      "height": 9,
+      "depth": 10.3923
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1122.369,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 1122.369,
+    "burnEnergy": 2469.2118,
+    "scrapValue": 101013,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "maki-salmon",
+    "assetPath": "assets/maki-salmon.fbx",
+    "size": {
+      "width": 12,
+      "height": 7,
+      "depth": 10.3923
+    },
+    "sizeClass": "XL",
+    "approxVolume": 872.9537,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 872.9537,
+    "burnEnergy": 1920.498,
+    "scrapValue": 78566,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "maki-vegetable",
+    "assetPath": "assets/maki-vegetable.fbx",
+    "size": {
+      "width": 12,
+      "height": 7,
+      "depth": 10.3923
+    },
+    "sizeClass": "XL",
+    "approxVolume": 872.9537,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 6547.1524,
+    "burnEnergy": 20950.8876,
+    "scrapValue": 883866,
+    "rarity": "rare",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "meat",
+    "assetPath": "assets/meat.fbx",
+    "size": {
+      "width": 6.9144,
+      "height": 8.2677,
+      "depth": 1.0747
+    },
+    "sizeClass": "XL",
+    "approxVolume": 61.4387,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 55.2948,
+    "burnEnergy": 110.5896,
+    "scrapValue": 3871,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "meat-cooked",
+    "assetPath": "assets/meat-cooked.fbx",
+    "size": {
+      "width": 47.8494,
+      "height": 6.45,
+      "depth": 57.5373
+    },
+    "sizeClass": "XL",
+    "approxVolume": 17757.6753,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 15981.9078,
+    "burnEnergy": 31963.8156,
+    "scrapValue": 1118734,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "meat-patty",
+    "assetPath": "assets/meat-patty.fbx",
+    "size": {
+      "width": 29.8779,
+      "height": 6.2431,
+      "depth": 34.5
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6435.3246,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 5791.7921,
+    "burnEnergy": 11583.5842,
+    "scrapValue": 405425,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "meat-raw",
+    "assetPath": "assets/meat-raw.fbx",
+    "size": {
+      "width": 47.8494,
+      "height": 6.45,
+      "depth": 57.5373
+    },
+    "sizeClass": "XL",
+    "approxVolume": 17757.6753,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 15981.9078,
+    "burnEnergy": 31963.8156,
+    "scrapValue": 1118734,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "meat-ribs",
+    "assetPath": "assets/meat-ribs.fbx",
+    "size": {
+      "width": 53.5387,
+      "height": 6,
+      "depth": 38.3378
+    },
+    "sizeClass": "XL",
+    "approxVolume": 12315.337,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 11083.8033,
+    "burnEnergy": 22167.6066,
+    "scrapValue": 775866,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "meat-sausage",
+    "assetPath": "assets/meat-sausage.fbx",
+    "size": {
+      "width": 15.155,
+      "height": 7.2746,
+      "depth": 39.1609
+    },
+    "sizeClass": "XL",
+    "approxVolume": 4317.3535,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 3885.6182,
+    "burnEnergy": 7771.2364,
+    "scrapValue": 271993,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "meat-tenderizer",
+    "assetPath": "assets/meat-tenderizer.fbx",
+    "size": {
+      "width": 54.0783,
+      "height": 11.8154,
+      "depth": 27.5692
+    },
+    "sizeClass": "XL",
+    "approxVolume": 17615.4845,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 15853.936,
+    "burnEnergy": 31707.872,
+    "scrapValue": 1109776,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "melon",
+    "assetPath": "assets/melon.fbx",
+    "size": {
+      "width": 3.2984,
+      "height": 3.4308,
+      "depth": 1.6199
+    },
+    "sizeClass": "M",
+    "approxVolume": 18.3311,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 16.4979,
+    "burnEnergy": 32.9959,
+    "scrapValue": 577,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "MetalTrashcan",
+    "assetPath": "assets/MetalTrashcan.fbx",
+    "size": {
+      "width": 3.6494,
+      "height": 5.7726,
+      "depth": 3.6494
+    },
+    "sizeClass": "L",
+    "approxVolume": 76.8815,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.3,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 576.6114,
+    "burnEnergy": 1845.1564,
+    "scrapValue": 43246,
+    "rarity": "common",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "Milk",
+    "assetPath": "assets/Milk.fbx",
+    "size": {
+      "width": 1.094,
+      "height": 2.6158,
+      "depth": 1.0567
+    },
+    "sizeClass": "M",
+    "approxVolume": 3.0239,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.4853,
+      "g": 0.5835,
+      "b": 0.5671
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 2.7215,
+    "burnEnergy": 5.443,
+    "scrapValue": 95,
+    "rarity": "uncommon",
+    "smellLevel": 0.8,
+    "toxicity": 0.2
+  },
+  {
+    "id": "milkshake",
+    "assetPath": "assets/milkshake.fbx",
+    "size": {
+      "width": 0.1019,
+      "height": 0.2961,
+      "depth": 0.1019
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0031,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0028,
+    "burnEnergy": 0.0055,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.8,
+    "toxicity": 0.2
+  },
+  {
+    "id": "mincemeat-pie",
+    "assetPath": "assets/mincemeat-pie.fbx",
+    "size": {
+      "width": 53.0926,
+      "height": 16.7317,
+      "depth": 61.3061
+    },
+    "sizeClass": "XL",
+    "approxVolume": 54460.1539,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 49014.1385,
+    "burnEnergy": 98028.277,
+    "scrapValue": 3430990,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "mortar",
+    "assetPath": "assets/mortar.fbx",
+    "size": {
+      "width": 39.5529,
+      "height": 21.042,
+      "depth": 45.6718
+    },
+    "sizeClass": "XL",
+    "approxVolume": 38011.4716,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 38011.4716,
+    "burnEnergy": 83625.2375,
+    "scrapValue": 3421032,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "mortar-pestle",
+    "assetPath": "assets/mortar-pestle.fbx",
+    "size": {
+      "width": 11.4156,
+      "height": 34.0154,
+      "depth": 13.1816
+    },
+    "sizeClass": "XL",
+    "approxVolume": 5118.5082,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 5118.5082,
+    "burnEnergy": 11260.7179,
+    "scrapValue": 460666,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "muffin",
+    "assetPath": "assets/muffin.fbx",
+    "size": {
+      "width": 30.4717,
+      "height": 24.86,
+      "depth": 26.3892
+    },
+    "sizeClass": "XL",
+    "approxVolume": 19990.5392,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 19990.5392,
+    "burnEnergy": 43979.1863,
+    "scrapValue": 1799149,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "mug",
+    "assetPath": "assets/mug.fbx",
+    "size": {
+      "width": 34.3669,
+      "height": 27.336,
+      "depth": 28.512
+    },
+    "sizeClass": "XL",
+    "approxVolume": 26785.7301,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 26785.7301,
+    "burnEnergy": 58928.6061,
+    "scrapValue": 2410716,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "mushroom",
+    "assetPath": "assets/mushroom.fbx",
+    "size": {
+      "width": 2.5701,
+      "height": 2.7082,
+      "depth": 0.6933
+    },
+    "sizeClass": "M",
+    "approxVolume": 4.8255,
+    "materialType": "organic",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.8,
+    "mass": 3.8604,
+    "burnEnergy": 5.7906,
+    "scrapValue": 116,
+    "rarity": "uncommon",
+    "smellLevel": 0.6,
+    "toxicity": 0.35
+  },
+  {
+    "id": "mushroom-half",
+    "assetPath": "assets/mushroom-half.fbx",
+    "size": {
+      "width": 6.2435,
+      "height": 13.92,
+      "depth": 14.4188
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1253.1356,
+    "materialType": "organic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.8,
+    "mass": 1002.5085,
+    "burnEnergy": 1503.7627,
+    "scrapValue": 60151,
+    "rarity": "legendary",
+    "smellLevel": 0.6,
+    "toxicity": 0.35
+  },
+  {
+    "id": "mussel",
+    "assetPath": "assets/mussel.fbx",
+    "size": {
+      "width": 9.2278,
+      "height": 4.1524,
+      "depth": 15.5358
+    },
+    "sizeClass": "XL",
+    "approxVolume": 595.2888,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 595.2888,
+    "burnEnergy": 1309.6353,
+    "scrapValue": 53576,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "mussel-open",
+    "assetPath": "assets/mussel-open.fbx",
+    "size": {
+      "width": 9.6098,
+      "height": 8.0364,
+      "depth": 15.5358
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1199.7988,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 1199.7988,
+    "burnEnergy": 2639.5573,
+    "scrapValue": 107982,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "mustard",
+    "assetPath": "assets/mustard.fbx",
+    "size": {
+      "width": 0.0714,
+      "height": 0.2315,
+      "depth": 0.075
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0012,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0011,
+    "burnEnergy": 0.0022,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "nachos",
+    "assetPath": "assets/nachos.fbx",
+    "size": {
+      "width": 0.1823,
+      "height": 0.0868,
+      "depth": 0.2981
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0047,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0042,
+    "burnEnergy": 0.0085,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "NormalRed",
+    "assetPath": "assets/NormalRed.fbx",
+    "size": {
+      "width": 3.0264,
+      "height": 10.0461,
+      "depth": 3.1336
+    },
+    "sizeClass": "XL",
+    "approxVolume": 95.2737,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.1947,
+      "g": 0.1297,
+      "b": 0.1297
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 95.2737,
+    "burnEnergy": 209.6021,
+    "scrapValue": 8575,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "nugget",
+    "assetPath": "assets/nugget.fbx",
+    "size": {
+      "width": 0.0538,
+      "height": 0.0153,
+      "depth": 0.0793
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0001,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0001,
+    "burnEnergy": 0.0001,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "onion",
+    "assetPath": "assets/onion.fbx",
+    "size": {
+      "width": 3.2587,
+      "height": 3.3582,
+      "depth": 1.2502
+    },
+    "sizeClass": "M",
+    "approxVolume": 13.6812,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 1,
+    "mass": 13.6812,
+    "burnEnergy": 30.0986,
+    "scrapValue": 616,
+    "rarity": "uncommon",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "onion-half",
+    "assetPath": "assets/onion-half.fbx",
+    "size": {
+      "width": 10.6521,
+      "height": 25,
+      "depth": 24.6
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6551.049,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 6551.049,
+    "burnEnergy": 14412.3078,
+    "scrapValue": 589594,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "orange",
+    "assetPath": "assets/orange.fbx",
+    "size": {
+      "width": 16.9692,
+      "height": 16.72,
+      "depth": 16.9692
+    },
+    "sizeClass": "XL",
+    "approxVolume": 4814.5866,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 4814.5866,
+    "burnEnergy": 10592.0904,
+    "scrapValue": 433313,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "oven",
+    "assetPath": "assets/oven.fbx",
+    "size": {
+      "width": 2.7736,
+      "height": 2.9845,
+      "depth": 2.535
+    },
+    "sizeClass": "M",
+    "approxVolume": 20.9834,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 157.3757,
+    "burnEnergy": 503.6023,
+    "scrapValue": 29508,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "pan",
+    "assetPath": "assets/pan.fbx",
+    "size": {
+      "width": 65.7449,
+      "height": 17.5347,
+      "depth": 76.2072
+    },
+    "sizeClass": "XL",
+    "approxVolume": 87852.9735,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 658897.3009,
+    "burnEnergy": 2108471.3629,
+    "scrapValue": 123543244,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "pan-stew",
+    "assetPath": "assets/pan-stew.fbx",
+    "size": {
+      "width": 65.7449,
+      "height": 17.5347,
+      "depth": 76.2072
+    },
+    "sizeClass": "XL",
+    "approxVolume": 87852.9758,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 658897.3188,
+    "burnEnergy": 2108471.4203,
+    "scrapValue": 123543247,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "pancake",
+    "assetPath": "assets/pancake.fbx",
+    "size": {
+      "width": 3.2523,
+      "height": 0.9586,
+      "depth": 0.1484
+    },
+    "sizeClass": "M",
+    "approxVolume": 0.4626,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.4164,
+    "burnEnergy": 0.8327,
+    "scrapValue": 15,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "pancakes",
+    "assetPath": "assets/pancakes.fbx",
+    "size": {
+      "width": 43.5505,
+      "height": 12.1599,
+      "depth": 50.3913
+    },
+    "sizeClass": "XL",
+    "approxVolume": 26685.5995,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 24017.0395,
+    "burnEnergy": 48034.0791,
+    "scrapValue": 1681193,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "paprika",
+    "assetPath": "assets/paprika.fbx",
+    "size": {
+      "width": 16.8065,
+      "height": 19.9349,
+      "depth": 16.8065
+    },
+    "sizeClass": "XL",
+    "approxVolume": 5630.7756,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 5630.7756,
+    "burnEnergy": 12387.7064,
+    "scrapValue": 506770,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "paprika-slice",
+    "assetPath": "assets/paprika-slice.fbx",
+    "size": {
+      "width": 16.0218,
+      "height": 3,
+      "depth": 16.0218
+    },
+    "sizeClass": "XL",
+    "approxVolume": 770.0989,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 770.0989,
+    "burnEnergy": 1694.2176,
+    "scrapValue": 69309,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "Pasta",
+    "assetPath": "assets/Pasta.fbx",
+    "size": {
+      "width": 1,
+      "height": 0.5,
+      "depth": 5.3517
+    },
+    "sizeClass": "L",
+    "approxVolume": 2.6758,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.2127,
+      "g": 0.3735,
+      "b": 0.1494
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 2.4083,
+    "burnEnergy": 4.8165,
+    "scrapValue": 121,
+    "rarity": "rare",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "peanut-butter",
+    "assetPath": "assets/peanut-butter.fbx",
+    "size": {
+      "width": 23.5944,
+      "height": 29.58,
+      "depth": 23.5944
+    },
+    "sizeClass": "XL",
+    "approxVolume": 16467.0597,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 16467.0597,
+    "burnEnergy": 36227.5313,
+    "scrapValue": 1482035,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "pear",
+    "assetPath": "assets/pear.fbx",
+    "size": {
+      "width": 19.6295,
+      "height": 27.0753,
+      "depth": 19.6295
+    },
+    "sizeClass": "XL",
+    "approxVolume": 10432.5482,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 10432.5482,
+    "burnEnergy": 22951.6061,
+    "scrapValue": 938929,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "pear-half",
+    "assetPath": "assets/pear-half.fbx",
+    "size": {
+      "width": 9.8147,
+      "height": 27.0753,
+      "depth": 19.6295
+    },
+    "sizeClass": "XL",
+    "approxVolume": 5216.2741,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 5216.2741,
+    "burnEnergy": 11475.8031,
+    "scrapValue": 469465,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "pepper",
+    "assetPath": "assets/pepper.fbx",
+    "size": {
+      "width": 10.3901,
+      "height": 7.7475,
+      "depth": 31.9074
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2568.4449,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 2568.4449,
+    "burnEnergy": 5650.5789,
+    "scrapValue": 231160,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "pepper-mill",
+    "assetPath": "assets/pepper-mill.fbx",
+    "size": {
+      "width": 15.8096,
+      "height": 54.814,
+      "depth": 15.8096
+    },
+    "sizeClass": "XL",
+    "approxVolume": 13700.463,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 13700.463,
+    "burnEnergy": 30141.0185,
+    "scrapValue": 1233042,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "pie",
+    "assetPath": "assets/pie.fbx",
+    "size": {
+      "width": 95.04,
+      "height": 14.9688,
+      "depth": 95.04
+    },
+    "sizeClass": "XL",
+    "approxVolume": 135207.2144,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 135207.2144,
+    "burnEnergy": 297455.8716,
+    "scrapValue": 12168649,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "pineapple",
+    "assetPath": "assets/pineapple.fbx",
+    "size": {
+      "width": 24.1165,
+      "height": 47.1591,
+      "depth": 24.4764
+    },
+    "sizeClass": "XL",
+    "approxVolume": 27837.2327,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 25053.5094,
+    "burnEnergy": 50107.0189,
+    "scrapValue": 1753746,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "pizza",
+    "assetPath": "assets/pizza.fbx",
+    "size": {
+      "width": 0.2974,
+      "height": 0.0113,
+      "depth": 0.2974
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.001,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0009,
+    "burnEnergy": 0.0018,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "pizza_slide",
+    "assetPath": "assets/pizza_slide.fbx",
+    "size": {
+      "width": 0.1487,
+      "height": 0.0113,
+      "depth": 0.1487
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0003,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0002,
+    "burnEnergy": 0.0005,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "pizza-box",
+    "assetPath": "assets/pizza-box.fbx",
+    "size": {
+      "width": 94.18,
+      "height": 88.1625,
+      "depth": 95.18
+    },
+    "sizeClass": "XL",
+    "approxVolume": 790293.7643,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 711264.3879,
+    "burnEnergy": 1422528.7757,
+    "scrapValue": 49788507,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "pizza-cutter",
+    "assetPath": "assets/pizza-cutter.fbx",
+    "size": {
+      "width": 53.6014,
+      "height": 5.56,
+      "depth": 25.4904
+    },
+    "sizeClass": "XL",
+    "approxVolume": 7596.7442,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 6837.0698,
+    "burnEnergy": 13674.1395,
+    "scrapValue": 478595,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "PizzaBoxFBX",
+    "assetPath": "assets/PizzaBoxFBX.fbx",
+    "size": {
+      "width": 195.5349,
+      "height": 132.2204,
+      "depth": 143.8349
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3718665.3837,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 3346798.8453,
+    "burnEnergy": 6693597.6907,
+    "scrapValue": 234275919,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "PlasticBeigeFBX",
+    "assetPath": "assets/PlasticBeigeFBX.fbx",
+    "size": {
+      "width": 42.2486,
+      "height": 39.5459,
+      "depth": 43.2298
+    },
+    "sizeClass": "XL",
+    "approxVolume": 72226.5512,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 79449.2063,
+    "burnEnergy": 635593.6504,
+    "scrapValue": 8938036,
+    "rarity": "legendary",
+    "smellLevel": 0.12,
+    "toxicity": 0.8
+  },
+  {
+    "id": "PlasticBlueFBX",
+    "assetPath": "assets/PlasticBlueFBX.fbx",
+    "size": {
+      "width": 42.2486,
+      "height": 40.4435,
+      "depth": 43.2298
+    },
+    "sizeClass": "XL",
+    "approxVolume": 73866.0259,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 81252.6285,
+    "burnEnergy": 650021.0283,
+    "scrapValue": 9140921,
+    "rarity": "legendary",
+    "smellLevel": 0.12,
+    "toxicity": 0.8
+  },
+  {
+    "id": "PlasticGrayFBX",
+    "assetPath": "assets/PlasticGrayFBX.fbx",
+    "size": {
+      "width": 42.2486,
+      "height": 40.4435,
+      "depth": 43.2298
+    },
+    "sizeClass": "XL",
+    "approxVolume": 73866.0262,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 81252.6288,
+    "burnEnergy": 650021.0305,
+    "scrapValue": 9140921,
+    "rarity": "legendary",
+    "smellLevel": 0.12,
+    "toxicity": 0.8
+  },
+  {
+    "id": "PlasticGreenFBX",
+    "assetPath": "assets/PlasticGreenFBX.fbx",
+    "size": {
+      "width": 42.2486,
+      "height": 40.4435,
+      "depth": 43.2298
+    },
+    "sizeClass": "XL",
+    "approxVolume": 73866.0259,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.402,
+      "g": 0.402,
+      "b": 0.402
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 81252.6285,
+    "burnEnergy": 650021.0283,
+    "scrapValue": 9140921,
+    "rarity": "legendary",
+    "smellLevel": 0.12,
+    "toxicity": 0.8
+  },
+  {
+    "id": "Platano",
+    "assetPath": "assets/Platano.fbx",
+    "size": {
+      "width": 45.7193,
+      "height": 15.5188,
+      "depth": 43.9582
+    },
+    "sizeClass": "XL",
+    "approxVolume": 31188.6547,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.305,
+      "g": 0.3039,
+      "b": 0.3031
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 31188.6547,
+    "burnEnergy": 68615.0404,
+    "scrapValue": 2806979,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "plate",
+    "assetPath": "assets/plate.fbx",
+    "size": {
+      "width": 89.1774,
+      "height": 9,
+      "depth": 89.1774
+    },
+    "sizeClass": "XL",
+    "approxVolume": 71573.4637,
+    "materialType": "paper",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.7,
+    "mass": 50101.4246,
+    "burnEnergy": 190385.4134,
+    "scrapValue": 4008114,
+    "rarity": "legendary",
+    "smellLevel": 0.18,
+    "toxicity": 0.18
+  },
+  {
+    "id": "plate-broken",
+    "assetPath": "assets/plate-broken.fbx",
+    "size": {
+      "width": 89.1774,
+      "height": 9,
+      "depth": 89.1774
+    },
+    "sizeClass": "XL",
+    "approxVolume": 71573.466,
+    "materialType": "paper",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.7,
+    "mass": 50101.4262,
+    "burnEnergy": 190385.4195,
+    "scrapValue": 4008114,
+    "rarity": "legendary",
+    "smellLevel": 0.18,
+    "toxicity": 0.18
+  },
+  {
+    "id": "plate-deep",
+    "assetPath": "assets/plate-deep.fbx",
+    "size": {
+      "width": 89.1774,
+      "height": 14.49,
+      "depth": 89.1774
+    },
+    "sizeClass": "XL",
+    "approxVolume": 115233.2775,
+    "materialType": "paper",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.7,
+    "mass": 80663.2943,
+    "burnEnergy": 306520.5183,
+    "scrapValue": 6453064,
+    "rarity": "legendary",
+    "smellLevel": 0.18,
+    "toxicity": 0.18
+  },
+  {
+    "id": "plate-dinner",
+    "assetPath": "assets/plate-dinner.fbx",
+    "size": {
+      "width": 89.1774,
+      "height": 22.1359,
+      "depth": 89.1774
+    },
+    "sizeClass": "XL",
+    "approxVolume": 176038.1037,
+    "materialType": "paper",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.7,
+    "mass": 123226.6726,
+    "burnEnergy": 468261.3559,
+    "scrapValue": 9858134,
+    "rarity": "legendary",
+    "smellLevel": 0.18,
+    "toxicity": 0.18
+  },
+  {
+    "id": "plate-rectangle",
+    "assetPath": "assets/plate-rectangle.fbx",
+    "size": {
+      "width": 85.8641,
+      "height": 13,
+      "depth": 71.8641
+    },
+    "sizeClass": "XL",
+    "approxVolume": 80217.135,
+    "materialType": "paper",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.7,
+    "mass": 56151.9945,
+    "burnEnergy": 213377.579,
+    "scrapValue": 4492160,
+    "rarity": "legendary",
+    "smellLevel": 0.18,
+    "toxicity": 0.18
+  },
+  {
+    "id": "plate-sauerkraut",
+    "assetPath": "assets/plate-sauerkraut.fbx",
+    "size": {
+      "width": 89.1774,
+      "height": 17.5228,
+      "depth": 89.1774
+    },
+    "sizeClass": "XL",
+    "approxVolume": 139351.7041,
+    "materialType": "paper",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.7,
+    "mass": 97546.1929,
+    "burnEnergy": 370675.5329,
+    "scrapValue": 7803695,
+    "rarity": "legendary",
+    "smellLevel": 0.18,
+    "toxicity": 0.18
+  },
+  {
+    "id": "plates",
+    "assetPath": "assets/plates.fbx",
+    "size": {
+      "width": 4.0655,
+      "height": 5.7648,
+      "depth": 0.247
+    },
+    "sizeClass": "L",
+    "approxVolume": 5.7886,
+    "materialType": "paper",
+    "baseColor": {
+      "r": 0.2607,
+      "g": 0.2453,
+      "b": 0.2423
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.7,
+    "mass": 4.052,
+    "burnEnergy": 15.3977,
+    "scrapValue": 233,
+    "rarity": "rare",
+    "smellLevel": 0.18,
+    "toxicity": 0.18
+  },
+  {
+    "id": "popcorn",
+    "assetPath": "assets/popcorn.fbx",
+    "size": {
+      "width": 0.1595,
+      "height": 0.2777,
+      "depth": 0.1595
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0071,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0064,
+    "burnEnergy": 0.0127,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "popsicle",
+    "assetPath": "assets/popsicle.fbx",
+    "size": {
+      "width": 7.5,
+      "height": 49,
+      "depth": 18
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6615.0004,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 6615.0004,
+    "burnEnergy": 14553.0009,
+    "scrapValue": 595350,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "popsicle-chocolate",
+    "assetPath": "assets/popsicle-chocolate.fbx",
+    "size": {
+      "width": 9.5,
+      "height": 49,
+      "depth": 20
+    },
+    "sizeClass": "XL",
+    "approxVolume": 9310,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 8379,
+    "burnEnergy": 16758,
+    "scrapValue": 586530,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "popsicle-stick",
+    "assetPath": "assets/popsicle-stick.fbx",
+    "size": {
+      "width": 2,
+      "height": 34,
+      "depth": 4
+    },
+    "sizeClass": "XL",
+    "approxVolume": 272,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 272,
+    "burnEnergy": 598.4,
+    "scrapValue": 24480,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "pot",
+    "assetPath": "assets/pot.fbx",
+    "size": {
+      "width": 65.7449,
+      "height": 36.08,
+      "depth": 82.2072
+    },
+    "sizeClass": "XL",
+    "approxVolume": 195001.7459,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 1462513.0939,
+    "burnEnergy": 4680041.9005,
+    "scrapValue": 274221205,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "pot-lid",
+    "assetPath": "assets/pot-lid.fbx",
+    "size": {
+      "width": 65.7449,
+      "height": 11.84,
+      "depth": 62.5272
+    },
+    "sizeClass": "XL",
+    "approxVolume": 48672.4038,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 365043.0285,
+    "burnEnergy": 1168137.6913,
+    "scrapValue": 68445568,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "pot-stew",
+    "assetPath": "assets/pot-stew.fbx",
+    "size": {
+      "width": 65.7449,
+      "height": 36.08,
+      "depth": 82.2072
+    },
+    "sizeClass": "XL",
+    "approxVolume": 195001.7459,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 1462513.0939,
+    "burnEnergy": 4680041.9005,
+    "scrapValue": 274221205,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "pot-stew-lid",
+    "assetPath": "assets/pot-stew-lid.fbx",
+    "size": {
+      "width": 65.7449,
+      "height": 11.84,
+      "depth": 62.5272
+    },
+    "sizeClass": "XL",
+    "approxVolume": 48672.4038,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.8762,
+      "g": 0.9263,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 365043.0285,
+    "burnEnergy": 1168137.6913,
+    "scrapValue": 68445568,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "potato",
+    "assetPath": "assets/potato.fbx",
+    "size": {
+      "width": 11.3847,
+      "height": 12.9379,
+      "depth": 1.0683
+    },
+    "sizeClass": "XL",
+    "approxVolume": 157.3585,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 1180.1886,
+    "burnEnergy": 3776.6036,
+    "scrapValue": 221285,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "pretzel",
+    "assetPath": "assets/pretzel.fbx",
+    "size": {
+      "width": 0.0732,
+      "height": 0.0811,
+      "depth": 0.0707
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0004,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0004,
+    "burnEnergy": 0.0008,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "pudding",
+    "assetPath": "assets/pudding.fbx",
+    "size": {
+      "width": 24.9935,
+      "height": 19.98,
+      "depth": 28.86
+    },
+    "sizeClass": "XL",
+    "approxVolume": 14411.8171,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 14411.8171,
+    "burnEnergy": 31705.9976,
+    "scrapValue": 1297064,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "pumpkin",
+    "assetPath": "assets/pumpkin.fbx",
+    "size": {
+      "width": 41.8877,
+      "height": 22.9143,
+      "depth": 41.8877
+    },
+    "sizeClass": "XL",
+    "approxVolume": 40204.9355,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 40204.9355,
+    "burnEnergy": 88450.8581,
+    "scrapValue": 3618444,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "pumpkin-basic",
+    "assetPath": "assets/pumpkin-basic.fbx",
+    "size": {
+      "width": 42,
+      "height": 29.9,
+      "depth": 36.3731
+    },
+    "sizeClass": "XL",
+    "approxVolume": 45677.2956,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 45677.2956,
+    "burnEnergy": 100490.0504,
+    "scrapValue": 4110957,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "radish",
+    "assetPath": "assets/radish.fbx",
+    "size": {
+      "width": 34.3142,
+      "height": 57.6304,
+      "depth": 34.3142
+    },
+    "sizeClass": "XL",
+    "approxVolume": 67857.6961,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 67857.6961,
+    "burnEnergy": 149286.9314,
+    "scrapValue": 6107193,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "ramen",
+    "assetPath": "assets/ramen.fbx",
+    "size": {
+      "width": 0.2248,
+      "height": 0.2402,
+      "depth": 0.1866
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0101,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0091,
+    "burnEnergy": 0.0181,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.82,
+    "toxicity": 0.2
+  },
+  {
+    "id": "refrigerator",
+    "assetPath": "assets/refrigerator.fbx",
+    "size": {
+      "width": 6.9015,
+      "height": 2.8507,
+      "depth": 6.1218
+    },
+    "sizeClass": "L",
+    "approxVolume": 120.4427,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 1,
+    "mass": 120.4427,
+    "burnEnergy": 264.9739,
+    "scrapValue": 10840,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "ribs",
+    "assetPath": "assets/ribs.fbx",
+    "size": {
+      "width": 0.3812,
+      "height": 0.1128,
+      "depth": 0.2461
+    },
+    "sizeClass": "S",
+    "approxVolume": 0.0106,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.3835,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0095,
+    "burnEnergy": 0.019,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "rice-ball",
+    "assetPath": "assets/rice-ball.fbx",
+    "size": {
+      "width": 8.12,
+      "height": 13.0935,
+      "depth": 11.5204
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1224.84,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 1224.84,
+    "burnEnergy": 2694.6479,
+    "scrapValue": 110236,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "rollingPin",
+    "assetPath": "assets/rollingPin.fbx",
+    "size": {
+      "width": 81.3656,
+      "height": 14.0296,
+      "depth": 16.2
+    },
+    "sizeClass": "XL",
+    "approxVolume": 18492.7421,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 18492.7421,
+    "burnEnergy": 40684.0327,
+    "scrapValue": 1664347,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "RottenApple",
+    "assetPath": "assets/RottenApple.fbx",
+    "size": {
+      "width": 5.1613,
+      "height": 9.38,
+      "depth": 4.2799
+    },
+    "sizeClass": "XL",
+    "approxVolume": 207.2045,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.053,
+      "g": 0.0361,
+      "b": 0.0165
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 186.4841,
+    "burnEnergy": 372.9681,
+    "scrapValue": 5222,
+    "rarity": "common",
+    "smellLevel": 0.95,
+    "toxicity": 0.28
+  },
+  {
+    "id": "salad",
+    "assetPath": "assets/salad.fbx",
+    "size": {
+      "width": 50.2153,
+      "height": 27.3366,
+      "depth": 57.9836
+    },
+    "sizeClass": "XL",
+    "approxVolume": 79595,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 71635.5,
+    "burnEnergy": 143271,
+    "scrapValue": 5014485,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "sandwich",
+    "assetPath": "assets/sandwich.fbx",
+    "size": {
+      "width": 43.2309,
+      "height": 16.8,
+      "depth": 43.3858
+    },
+    "sizeClass": "XL",
+    "approxVolume": 31510.2322,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 28359.209,
+    "burnEnergy": 56718.418,
+    "scrapValue": 1985145,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "Sandwich",
+    "assetPath": "assets/Sandwich.fbx",
+    "size": {
+      "width": 1.3444,
+      "height": 0.3065,
+      "depth": 1.4272
+    },
+    "sizeClass": "M",
+    "approxVolume": 0.5882,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.5293,
+    "burnEnergy": 1.0587,
+    "scrapValue": 19,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "sauce ketchup",
+    "assetPath": "assets/sauce ketchup.fbx",
+    "size": {
+      "width": 0.1104,
+      "height": 0.0418,
+      "depth": 0.087
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0004,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.5008,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0004,
+    "burnEnergy": 0.0007,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.82,
+    "toxicity": 0.2
+  },
+  {
+    "id": "sauce mustard",
+    "assetPath": "assets/sauce mustard.fbx",
+    "size": {
+      "width": 0.1104,
+      "height": 0.0418,
+      "depth": 0.087
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0004,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.5008,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0004,
+    "burnEnergy": 0.0007,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.82,
+    "toxicity": 0.2
+  },
+  {
+    "id": "sausage",
+    "assetPath": "assets/sausage.fbx",
+    "size": {
+      "width": 37.0657,
+      "height": 11.8878,
+      "depth": 13.7268
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6048.4136,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 6048.4136,
+    "burnEnergy": 13306.5098,
+    "scrapValue": 544357,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "sausage-half",
+    "assetPath": "assets/sausage-half.fbx",
+    "size": {
+      "width": 18.5329,
+      "height": 11.8878,
+      "depth": 13.7268
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3024.2068,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 3024.2068,
+    "burnEnergy": 6653.2549,
+    "scrapValue": 272179,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "shaker-pepper",
+    "assetPath": "assets/shaker-pepper.fbx",
+    "size": {
+      "width": 9.492,
+      "height": 19.6,
+      "depth": 9.492
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1765.9223,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 1765.9223,
+    "burnEnergy": 3885.0291,
+    "scrapValue": 158933,
+    "rarity": "legendary",
+    "smellLevel": 0.3,
+    "toxicity": 0.3
+  },
+  {
+    "id": "shaker-salt",
+    "assetPath": "assets/shaker-salt.fbx",
+    "size": {
+      "width": 9.492,
+      "height": 19.6,
+      "depth": 9.492
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1765.9223,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 1765.9223,
+    "burnEnergy": 3885.0291,
+    "scrapValue": 158933,
+    "rarity": "legendary",
+    "smellLevel": 0.3,
+    "toxicity": 0.3
+  },
+  {
+    "id": "shelfMarker",
+    "assetPath": "assets/shelfMarker.fbx",
+    "size": {
+      "width": 19.7777,
+      "height": 15,
+      "depth": 11.4045
+    },
+    "sizeClass": "XL",
+    "approxVolume": 3383.3121,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.2532,
+      "g": 0.2672,
+      "b": 0.7626
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 1,
+    "mass": 3383.3121,
+    "burnEnergy": 7443.2866,
+    "scrapValue": 219239,
+    "rarity": "rare",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "shelfMarker2",
+    "assetPath": "assets/shelfMarker2.fbx",
+    "size": {
+      "width": 5.0457,
+      "height": 2.4244,
+      "depth": 4.3466
+    },
+    "sizeClass": "L",
+    "approxVolume": 53.1707,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.3,
+    "emissive": true,
+    "density": 1,
+    "mass": 53.1707,
+    "burnEnergy": 116.9755,
+    "scrapValue": 3445,
+    "rarity": "rare",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "shelfMarker3",
+    "assetPath": "assets/shelfMarker3.fbx",
+    "size": {
+      "width": 2.1659,
+      "height": 2.6061,
+      "depth": 2.9663
+    },
+    "sizeClass": "M",
+    "approxVolume": 16.7434,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.1714,
+      "g": 0.3117,
+      "b": 0.0583
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 1,
+    "mass": 16.7434,
+    "burnEnergy": 36.8355,
+    "scrapValue": 1085,
+    "rarity": "rare",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "shelfMarker4",
+    "assetPath": "assets/shelfMarker4.fbx",
+    "size": {
+      "width": 21.9615,
+      "height": 15.4065,
+      "depth": 5.1222
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1733.0801,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.2523,
+      "g": 0.2321,
+      "b": 0.293
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 1,
+    "mass": 1733.0801,
+    "burnEnergy": 3812.7761,
+    "scrapValue": 112304,
+    "rarity": "rare",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "ShopingCar",
+    "assetPath": "assets/ShopingCar.fbx",
+    "size": {
+      "width": 7.8322,
+      "height": 18.5616,
+      "depth": 14.7516
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2144.5612,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.0966,
+      "g": 0.1411,
+      "b": 0.2116
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 7.5,
+    "mass": 16084.209,
+    "burnEnergy": 51469.4688,
+    "scrapValue": 3015789,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "silverware",
+    "assetPath": "assets/silverware.fbx",
+    "size": {
+      "width": 2.3061,
+      "height": 1.9878,
+      "depth": 0.2103
+    },
+    "sizeClass": "M",
+    "approxVolume": 0.9639,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 1,
+    "mass": 0.9639,
+    "burnEnergy": 2.1207,
+    "scrapValue": 43,
+    "rarity": "uncommon",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "skewer",
+    "assetPath": "assets/skewer.fbx",
+    "size": {
+      "width": 59.67,
+      "height": 9.4003,
+      "depth": 10.8545
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6088.4214,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 6088.4214,
+    "burnEnergy": 13394.5271,
+    "scrapValue": 547958,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "skewer-vegetables",
+    "assetPath": "assets/skewer-vegetables.fbx",
+    "size": {
+      "width": 59.67,
+      "height": 10.767,
+      "depth": 10.8545
+    },
+    "sizeClass": "XL",
+    "approxVolume": 6973.6738,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 52302.5535,
+    "burnEnergy": 167368.1711,
+    "scrapValue": 7060845,
+    "rarity": "rare",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "small_cheese",
+    "assetPath": "assets/small_cheese.fbx",
+    "size": {
+      "width": 0.1431,
+      "height": 0.1388,
+      "depth": 0.1505
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.003,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0027,
+    "burnEnergy": 0.0054,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "Soap",
+    "assetPath": "assets/Soap.fbx",
+    "size": {
+      "width": 1,
+      "height": 0.575,
+      "depth": 1.7289
+    },
+    "sizeClass": "M",
+    "approxVolume": 0.9942,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.2529,
+      "g": 0.0539,
+      "b": 0.1078
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 1.1,
+    "mass": 1.0936,
+    "burnEnergy": 8.7488,
+    "scrapValue": 62,
+    "rarity": "uncommon",
+    "smellLevel": 0.12,
+    "toxicity": 0.93
+  },
+  {
+    "id": "soda",
+    "assetPath": "assets/soda.fbx",
+    "size": {
+      "width": 0.0955,
+      "height": 0.1506,
+      "depth": 0.0946
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0014,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.4303,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 0.0015,
+    "burnEnergy": 0.012,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "soda-bottle",
+    "assetPath": "assets/soda-bottle.fbx",
+    "size": {
+      "width": 18.0492,
+      "height": 58.0412,
+      "depth": 15.6311
+    },
+    "sizeClass": "XL",
+    "approxVolume": 16375.0625,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 18012.5688,
+    "burnEnergy": 144100.55,
+    "scrapValue": 810566,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "soda-can",
+    "assetPath": "assets/soda-can.fbx",
+    "size": {
+      "width": 22.464,
+      "height": 35.0597,
+      "depth": 22.464
+    },
+    "sizeClass": "XL",
+    "approxVolume": 17692.22,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 19461.442,
+    "burnEnergy": 155691.5356,
+    "scrapValue": 2189412,
+    "rarity": "legendary",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "soda-can-crushed",
+    "assetPath": "assets/soda-can-crushed.fbx",
+    "size": {
+      "width": 24.7104,
+      "height": 18.0597,
+      "depth": 24.7104
+    },
+    "sizeClass": "XL",
+    "approxVolume": 11027.3224,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 12130.0546,
+    "burnEnergy": 97040.4367,
+    "scrapValue": 1364631,
+    "rarity": "legendary",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "soda-glass",
+    "assetPath": "assets/soda-glass.fbx",
+    "size": {
+      "width": 26.18,
+      "height": 41.3438,
+      "depth": 29.6725
+    },
+    "sizeClass": "XL",
+    "approxVolume": 32117.0044,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 35328.7048,
+    "burnEnergy": 282629.6383,
+    "scrapValue": 3974479,
+    "rarity": "legendary",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "soup",
+    "assetPath": "assets/soup.fbx",
+    "size": {
+      "width": 0.2353,
+      "height": 0.1302,
+      "depth": 0.2353
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0072,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0065,
+    "burnEnergy": 0.013,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.82,
+    "toxicity": 0.2
+  },
+  {
+    "id": "soy",
+    "assetPath": "assets/soy.fbx",
+    "size": {
+      "width": 16.5322,
+      "height": 4,
+      "depth": 19.0898
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1262.3854,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 1262.3854,
+    "burnEnergy": 2777.2479,
+    "scrapValue": 113615,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "spring_roll",
+    "assetPath": "assets/spring_roll.fbx",
+    "size": {
+      "width": 0.1091,
+      "height": 0.0341,
+      "depth": 0.043
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0002,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0001,
+    "burnEnergy": 0.0003,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "steamer",
+    "assetPath": "assets/steamer.fbx",
+    "size": {
+      "width": 64,
+      "height": 60,
+      "depth": 64
+    },
+    "sizeClass": "XL",
+    "approxVolume": 245759.9922,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 245759.9922,
+    "burnEnergy": 540671.9828,
+    "scrapValue": 22118399,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "stove",
+    "assetPath": "assets/stove.fbx",
+    "size": {
+      "width": 5.382,
+      "height": 2.5611,
+      "depth": 2.3247
+    },
+    "sizeClass": "L",
+    "approxVolume": 32.0435,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 240.3263,
+    "burnEnergy": 769.0441,
+    "scrapValue": 32444,
+    "rarity": "rare",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "strawberry",
+    "assetPath": "assets/strawberry.fbx",
+    "size": {
+      "width": 11.968,
+      "height": 18.2,
+      "depth": 11.968
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2606.8411,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 2606.8411,
+    "burnEnergy": 5735.0503,
+    "scrapValue": 234616,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "StripedBox",
+    "assetPath": "assets/StripedBox.fbx",
+    "size": {
+      "width": 29.9388,
+      "height": 31.6951,
+      "depth": 68.908
+    },
+    "sizeClass": "XL",
+    "approxVolume": 65387.7694,
+    "materialType": "paper",
+    "baseColor": {
+      "r": 0.1345,
+      "g": 0.0598,
+      "b": 0.3064
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.7,
+    "mass": 45771.4386,
+    "burnEnergy": 173931.4665,
+    "scrapValue": 3661715,
+    "rarity": "legendary",
+    "smellLevel": 0.18,
+    "toxicity": 0.18
+  },
+  {
+    "id": "styrofoam",
+    "assetPath": "assets/styrofoam.fbx",
+    "size": {
+      "width": 128.1055,
+      "height": 82.1985,
+      "depth": 75.8926
+    },
+    "sizeClass": "XL",
+    "approxVolume": 799155.319,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 799155.319,
+    "burnEnergy": 1758141.7019,
+    "scrapValue": 71923979,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "styrofoam-dinner",
+    "assetPath": "assets/styrofoam-dinner.fbx",
+    "size": {
+      "width": 128.1055,
+      "height": 82.1985,
+      "depth": 75.8926
+    },
+    "sizeClass": "XL",
+    "approxVolume": 799155.319,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 799155.319,
+    "burnEnergy": 1758141.7019,
+    "scrapValue": 71923979,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "sub",
+    "assetPath": "assets/sub.fbx",
+    "size": {
+      "width": 28.2712,
+      "height": 22.2531,
+      "depth": 67.5639
+    },
+    "sizeClass": "XL",
+    "approxVolume": 42505.8051,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 42505.8051,
+    "burnEnergy": 93512.7713,
+    "scrapValue": 3825522,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "sundae",
+    "assetPath": "assets/sundae.fbx",
+    "size": {
+      "width": 22.3189,
+      "height": 66.7883,
+      "depth": 25.7716
+    },
+    "sizeClass": "XL",
+    "approxVolume": 38416.1477,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 38416.1477,
+    "burnEnergy": 84515.525,
+    "scrapValue": 3457453,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "sushi",
+    "assetPath": "assets/sushi.fbx",
+    "size": {
+      "width": 0.6606,
+      "height": 0.0833,
+      "depth": 0.6607
+    },
+    "sizeClass": "S",
+    "approxVolume": 0.0363,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0327,
+    "burnEnergy": 0.0654,
+    "scrapValue": 1,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "sushi-egg",
+    "assetPath": "assets/sushi-egg.fbx",
+    "size": {
+      "width": 11.79,
+      "height": 7.9176,
+      "depth": 17.4292
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1626.9877,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 1464.289,
+    "burnEnergy": 2928.5779,
+    "scrapValue": 102500,
+    "rarity": "legendary",
+    "smellLevel": 0.88,
+    "toxicity": 0.2
+  },
+  {
+    "id": "sushi-salmon",
+    "assetPath": "assets/sushi-salmon.fbx",
+    "size": {
+      "width": 10.79,
+      "height": 8.9176,
+      "depth": 20.0774
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1931.8631,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 1738.6768,
+    "burnEnergy": 3477.3536,
+    "scrapValue": 121707,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "table",
+    "assetPath": "assets/table.fbx",
+    "size": {
+      "width": 17.8706,
+      "height": 9.3312,
+      "depth": 3.9167
+    },
+    "sizeClass": "XL",
+    "approxVolume": 653.1353,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.455,
+      "g": 0.5057,
+      "b": 0.4538
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 4898.515,
+    "burnEnergy": 15675.248,
+    "scrapValue": 661300,
+    "rarity": "rare",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "taco",
+    "assetPath": "assets/taco.fbx",
+    "size": {
+      "width": 0.2084,
+      "height": 0.0669,
+      "depth": 0.2084
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0029,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0026,
+    "burnEnergy": 0.0052,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "tajine",
+    "assetPath": "assets/tajine.fbx",
+    "size": {
+      "width": 81.9106,
+      "height": 13.8005,
+      "depth": 86.1259
+    },
+    "sizeClass": "XL",
+    "approxVolume": 97356.992,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 97356.992,
+    "burnEnergy": 214185.3824,
+    "scrapValue": 8762129,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "tajine-lid",
+    "assetPath": "assets/tajine-lid.fbx",
+    "size": {
+      "width": 75.5467,
+      "height": 44.201,
+      "depth": 79.4345
+    },
+    "sizeClass": "XL",
+    "approxVolume": 265250.8534,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 265250.8534,
+    "burnEnergy": 583551.8775,
+    "scrapValue": 23872577,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "teapotKettle",
+    "assetPath": "assets/teapotKettle.fbx",
+    "size": {
+      "width": 18.5992,
+      "height": 5.3184,
+      "depth": 1.8623
+    },
+    "sizeClass": "XL",
+    "approxVolume": 184.215,
+    "materialType": "metal",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.4336,
+      "b": 0.3582
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 7.5,
+    "mass": 1381.6127,
+    "burnEnergy": 4421.1606,
+    "scrapValue": 259052,
+    "rarity": "legendary",
+    "smellLevel": 0.05,
+    "toxicity": 0.55
+  },
+  {
+    "id": "Tissue1",
+    "assetPath": "assets/Tissue1.fbx",
+    "size": {
+      "width": 11.0699,
+      "height": 8.6804,
+      "depth": 9.6849
+    },
+    "sizeClass": "XL",
+    "approxVolume": 930.632,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.5878,
+      "g": 0.5878,
+      "b": 0.5878
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 837.5688,
+    "burnEnergy": 1675.1376,
+    "scrapValue": 23452,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "Tissue2",
+    "assetPath": "assets/Tissue2.fbx",
+    "size": {
+      "width": 10.6024,
+      "height": 8.3967,
+      "depth": 9.1906
+    },
+    "sizeClass": "XL",
+    "approxVolume": 818.1921,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.5878,
+      "g": 0.5878,
+      "b": 0.5878
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 736.3729,
+    "burnEnergy": 1472.7458,
+    "scrapValue": 20618,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "toast",
+    "assetPath": "assets/toast.fbx",
+    "size": {
+      "width": 0.1876,
+      "height": 0.0308,
+      "depth": 0.164
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0009,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.4114,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0009,
+    "burnEnergy": 0.0017,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "toaster",
+    "assetPath": "assets/toaster.fbx",
+    "size": {
+      "width": 1.1713,
+      "height": 0.5902,
+      "depth": 0.5513
+    },
+    "sizeClass": "M",
+    "approxVolume": 0.3811,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.3,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.343,
+    "burnEnergy": 0.686,
+    "scrapValue": 12,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "tomate",
+    "assetPath": "assets/tomate.fbx",
+    "size": {
+      "width": 0.4565,
+      "height": 0.6152,
+      "depth": 0.4636
+    },
+    "sizeClass": "S",
+    "approxVolume": 0.1302,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.2111,
+      "g": 0.1857,
+      "b": 0.005
+    },
+    "shininess": 0.3,
+    "emissive": false,
+    "density": 0.9,
+    "mass": 0.1172,
+    "burnEnergy": 0.2343,
+    "scrapValue": 3,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "tomato",
+    "assetPath": "assets/tomato.fbx",
+    "size": {
+      "width": 3.22,
+      "height": 2.2147,
+      "depth": 1.1037
+    },
+    "sizeClass": "M",
+    "approxVolume": 7.8711,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 7.084,
+    "burnEnergy": 14.168,
+    "scrapValue": 248,
+    "rarity": "uncommon",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "tomato-slice",
+    "assetPath": "assets/tomato-slice.fbx",
+    "size": {
+      "width": 18,
+      "height": 3,
+      "depth": 18
+    },
+    "sizeClass": "XL",
+    "approxVolume": 972,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 874.8,
+    "burnEnergy": 1749.6,
+    "scrapValue": 61236,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "trash",
+    "assetPath": "assets/trash.fbx",
+    "size": {
+      "width": 8.265,
+      "height": 7.408,
+      "depth": 4.4781
+    },
+    "sizeClass": "XL",
+    "approxVolume": 274.18,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 301.598,
+    "burnEnergy": 2412.7836,
+    "scrapValue": 13572,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "turkey",
+    "assetPath": "assets/turkey.fbx",
+    "size": {
+      "width": 94.8978,
+      "height": 37.6899,
+      "depth": 70.1483
+    },
+    "sizeClass": "XL",
+    "approxVolume": 250899.0427,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 250899.0427,
+    "burnEnergy": 551977.8939,
+    "scrapValue": 22580914,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "TwistedBottle",
+    "assetPath": "assets/TwistedBottle.fbx",
+    "size": {
+      "width": 3.3746,
+      "height": 9.8914,
+      "depth": 2.8738
+    },
+    "sizeClass": "XL",
+    "approxVolume": 95.9261,
+    "materialType": "plastic",
+    "baseColor": {
+      "r": 0.1947,
+      "g": 0.1297,
+      "b": 0.1297
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1.1,
+    "mass": 105.5187,
+    "burnEnergy": 844.1499,
+    "scrapValue": 4748,
+    "rarity": "common",
+    "smellLevel": 0.12,
+    "toxicity": 0.68
+  },
+  {
+    "id": "utensil-fork",
+    "assetPath": "assets/utensil-fork.fbx",
+    "size": {
+      "width": 50.3475,
+      "height": 1.78,
+      "depth": 8.4
+    },
+    "sizeClass": "XL",
+    "approxVolume": 752.7963,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 752.7963,
+    "burnEnergy": 1656.152,
+    "scrapValue": 67752,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "utensil-knife",
+    "assetPath": "assets/utensil-knife.fbx",
+    "size": {
+      "width": 60.0768,
+      "height": 1.78,
+      "depth": 7.78
+    },
+    "sizeClass": "XL",
+    "approxVolume": 831.9679,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 831.9679,
+    "burnEnergy": 1830.3294,
+    "scrapValue": 74877,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "utensil-spoon",
+    "assetPath": "assets/utensil-spoon.fbx",
+    "size": {
+      "width": 47.9587,
+      "height": 2.78,
+      "depth": 12
+    },
+    "sizeClass": "XL",
+    "approxVolume": 1599.9008,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 1599.9008,
+    "burnEnergy": 3519.7817,
+    "scrapValue": 143991,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "waffle",
+    "assetPath": "assets/waffle.fbx",
+    "size": {
+      "width": 0.1497,
+      "height": 0.0365,
+      "depth": 0.1544
+    },
+    "sizeClass": "XS",
+    "approxVolume": 0.0008,
+    "materialType": "food",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 0.0008,
+    "burnEnergy": 0.0015,
+    "scrapValue": 0,
+    "rarity": "common",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "waterCooler",
+    "assetPath": "assets/waterCooler.fbx",
+    "size": {
+      "width": 1.6,
+      "height": 1.6,
+      "depth": 5.9799
+    },
+    "sizeClass": "L",
+    "approxVolume": 15.3085,
+    "materialType": "other",
+    "baseColor": {
+      "r": 0.6038,
+      "g": 0.6038,
+      "b": 0.6038
+    },
+    "shininess": 0.25,
+    "emissive": true,
+    "density": 1,
+    "mass": 15.3085,
+    "burnEnergy": 33.6786,
+    "scrapValue": 992,
+    "rarity": "rare",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "watermelon",
+    "assetPath": "assets/watermelon.fbx",
+    "size": {
+      "width": 45.54,
+      "height": 47.61,
+      "depth": 45.54
+    },
+    "sizeClass": "XL",
+    "approxVolume": 98737.9887,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 88864.1898,
+    "burnEnergy": 177728.3797,
+    "scrapValue": 6220493,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "whipped-cream",
+    "assetPath": "assets/whipped-cream.fbx",
+    "size": {
+      "width": 13.6243,
+      "height": 9.668,
+      "depth": 15.732
+    },
+    "sizeClass": "XL",
+    "approxVolume": 2072.2263,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 2072.2263,
+    "burnEnergy": 4558.8978,
+    "scrapValue": 186500,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "whisk",
+    "assetPath": "assets/whisk.fbx",
+    "size": {
+      "width": 72.441,
+      "height": 15.7617,
+      "depth": 15.7617
+    },
+    "sizeClass": "XL",
+    "approxVolume": 17996.5168,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 17996.5168,
+    "burnEnergy": 39592.3369,
+    "scrapValue": 1619687,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "whole-ham",
+    "assetPath": "assets/whole-ham.fbx",
+    "size": {
+      "width": 38.0947,
+      "height": 43.988,
+      "depth": 63.9741
+    },
+    "sizeClass": "XL",
+    "approxVolume": 107201.9202,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 96481.7281,
+    "burnEnergy": 192963.4563,
+    "scrapValue": 6753721,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "wholer-ham",
+    "assetPath": "assets/wholer-ham.fbx",
+    "size": {
+      "width": 34.108,
+      "height": 39.3846,
+      "depth": 82.9354
+    },
+    "sizeClass": "XL",
+    "approxVolume": 111409.6684,
+    "materialType": "food",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 0.9,
+    "mass": 100268.7015,
+    "burnEnergy": 200537.4031,
+    "scrapValue": 7018809,
+    "rarity": "legendary",
+    "smellLevel": 0.7,
+    "toxicity": 0.2
+  },
+  {
+    "id": "wine-red",
+    "assetPath": "assets/wine-red.fbx",
+    "size": {
+      "width": 19.0794,
+      "height": 69.888,
+      "depth": 16.5233
+    },
+    "sizeClass": "XL",
+    "approxVolume": 22032.4968,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 22032.4968,
+    "burnEnergy": 48471.4929,
+    "scrapValue": 1982925,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  },
+  {
+    "id": "wine-white",
+    "assetPath": "assets/wine-white.fbx",
+    "size": {
+      "width": 20.28,
+      "height": 65.56,
+      "depth": 17.563
+    },
+    "sizeClass": "XL",
+    "approxVolume": 23351.0012,
+    "materialType": "other",
+    "baseColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1
+    },
+    "shininess": 0.4,
+    "emissive": true,
+    "density": 1,
+    "mass": 23351.0012,
+    "burnEnergy": 51372.2026,
+    "scrapValue": 2101590,
+    "rarity": "legendary",
+    "smellLevel": 0.2,
+    "toxicity": 0.3
+  }
+]

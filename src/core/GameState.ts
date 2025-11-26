@@ -9,6 +9,11 @@ export type PhysicsParams = {
   chargeDamping: number;
 };
 
+export type ScrapCollectionEntry = {
+  count: number;
+  lastCollectedAt: number;
+};
+
 type GameValues = {
   energy: number;
   totalEnergy: number;
@@ -23,6 +28,7 @@ type GameValues = {
   physics: PhysicsParams;
   upgrades: Record<ScrapUpgradeId, number>;
   lastSaveAt: number;
+  scrapCollection: Record<string, ScrapCollectionEntry>;
 };
 
 export type GameStore = GameValues & {
@@ -31,6 +37,7 @@ export type GameStore = GameValues & {
   addScrap: (n: number) => void;
   startScrapRun: () => void;
   endScrapRun: (score: number, collected: number) => void;
+  recordScrapPickup: (scrapId: string, amount?: number) => void;
   purchaseUpgrade: (id: ScrapUpgradeId) => void;
   prestige: () => void;
   devSetState?: (partial: Partial<GameValues>) => void;
@@ -61,6 +68,7 @@ const buildInitialState = (): GameValues => ({
   physics: { ...initialPhysics },
   upgrades: {} as Record<ScrapUpgradeId, number>,
   lastSaveAt: Date.now(),
+  scrapCollection: {},
 });
 
 export const useGameStore = create<GameStore>()(
@@ -86,6 +94,17 @@ export const useGameStore = create<GameStore>()(
           totalScrap: state.totalScrap + n,
           lastSaveAt: Date.now(),
         })),
+      recordScrapPickup: (scrapId, amount = 1) =>
+        set((state) => {
+          const current = state.scrapCollection[scrapId];
+          const nextEntry: ScrapCollectionEntry = {
+            count: (current?.count ?? 0) + amount,
+            lastCollectedAt: Date.now(),
+          };
+          return {
+            scrapCollection: { ...state.scrapCollection, [scrapId]: nextEntry },
+          };
+        }),
 
       startScrapRun: () =>
         set((state) => ({
@@ -135,6 +154,7 @@ export const useGameStore = create<GameStore>()(
           prestigeLevel: state.prestigeLevel + 1,
           cosmicEssence: state.cosmicEssence + calculateEssence(state.totalEnergy),
           lastSaveAt: Date.now(),
+          scrapCollection: {},
         })),
       devSetState: __DEV_TOOLS__
         ? (partial) =>

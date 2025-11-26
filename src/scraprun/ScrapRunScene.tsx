@@ -8,12 +8,111 @@ import { createOrbMaterial } from '../orb/orbMaterial';
 import { CALM_IDLE_PRESET } from '../orb/orbPresets';
 import { haptic } from '../utils/haptics';
 import { audioBus } from '../audio/audioBus';
+import { useGameStore } from '../core/GameState';
+import { SCRAP_ASSETS, type ScrapAsset } from '../core/scrapAssets';
 
-const GOOD_SCRAP_URLS = Object.values(
-  import.meta.glob('../assets/*.fbx', { eager: true, as: 'url' }) as Record<string, string>
-);
+const GOOD_SCRAP_ASSETS = SCRAP_ASSETS.filter((asset) => asset.sizeClass !== 'XL');
+
+const RARITY_WEIGHTS: Record<ScrapAsset['rarity'], number> = {
+  common: 1,
+  uncommon: 0.5,
+  rare: 0.2,
+  legendary: 0.06,
+};
+
+const sizeWeightBoost: Record<ScrapAsset['sizeClass'], number> = {
+  XS: 1.3,
+  S: 1.1,
+  M: 1,
+  L: 0.7,
+  XL: 0.35,
+};
+
+const sizeClassVisualScale: Record<ScrapAsset['sizeClass'], number> = {
+  XS: 0.65,
+  S: 0.8,
+  M: 1,
+  L: 1.25,
+  XL: 1.45,
+};
+
+const RARITY_HAUL_MULTIPLIER: Record<ScrapAsset['rarity'], number> = {
+  common: 0.95,
+  uncommon: 1.1,
+  rare: 1.3,
+  legendary: 1.55,
+};
+
+const RARITY_SCORE_MULTIPLIER: Record<ScrapAsset['rarity'], number> = {
+  common: 1,
+  uncommon: 1.15,
+  rare: 1.35,
+  legendary: 1.6,
+};
+
+const MATERIAL_TRAITS: Record<
+  ScrapAsset['materialType'],
+  { haul: number; score: number; metalness: number; roughness: number }
+> = {
+  metal: { haul: 1.2, score: 0.95, metalness: 0.85, roughness: 0.25 },
+  plastic: { haul: 1, score: 1.05, metalness: 0.25, roughness: 0.45 },
+  food: { haul: 0.85, score: 1.12, metalness: 0.05, roughness: 0.78 },
+  organic: { haul: 0.95, score: 1.08, metalness: 0.05, roughness: 0.8 },
+  glass: { haul: 1, score: 1, metalness: 0.35, roughness: 0.2 },
+  paper: { haul: 0.9, score: 0.92, metalness: 0.05, roughness: 0.6 },
+  other: { haul: 1, score: 1, metalness: 0.4, roughness: 0.45 },
+};
+
+const RARITY_HALO_INTENSITY: Record<ScrapAsset['rarity'], number> = {
+  common: 0,
+  uncommon: 0.2,
+  rare: 0.35,
+  legendary: 0.5,
+};
+
+const pickScrapAsset = (): ScrapAsset | null => {
+  if (GOOD_SCRAP_ASSETS.length === 0) return null;
+  const weights = GOOD_SCRAP_ASSETS.map(
+    (asset) => (RARITY_WEIGHTS[asset.rarity] ?? 1) * (sizeWeightBoost[asset.sizeClass] ?? 1)
+  );
+  const total = weights.reduce((sum, weight) => sum + weight, 0);
+  let roll = Math.random() * total;
+  for (let i = 0; i < GOOD_SCRAP_ASSETS.length; i++) {
+    roll -= weights[i];
+    if (roll <= 0) {
+      return GOOD_SCRAP_ASSETS[i];
+    }
+  }
+  return GOOD_SCRAP_ASSETS[GOOD_SCRAP_ASSETS.length - 1];
+};
+
+const computeHaulValue = (asset: ScrapAsset) => {
+  const normalized = Math.cbrt(Math.max(asset.mass, 0.0001));
+  const rarityBonus = RARITY_HAUL_MULTIPLIER[asset.rarity] ?? 1;
+  const materialBonus = MATERIAL_TRAITS[asset.materialType]?.haul ?? 1;
+  const scaled = normalized * rarityBonus * materialBonus;
+  return Math.max(0.5, Math.min(35, parseFloat(scaled.toFixed(2))));
+};
+
+const computeScoreValue = (asset: ScrapAsset) => {
+  const normalized = Math.cbrt(Math.max(asset.burnEnergy, 0.0001));
+  const rarityBonus = RARITY_SCORE_MULTIPLIER[asset.rarity] ?? 1;
+  const materialBonus = MATERIAL_TRAITS[asset.materialType]?.score ?? 1;
+  const smellBonus = 1 + asset.smellLevel * 0.2;
+  const toxicityTax = 1 - asset.toxicity * 0.05;
+  const scaled = normalized * 6 * rarityBonus * materialBonus * smellBonus * toxicityTax;
+  return Math.max(5, Math.round(scaled));
+};
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+
+type StyledMaterial = THREE.Material & {
+  color?: THREE.Color;
+  emissive?: THREE.Color;
+  emissiveIntensity?: number;
+  metalness?: number;
+  roughness?: number;
+};
 
 type Props = {
   onGameOver: (score: number, collected: number) => void;
@@ -55,6 +154,11 @@ export default function ScrapRunScene({
     gameOver: false,
     shields: upgrades.shieldGenerator ?? 0,
   });
+  const [environmentalLoad, setEnvironmentalLoad] = useState({
+    smell: 0,
+    toxicity: 0,
+  });
+  const recordScrapPickup = useGameStore((s) => s.recordScrapPickup);
   const pressStartRef = useRef<number | null>(null);
   const lastDragXRef = useRef<number | null>(null);
   const lastDragTimeRef = useRef<number>(0);
@@ -68,6 +172,8 @@ export default function ScrapRunScene({
   useEffect(() => {
     if (!mountRef.current || gameState.gameOver) return;
 
+    let disposed = false;
+    setEnvironmentalLoad({ smell: 0, toxicity: 0 });
     const container = mountRef.current;
     if (container.firstChild) {
       container.replaceChildren();
@@ -86,12 +192,42 @@ export default function ScrapRunScene({
     const magnetLevel = upgrades.tractorBeam ?? 0;
     const fbxLoader = new FBXLoader();
     const goodScrapCache = new Map<string, THREE.Object3D>();
+    let toxicityLoad = 0;
+    let smellLoad = 0;
+    let sharedToxicityIntensity = 0;
+    let sharedSmellIntensity = 0;
+    let lastEnvSmell = 0;
+    let lastEnvToxicity = 0;
+    let playableBounds: THREE.LineSegments | null = null;
+    let animationId: number | null = null;
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x05070f);
     scene.fog = new THREE.Fog(0x05070f, 10, 50);
 
     const { width, height } = getSize();
+
+    const widthFactor = clamp(width / 480, 0.85, 1.25);
+    const maxStrafeReach = effectiveConfig.maxStrafe * widthFactor;
+    const minY = effectiveConfig.innerOrbit;
+    const maxY = effectiveConfig.outerOrbit;
+    const spawnZ = effectiveConfig.spawnDistance;
+    const despawnZ = effectiveConfig.despawnDistance;
+    const boundsWidth = maxStrafeReach * 2;
+    const boundsHeight = maxY - minY;
+    const boundsDepth = Math.abs(despawnZ - spawnZ);
+
+    const boundsBoxGeometry = new THREE.BoxGeometry(boundsWidth, boundsHeight, boundsDepth);
+    const boundsEdges = new THREE.EdgesGeometry(boundsBoxGeometry);
+    boundsBoxGeometry.dispose();
+    const boundsMaterial = new THREE.LineBasicMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.15,
+    });
+    playableBounds = new THREE.LineSegments(boundsEdges, boundsMaterial);
+    playableBounds.position.set(0, (minY + maxY) / 2, (spawnZ + despawnZ) / 2);
+    scene.add(playableBounds);
 
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
     const cameraBase = new THREE.Vector3(0, 0, 10);
@@ -115,6 +251,8 @@ export default function ScrapRunScene({
     const pointLight = new THREE.PointLight(0x4a90e2, 0.5);
     pointLight.position.set(0, 2, 8);
     scene.add(pointLight);
+    const smellLightBase = new THREE.Color(0x4a90e2);
+    const smellLightWarning = new THREE.Color(0xff8a3c);
 
     const planetGeometry = new THREE.SphereGeometry(6, 32, 32);
     const planetMaterial = new THREE.MeshLambertMaterial({ color: 0x1a1a2e, wireframe: true });
@@ -271,9 +409,60 @@ export default function ScrapRunScene({
       refreshMeshResources(visual);
     };
 
-    const attachGoodScrapVisual = (debris: THREE.Mesh) => {
-      if (GOOD_SCRAP_URLS.length === 0) return;
-      const url = GOOD_SCRAP_URLS[Math.floor(Math.random() * GOOD_SCRAP_URLS.length)];
+    const styleGoodScrapVisual = (visual: THREE.Object3D, asset: ScrapAsset) => {
+      const baseColor = new THREE.Color(asset.baseColor.r, asset.baseColor.g, asset.baseColor.b);
+      const trait = MATERIAL_TRAITS[asset.materialType];
+      const classScale = sizeClassVisualScale[asset.sizeClass] ?? 1;
+      visual.scale.multiplyScalar(classScale);
+
+      visual.traverse((child) => {
+        const mesh = child as THREE.Mesh;
+        if (!(mesh as unknown as { isMesh?: boolean }).isMesh) return;
+        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        materials.forEach((mat) => {
+          const styled = mat as StyledMaterial;
+          if (styled.color) {
+            styled.color.copy(baseColor);
+          }
+          if (trait) {
+            if (typeof styled.metalness === 'number') {
+              styled.metalness = THREE.MathUtils.lerp(styled.metalness, trait.metalness, 0.7);
+            }
+            if (typeof styled.roughness === 'number') {
+              styled.roughness = THREE.MathUtils.lerp(styled.roughness, trait.roughness, 0.7);
+            }
+          }
+          if (styled.emissive) {
+            const wantsGlow = asset.emissive || asset.toxicity > 0.6;
+            const emissiveStrength = wantsGlow
+              ? 0.4 + asset.shininess * 0.5
+              : asset.toxicity * 0.3;
+            styled.emissive.copy(baseColor);
+            if (typeof styled.emissiveIntensity === 'number') {
+              styled.emissiveIntensity = Math.max(0.1, emissiveStrength);
+            } else {
+              styled.emissiveIntensity = Math.max(0.1, emissiveStrength);
+            }
+          }
+          styled.needsUpdate = true;
+        });
+      });
+
+      const haloStrength = RARITY_HALO_INTENSITY[asset.rarity] ?? 0;
+      if (haloStrength > 0) {
+        const halo = new THREE.PointLight(baseColor.clone(), haloStrength * 2.4, 3, 2);
+        halo.position.set(0, 0, 0);
+        visual.add(halo);
+      } else if (asset.toxicity > 0.7) {
+        const warning = new THREE.PointLight(baseColor.clone().offsetHSL(0.05, 0.1, 0.1), 0.4, 2, 2);
+        warning.position.set(0, 0, 0);
+        visual.add(warning);
+      }
+    };
+
+    const attachGoodScrapVisual = (debris: THREE.Mesh, asset: ScrapAsset | null) => {
+      if (!asset) return;
+      const url = asset.assetUrl;
       const existing = goodScrapCache.get(url);
       const sourcePromise: Promise<THREE.Object3D> =
         existing !== undefined
@@ -288,6 +477,7 @@ export default function ScrapRunScene({
           if (!debris.parent) return;
           const visual = source.clone(true);
           normalizeGoodScrap(visual);
+          styleGoodScrapVisual(visual, asset);
           debris.add(visual);
           debris.userData.visual = visual;
           const mat = debris.material as THREE.Material & { opacity?: number; transparent?: boolean };
@@ -300,13 +490,41 @@ export default function ScrapRunScene({
     };
 
     const animate = () => {
+      if (disposed) return;
       if (!currentGameState.gameOver || endless) {
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
+      } else {
+        animationId = null;
       }
 
       planet.rotation.y += 0.002;
       const delta = shaderClock.getDelta();
       const elapsed = shaderClock.elapsedTime;
+      toxicityLoad = clamp(toxicityLoad - delta * 0.05, 0, 1.5);
+      smellLoad = clamp(smellLoad - delta * 0.08, 0, 1.5);
+      const toxicityIntensity = clamp(toxicityLoad, 0, 1);
+      const smellIntensity = clamp(smellLoad, 0, 1);
+      sharedToxicityIntensity = toxicityIntensity;
+      sharedSmellIntensity = smellIntensity;
+      if (scene.fog instanceof THREE.Fog) {
+        scene.fog.near = THREE.MathUtils.lerp(10, 4.5, smellIntensity);
+        scene.fog.far = THREE.MathUtils.lerp(50, 20, smellIntensity);
+      }
+      pointLight.intensity = 0.5 + smellIntensity * 0.4;
+      pointLight.color.lerpColors(smellLightBase, smellLightWarning, smellIntensity * 0.7);
+      if (
+        Math.abs(lastEnvSmell - smellIntensity) > 0.02 ||
+        Math.abs(lastEnvToxicity - toxicityIntensity) > 0.02
+      ) {
+        lastEnvSmell = smellIntensity;
+        lastEnvToxicity = toxicityIntensity;
+        if (!disposed) {
+          setEnvironmentalLoad({
+            smell: Number(smellIntensity.toFixed(2)),
+            toxicity: Number(toxicityIntensity.toFixed(2)),
+          });
+        }
+      }
       orbMaterial.uniforms.time.value = elapsed;
       const shieldPulseActive = performance.now() < shieldPulseUntilRef.current;
       const visualCharge = Math.min(
@@ -371,9 +589,12 @@ export default function ScrapRunScene({
         }
       }
 
-      if (shakeRef.current > 0) {
-        shakeRef.current = Math.max(0, shakeRef.current - delta * 1.5);
-        const strength = shakeRef.current * 0.25;
+      const toxicityShake = toxicityIntensity * 0.06;
+      if (shakeRef.current > 0 || toxicityShake > 0) {
+        if (shakeRef.current > 0) {
+          shakeRef.current = Math.max(0, shakeRef.current - delta * 1.5);
+        }
+        const strength = shakeRef.current * 0.25 + toxicityShake;
         camera.position.set(
           cameraBase.x + Math.sin(elapsed * 40) * strength,
           cameraBase.y + Math.cos(elapsed * 32) * strength * 0.8,
@@ -390,6 +611,7 @@ export default function ScrapRunScene({
         lastSpawnTime = now;
 
         const isGood = Math.random() < effectiveConfig.goodRatio;
+        const scrapAsset = isGood ? pickScrapAsset() : null;
         const geometry = isGood
           ? new THREE.BoxGeometry(0.4, 0.4, 0.4)
           : new THREE.OctahedronGeometry(0.5, 0);
@@ -415,17 +637,22 @@ export default function ScrapRunScene({
 
         debris.position.set(startX, startY, effectiveConfig.spawnDistance);
         debris.castShadow = true;
+        const haulValue = scrapAsset ? computeHaulValue(scrapAsset) : 1;
+        const scoreValue = scrapAsset ? computeScoreValue(scrapAsset) : 10;
         debris.userData = {
           id: debrisIdCounter++,
           type: isGood ? 'good' : 'bad',
           initialX: startX,
           initialY: startY,
           rotationSpeed: { x: Math.random() * 0.04 - 0.02, y: Math.random() * 0.04 - 0.02 },
+          scrapAsset,
+          haulValue,
+          scoreValue,
         };
         scene.add(debris);
 
         if (isGood) {
-          attachGoodScrapVisual(debris);
+          attachGoodScrapVisual(debris, scrapAsset);
         }
 
         if (showHitboxes) {
@@ -472,8 +699,14 @@ export default function ScrapRunScene({
         debrisList.push(debris);
       }
 
+      const envRadiusScale = clamp(
+        (1 - sharedToxicityIntensity * 0.15) * (1 - sharedSmellIntensity * 0.1),
+        0.65,
+        1
+      );
       const hitboxRadius =
-        0.5 + currentGameState.collected * 0.1 + (upgrades.tractorBeam ?? 0) * 0.2;
+        (0.5 + currentGameState.collected * 0.1 + (upgrades.tractorBeam ?? 0) * 0.2) *
+        envRadiusScale;
       const playerPos = playerGroup.position;
 
       for (let i = debrisList.length - 1; i >= 0; i--) {
@@ -529,16 +762,40 @@ export default function ScrapRunScene({
           debrisList.splice(i, 1);
 
           if (debris.userData.type === 'good') {
-            currentGameState.collected++;
-            currentGameState.score += 10;
+            const haulValue =
+              typeof debris.userData.haulValue === 'number'
+                ? debris.userData.haulValue
+                : 1;
+            const scoreValue =
+              typeof debris.userData.scoreValue === 'number'
+                ? debris.userData.scoreValue
+                : 10;
+            currentGameState.collected = Math.max(
+              0,
+              currentGameState.collected + haulValue
+            );
+            currentGameState.score += scoreValue;
             haptic(10);
             audioBus.playEvent('goodScrap');
             setGameState({ ...currentGameState });
+            const scrapData: ScrapAsset | null = debris.userData.scrapAsset ?? null;
+            if (scrapData) {
+              recordScrapPickup(scrapData.id);
+              const toxicityGain = clamp(scrapData.toxicity * 0.35, 0, 0.45);
+              const smellGain = clamp(scrapData.smellLevel * 0.25, 0, 0.4);
+              toxicityLoad = clamp(toxicityLoad + toxicityGain, 0, 1.5);
+              smellLoad = clamp(smellLoad + smellGain, 0, 1.5);
+            }
 
             const junkPiece = collectedVisual ?? debris.clone(true);
             if (!collectedVisual) {
               refreshMeshResources(junkPiece);
             }
+            junkPiece.userData = {
+              ...(junkPiece.userData || {}),
+              haulValue,
+              scoreValue,
+            };
             const angle = (collectedJunk.length / 20) * Math.PI * 2;
             const radius = 0.8 + Math.floor(collectedJunk.length / 20) * 0.3;
             junkPiece.position.set(
@@ -558,13 +815,23 @@ export default function ScrapRunScene({
               audioBus.playEvent('shield');
               setGameState({ ...currentGameState });
             } else if (currentGameState.collected > 0) {
-              const loseCount = Math.min(3, currentGameState.collected);
-              currentGameState.collected -= loseCount;
+              const losePieces = Math.min(3, collectedJunk.length);
+              let removedValue = 0;
 
-              for (let j = 0; j < loseCount && collectedJunk.length > 0; j++) {
+              for (let j = 0; j < losePieces && collectedJunk.length > 0; j++) {
                 const junk = collectedJunk.pop();
-                if (junk) disposeCollectedPiece(junk);
+                if (junk) {
+                  removedValue +=
+                    typeof junk.userData?.haulValue === 'number'
+                      ? junk.userData.haulValue
+                      : 1;
+                  disposeCollectedPiece(junk);
+                }
               }
+              currentGameState.collected = Math.max(
+                0,
+                currentGameState.collected - removedValue
+              );
 
               setGameState({ ...currentGameState });
             } else {
@@ -607,17 +874,20 @@ export default function ScrapRunScene({
 
       const rect = mountRef.current?.getBoundingClientRect();
       const containerWidth = rect?.width ?? window.innerWidth;
+      const smellPenalty = clamp(1 - sharedSmellIntensity * 0.25, 0.6, 1);
+      const toxicityPenalty = clamp(1 - sharedToxicityIntensity * 0.35, 0.5, 1);
       if (currentTouchPos !== null && containerWidth > 0) {
         const normalizedX = (currentTouchPos - containerWidth / 2) / (containerWidth / 2);
         const widthFactor = clamp(containerWidth / 480, 0.85, 1.25);
-        strafeScaleRef.current = widthFactor;
+        const envWidthFactor = widthFactor * toxicityPenalty;
+        strafeScaleRef.current = envWidthFactor;
         const inDeadZone = Math.abs(normalizedX) < 0.12;
-        currentStrafeTarget = (inDeadZone ? 0 : normalizedX * widthFactor) * effectiveConfig.maxStrafe;
-        currentStrafeSpeed = effectiveConfig.strafeSpeed * widthFactor;
+        currentStrafeTarget = (inDeadZone ? 0 : normalizedX * envWidthFactor) * effectiveConfig.maxStrafe;
+        currentStrafeSpeed = effectiveConfig.strafeSpeed * widthFactor * smellPenalty;
       } else {
         currentStrafeTarget = 0;
-        currentStrafeSpeed = effectiveConfig.strafeSpeed;
-        strafeScaleRef.current = 1;
+        currentStrafeSpeed = effectiveConfig.strafeSpeed * smellPenalty;
+        strafeScaleRef.current = toxicityPenalty;
       }
     }, 16);
 
@@ -644,11 +914,17 @@ export default function ScrapRunScene({
     };
 
     return () => {
+      disposed = true;
       window.removeEventListener('resize', handleResize);
       clearInterval(stateInterval);
       delete (window as unknown as Record<string, unknown>).activateShieldPulse;
       delete (window as unknown as Record<string, unknown>).updateHoldingState;
       delete (window as unknown as Record<string, unknown>).updateTouchPosition;
+
+      if (animationId !== null) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
 
       trailParticles.forEach((particle) => {
         scene.remove(particle.mesh);
@@ -676,12 +952,18 @@ export default function ScrapRunScene({
         hitboxHelper.material.dispose();
       }
 
+      if (playableBounds) {
+        scene.remove(playableBounds);
+        (playableBounds.geometry as THREE.BufferGeometry).dispose();
+        (playableBounds.material as THREE.Material).dispose();
+      }
+
       if (mountRef.current && renderer.domElement && renderer.domElement.parentElement === mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
       renderer.dispose();
     };
-  }, [gameState.gameOver, upgrades, config, showCurvatureDebug, showHitboxes, endless]);
+  }, [gameState.gameOver, upgrades, config, showCurvatureDebug, showHitboxes, endless, recordScrapPickup]);
 
   useEffect(() => {
     const updater = (window as unknown as Record<string, (value: any) => void>).updateHoldingState;
@@ -837,10 +1119,18 @@ export default function ScrapRunScene({
             </div>
             <div className="text-right">
               <div className="text-sm font-mono text-lime-200">{gameState.score} kJ</div>
-              <div className="text-[11px] text-slate-400">Trash hauled: {gameState.collected}</div>
+              <div className="text-[11px] text-slate-400">
+                Trash hauled: {Math.floor(gameState.collected)}
+              </div>
               {gameState.shields > 0 && (
                 <div className="text-[11px] text-cyan-300 mt-1">Shields: {gameState.shields}</div>
               )}
+              <div className="text-[11px] text-amber-200 mt-1">
+                Smell load: {Math.round(environmentalLoad.smell * 100)}%
+              </div>
+              <div className="text-[11px] text-fuchsia-200">
+                Toxic load: {Math.round(environmentalLoad.toxicity * 100)}%
+              </div>
             </div>
           </div>
 
@@ -865,7 +1155,9 @@ export default function ScrapRunScene({
               <div className="rounded-2xl border border-slate-800 bg-black/70 backdrop-blur-md p-3 flex items-center justify-between text-xs text-slate-200">
                 <div>
                   <div className="uppercase tracking-[0.2em] text-lime-300 text-[11px]">Trash hauled</div>
-                  <div className="text-base font-mono text-lime-200">{gameState.collected}</div>
+                  <div className="text-base font-mono text-lime-200">
+                    {Math.floor(gameState.collected)}
+                  </div>
                 </div>
                 <div className="text-right">
                   <div className="text-[11px] text-slate-400">Shields</div>
@@ -886,7 +1178,9 @@ export default function ScrapRunScene({
               <div className="w-full max-w-sm rounded-3xl bg-black/80 border border-rose-500/60 shadow-2xl shadow-rose-900/40 p-6 text-center text-slate-100">
                 <div className="text-2xl font-bold text-rose-300 mb-2">Hull Breach</div>
                 <div className="text-sm text-slate-300">Burn Output: {gameState.score} kJ</div>
-                <div className="text-sm text-lime-300 mt-1">Trash Hauled: {gameState.collected}</div>
+                <div className="text-sm text-lime-300 mt-1">
+                  Trash Hauled: {Math.floor(gameState.collected)}
+                </div>
                 <button
                   onClick={handleAbort}
                   className="mt-4 w-full py-3 rounded-xl bg-lime-400 text-black font-semibold active:scale-[0.99]"
